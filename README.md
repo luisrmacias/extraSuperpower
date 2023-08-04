@@ -6,6 +6,7 @@ We provide a function to create a matrix of mean values that can be used as inpu
 It depends on packages MASS and afex. Installation of package Superpower is highly recommended for dowstream analysis.
 
 To install.
+
 devtools::install_github("luisrmacias/extraSuperpower")
 
 See ?mean_sd_matrix for examples.
