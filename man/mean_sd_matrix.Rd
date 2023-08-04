@@ -65,7 +65,7 @@ treatgroups <- 4
 timepoints <- 5
 treateff <- 1.5
 timeeff <- 0.85
-effects_treat_time <- mean_sd_matrix(refmean = refmean, f1effect = treateff, f2effect = timeeff, nlfA = treatgroups, nlfB = timepoints, label_list = list(treatment=letters[1:treatgroups], time=1:timepoints))
+effects_treat_time <- mean_sd_matrix(refmean = refmean, fAeffect = treateff, fBeffect = timeeff, nlfA = treatgroups, nlfB = timepoints, label_list = list(treatment=letters[1:treatgroups], time=1:timepoints))
 muvec <- as.vector(effects_treat_time$mean.mat)
 sdvec <- as.vector(effects_treat_time$sd.mat)
 bwdes <- Superpower::ANOVA_design("5b*4b", n=15, mu =  muvec, sd = sdvec, label_list = rev(dimnames(cor_mat$mean.mat)))
