@@ -16,10 +16,10 @@
 #' effects_treat_time <- mean_sd_matrix(refmean = refmean, nlfA = treatgroups, nlfB = timepoints, fAeffect = treateff, fBeffect = timeeff, label_list = list(treatment=letters[1:treatgroups], time=1:timepoints))
 #' anoveff(effects_treat_time)
 #'
-#' # we add interaction keeping design or main effect coefficients
+#' # we add cell specific interaction effect keeping design and main effect coefficients
 #' cellswithinteraction <- matrix(c(rep(2,3), 3:5), 3,2) #second level of factor A interacts with 3rd, 4th and 5th level of factor B
 #' effects_treat_time_interact <- mean_sd_matrix(refmean = refmean, nlfA = treatgroups, nlfB = timepoints, fAeffect = treateff, fBeffect = timeeff, label_list = list(treatment=letters[1:treatgroups], time=1:timepoints),
-#'                       groupswithinteraction = cellswithinteraction, interact=1.3)
+#'                       groupswinteraction = cellswithinteraction, interact=1.3)
 #' anoveff(effects_treat_time_interact)
 #'
 #'
