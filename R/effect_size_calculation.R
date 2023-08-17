@@ -1,11 +1,13 @@
-#' Effect size calculation 
+#' Effect size calculation
 #'
 #' Calculate effect sizes for two-way factorial designs from matrices of expected mean and standard deviation values
-#' for each combination of factor levels. The output given is Cohen's f. Calculations are done as exemplified in the 
+#' for each combination of factor levels. The output given is Cohen's f. Calculations are done as exemplified in the
 #' G*Power 3.1 manual.
 #'
 #' @param matrices_obj List of 2 matrices, named mean.mat and sd.mat. It is the output of the mean_sd_matrix function
-#' @examples 
+#' @examples
+#'
+#' # no interaction effect expected
 #' refmean <- 1
 #' treatgroups <- 4
 #' timepoints <- 5
@@ -13,6 +15,13 @@
 #' timeeff <- 0.85
 #' effects_treat_time <- mean_sd_matrix(refmean = refmean, f1effect = treateff, f2effect = timeeff, nlf1 = treatgroups, nlf2 = timepoints, label_list = list(treatment=letters[1:treatgroups], time=1:timepoints))
 #' anoveff(effects_treat_time)
+#'
+#' # we add interaction keeping design or main effect coefficients
+#' cellswithinteraction <- matrix(c(rep(2,3), 3:5), 3,2) #second level of factor A interacts with 3rd, 4th and 5th level of factor B
+#' effects_treat_time_interact <- mean_sd_matrix(refmean = refmean, f1effect = treateff, f2effect = timeeff, nlf1 = treatgroups, nlf2 = timepoints, label_list = list(treatment=letters[1:treatgroups], time=1:timepoints),
+#'                       groupswithinteraction = cellswithinteraction, interact=1.3)
+#' anoveff(effects_treat_time_interact)
+#'
 #'
 #' @export
 anoveff <- function(matrices_obj)
