@@ -48,11 +48,11 @@ mean_sd_matrix <- function(refmean, nlfA, nlfB, fAeffect, fBeffect, groupswinter
   }
   if(is.null(label_list))
   {
-    label_list <- list(f1 = letters[1:nlfA], f2 = letters[1:nlfB])
+    label_list <- list(fA = letters[1:nlfA], fB = letters[1:nlfB])
   }
-  f1vec <- genvecs(change = fAeffect, reps = nlfA, bystart = endincrement)
-  f2vec <- genvecs(change = fBeffect, reps = nlfB, bystart = endincrement)
-  effects <- rowSums(expand.grid(f1vec, f2vec-1))
+  fAvec <- genvecs(change = fAeffect, reps = nlfA, bystart = endincrement)
+  fBvec <- genvecs(change = fBeffect, reps = nlfB, bystart = endincrement)
+  effects <- rowSums(expand.grid(fAvec, fBvec-1))
   effmat <- matrix(effects, nlfA, nlfB, dimnames = label_list)
   if(interact!=1)
   {
