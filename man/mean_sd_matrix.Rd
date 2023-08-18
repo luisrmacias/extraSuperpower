@@ -41,18 +41,21 @@ mean_sd_matrix(
 
 \item{endincrement}{Determines if the multiples provided in fAeffect and fBeffect refer to level to level changes (default) or change between first and last levels.}
 }
+\value{
+A list with two matrices. One of expected means for each cell of the two-way factorial experiment, one of expected standard deviations for said cells.
+}
 \description{
 The mean_sd_matrix function is intended as a companion function to the Superpower package ANOVA_design function,
 followed by the Superpower ANOVA_power function.
 We were motivated by sample size calculation for two-way factorial designs with a,b,...,i levels of factor A and
 a,b,...,j levels of factor B in which the mean outcome value for replicates of cell A=a and B=a are known.
-Furthermore, there is an estimate of the change in level mean for each of the factors. Finally, some level
-combinations are expected to present interaction.
+Furthermore, there is an expected change in level mean for each of the factors. Finally, interaction can be explicitly
+introduced to level combinations in which it is expected to occur.
 }
 \details{
-With user provided reference mean (mean for A=a and B=a), the expected change for each factor from one level to
-the next (or from the first to last level) and the number of levels in each factor, the function creates a
-matrix of expected means and a matrix of expected standard deviations with a cell for each combination of levels
+With user provided reference mean (usually mean in control or untreated group), the expected change for each factor
+from one level to the next (or from the first to last level) and the number of levels in each factor, the function
+creates a matrix of expected means and a matrix of expected standard deviations with a cell for each combination of levels
 i and j.
 
 Aditionally, if the user specifies factor level combinations which are expected to present interaction and its
@@ -69,4 +72,5 @@ effects_treat_time <- mean_sd_matrix(refmean = refmean, fAeffect = treateff, fBe
 muvec <- as.vector(effects_treat_time$mean.mat)
 sdvec <- as.vector(effects_treat_time$sd.mat)
 bwdes <- Superpower::ANOVA_design("5w*4b", n=15, mu =  muvec, sd = sdvec, label_list = rev(dimnames(effects_treat_time$mean.mat)), r=0.5)
+
 }
