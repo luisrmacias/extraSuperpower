@@ -2,14 +2,11 @@
 % Please edit documentation in R/genvecs.R
 \name{genvecs}
 \alias{genvecs}
-\title{Internal function to generate a vector of coefficients to be applied to the reference mean to generate an experimental model.
-The vector's length is length equal to the number of levels of the experimental factor, defined in reps.
-he coefficients are estimated from a user defined change. Default is to generate linear vector, this can be modified with the}
+\title{Internal function to generate a vector of coefficients to be applied to the reference mean to generate an experimental model.}
 \usage{
 genvecs(change, reps, bystart = FALSE, scaler = refmean)
 }
 \description{
-Internal function to generate a vector of coefficients to be applied to the reference mean to generate an experimental model.
 The vector's length is length equal to the number of levels of the experimental factor, defined in reps.
 he coefficients are estimated from a user defined change. Default is to generate linear vector, this can be modified with the
 }
