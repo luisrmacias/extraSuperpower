@@ -4,12 +4,12 @@
 #' followed by the Superpower ANOVA_power function.
 #' We were motivated by sample size calculation for two-way factorial designs with a,b,...,i levels of factor A and
 #' a,b,...,j levels of factor B in which the mean outcome value for replicates of cell A=a and B=a are known.
-#' Furthermore, there is an estimate of the change in level mean for each of the factors. Finally, some level
-#' combinations are expected to present interaction.
+#' Furthermore, there is an expected change in level mean for each of the factors. Finally, interaction can be explicitly
+#' introduced to level combinations in which it is expected to occur.
 #'
-#' With user provided reference mean (mean for A=a and B=a), the expected change for each factor from one level to
-#' the next (or from the first to last level) and the number of levels in each factor, the function creates a
-#' matrix of expected means and a matrix of expected standard deviations with a cell for each combination of levels
+#' With user provided reference mean (usually mean in control or untreated group), the expected change for each factor
+#' from one level to the next (or from the first to last level) and the number of levels in each factor, the function
+#' creates a matrix of expected means and a matrix of expected standard deviations with a cell for each combination of levels
 #' i and j.
 #'
 #' Aditionally, if the user specifies factor level combinations which are expected to present interaction and its
@@ -27,6 +27,9 @@
 #' @param sdproportional Whether the standard deviation for each combination of factor levels is a proportion of the respective factor level combination mean, defaults to TRUE
 #' @param sdratio Value by which the expected mean value of a factor level combination is multiplied to obtain the respective standard deviation, defaults to 0.2.
 #' @param endincrement Determines if the multiples provided in fAeffect and fBeffect refer to level to level changes (default) or change between first and last levels.
+#'
+#' @return A list with two matrices. One of expected means for each cell of the two-way factorial experiment, one of expected standard deviations for said cells.
+#'
 #' @examples
 #' refmean <- 1
 #' treatgroups <- 4
@@ -37,6 +40,7 @@
 #' muvec <- as.vector(effects_treat_time$mean.mat)
 #' sdvec <- as.vector(effects_treat_time$sd.mat)
 #' bwdes <- Superpower::ANOVA_design("5w*4b", n=15, mu =  muvec, sd = sdvec, label_list = rev(dimnames(effects_treat_time$mean.mat)), r=0.5)
+#'
 #' @export
 mean_sd_matrix <- function(refmean, nlfA, nlfB, fAeffect, fBeffect, groupswinteraction=NULL, interact=1, label_list = NULL, sdproportional = TRUE, sdratio=0.2, endincrement=FALSE)
   {

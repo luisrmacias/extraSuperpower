@@ -5,6 +5,10 @@
 #' G*Power 3.1 manual.
 #'
 #' @param matrices_obj List of 2 matrices, named mean.mat and sd.mat. It is the output of the mean_sd_matrix function
+#'
+#' @return Vector of length 3. The first two elements are the effect sizes for the main effects of the first
+#' and second factors, respectively. The third element is the interaction effect size.
+#'
 #' @examples
 #'
 #' # no interaction effect expected
