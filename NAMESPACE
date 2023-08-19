@@ -2,6 +2,7 @@
 
 export(anova_dat)
 export(anoveff)
+export(exact_twoway_anova_power)
 export(genvecs)
 export(mean_sd_matrix)
 export(plot_powercurve)
