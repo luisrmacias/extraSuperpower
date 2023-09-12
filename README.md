@@ -11,6 +11,6 @@ devtools::install_github("luisrmacias/extraSuperpower")
 
 library(extraSuperpower)
 
-?mean_sd_matrix    ## useful example
+?mean_sd_matrix    ## example of one between, one within (repeated measure) factorial design sample size calculation with ``extraSuperpower`` and ``Superpower``
 
-?plot_powercurve    ## another useful example
+?plot_powercurve    ## example of independent measurements power curve plotting
