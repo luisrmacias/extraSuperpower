@@ -7,6 +7,8 @@ It depends on packages MASS, afex, reshape2 and ggplot2. Installation of package
 
 To install, install dependencies and devtools, if not done already.
 
-devtools::install_github("luisrmacias/extraSuperpower")  
-library(extraSuperpower)  
+devtools::install_github("luisrmacias/extraSuperpower")
+
+library(extraSuperpower)
+
 ?mean_sd_matrix ## useful examples
