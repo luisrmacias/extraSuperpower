@@ -7,10 +7,10 @@ We provide a function to create a matrix of mean values that can be used as inpu
 
 To install, install dependencies and ``devtools``, if not done already.
 
-devtools::install_github("luisrmacias/extraSuperpower")
+``devtools::install_github("luisrmacias/extraSuperpower")``
 
-library(extraSuperpower)
+``library(extraSuperpower)``
 
-?mean_sd_matrix    ## example of one between, one within (repeated measure) factorial design sample size calculation with ``extraSuperpower`` and ``Superpower``
+``?mean_sd_matrix    ## example of one between, one within (repeated measure) factorial design sample size calculation with extraSuperpower and Superpower``
 
-?plot_powercurve    ## example of independent measurements power curve plotting
+``?plot_powercurve    ## example of independent measurements power curve plotting``
