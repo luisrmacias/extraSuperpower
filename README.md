@@ -12,3 +12,5 @@ devtools::install_github("luisrmacias/extraSuperpower")
 library(extraSuperpower)
 
 ?mean_sd_matrix    ## useful examples
+
+?plot_powercurve    ## another useful example
