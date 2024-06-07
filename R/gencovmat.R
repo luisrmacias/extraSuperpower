@@ -22,7 +22,7 @@ gencovmat <- function(mean_matrix, sd_matrix, rho=rho, label_list, withinf, nlfA
   sigmat <- diag(0, prod(nlfA, nlfB))
   rownames(sigmat) <- colnames(sigmat) <- cnames
 
-  if(withinf=="f1")
+  if(withinf=="fA")
   {
     rowpos <- sapply(1:nlfB, function(x) grep(paste0("_", label_list[[2]][x], "$"), rownames(cormat)))
     colpos <- sapply(1:nlfB, function(x) grep(paste0("_", label_list[[2]][x], "$"), colnames(cormat)))
@@ -36,7 +36,7 @@ gencovmat <- function(mean_matrix, sd_matrix, rho=rho, label_list, withinf, nlfA
       }
     }
   }
-  if(withinf=="f2")
+  if(withinf=="fB")
   {
     rowpos <- sapply(1:nlfA, function(x) grep(paste0("^", label_list[[1]][x], "_"), rownames(cormat)))
     colpos <- sapply(1:nlfA, function(x) grep(paste0("^", label_list[[1]][x], "_"), colnames(cormat)))
@@ -59,5 +59,5 @@ gencovmat <- function(mean_matrix, sd_matrix, rho=rho, label_list, withinf, nlfA
     cormat[cormat!=1] <- rho
     sigmat <- cormat*tcrossprod(as.vector(sd_matrix))
   }
-  corsigmats <- list(cormat=cormat, sigmat=sigmat)
+  list(cormat=cormat, sigmat=sigmat)
 }
