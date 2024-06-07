@@ -90,7 +90,26 @@ timeeff <- 0.85
 effects_treat_time <- calculate_mean_matrix(refmean = refmean, fAeffect = treateff, fBeffect = timeeff, nlfA = treatgroups, nlfB = timepoints, label_list = list(treatment=letters[1:treatgroups], time=1:timepoints))
 ## Inspect plot to check if matrices correspond to design
 n <- 20
-simulated_experiment <- twoway_simulation_independent(group_size = n, matrices_obj = effects_treat_time)
-simulated_experiment[1]
+independent_experiment <- twoway_simulation_independent(group_size = n, matrices_obj = effects_treat_time)
+head(independent_experiment, 10)
+
+## Repeated measures design, suppose subjects from 4 independent treatment groups measured at 5 different timepoints.
+## We use the same parameters as the independent design example, except we add within factor level correlation and we specify that facto B is the within factor.
+
+refmean <- 1
+treatgroups <- 4
+timepoints <- 5
+treateff <- 1.5
+timeeff <- 0.85
+rho <- 0.8
+withinf <- "fB"
+
+effects_treat_time <- calculate_mean_matrix(refmean = refmean, fAeffect = treateff, fBeffect = timeeff, nlfA = treatgroups,  nlfB = timepoints,
+rho = rho, withinf = withinf, label_list = list(treatment=letters[1:treatgroups], time=1:timepoints))
+
+## Inspect plot to check if matrices correspond to design
+n <- 20
+repeatedmeasures_experiment <- twoway_simulation_correlated(group_size = n, matrices_obj = effects_treat_time)
+head(repeatedmeasures_experiment, 10)
 
 }
