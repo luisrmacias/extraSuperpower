@@ -38,7 +38,7 @@ twoway_simulation_correlated <- function(group_size, matrices_obj, nsims=500)
   label_list <- dimnames(matrices_obj$mean.mat)
   factor_levels <- dim(matrices_obj$mean.mat)
   mean_matrix <- as.vector(t(matrices_obj$mean.mat))
-  if(length(group_size)>0 | !is.integer(group_size))
+  if(length(group_size)>1 | !is.integer(group_size))
   {
     stop("group_size must be a single integer")
   }
