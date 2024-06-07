@@ -74,10 +74,7 @@ twoway_simulation_correlated <- function(group_size, matrices_obj, nsims=500)
 
   if(length(group_size)==1)
   {
-    if(distribution=="normal")
-    {
-      y <- suppressMessages(replicate(nsims, reshape2::melt(as.data.frame(MASS::mvrnorm(n = group_size, mu = mean_matrix, Sigma = sigmatrix)))$value))
-    }
+    y <- suppressMessages(replicate(nsims, reshape2::melt(as.data.frame(MASS::mvrnorm(n = group_size, mu = mean_matrix, Sigma = sigmatrix)))$value))
   }
   sim <- lapply(seq(nsims),
                 function(x)
