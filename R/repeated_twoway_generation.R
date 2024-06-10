@@ -32,9 +32,9 @@
 twoway_simulation_correlated <- function(group_size, matrices_obj, nsims=500)
 {
   if(!all(sapply(matrices_obj[-1], is.matrix)))
-    {
+  {
     matrices_obj <- matrices_obj$matrices_obj
-    }
+  }
   label_list <- dimnames(matrices_obj$mean.mat)
   factor_levels <- dim(matrices_obj$mean.mat)
   mean_matrix <- as.vector(t(matrices_obj$mean.mat))
@@ -55,13 +55,14 @@ twoway_simulation_correlated <- function(group_size, matrices_obj, nsims=500)
   }
   else if (withinf=="fB")
   {
-    subject <- rep(1:(group_size*factor_levels[1]), each=factor_levels[2])
+    subject <- as.vector(sapply(1:factor_levels[1], function(x)
+    {y <- x-1; rep((1+(group_size*y)):(group_size*x), factor_levels[2])}))
   }
   fdata <- as.data.frame(MASS::mvrnorm(group_size, mean_matrix, sigmatrix))
   fdata$subject <- 1:group_size
   fdata <- reshape2::melt(fdata, id.vars = "subject", variable.name = "cond",
                           value.name = "y")
-  fdata$subject <- subject
+  fdata$subject <- factor(subject)
   for (j in 1:2)
   {
     fdata <- cbind(fdata,
@@ -83,5 +84,6 @@ twoway_simulation_correlated <- function(group_size, matrices_obj, nsims=500)
                   fdata$iteration <- x
                   fdata
                 })
-  do.call(rbind, sim)
+  sim <- do.call(rbind, sim)
+  list(simulated_data = sim, withinf = withinf)
 }
