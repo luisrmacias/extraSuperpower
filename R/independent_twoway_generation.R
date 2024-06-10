@@ -70,6 +70,7 @@ twoway_simulation_independent <- function(group_size, matrices_obj, distribution
                 function(x)
                 {
                   fdata$y <- y[,x]
+                  fdata$subject <- 1:nrow(fdata)
                   fdata$iteration <- x
                   fdata
                 })
