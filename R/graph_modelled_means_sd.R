@@ -23,6 +23,6 @@ graph_twoway_assumptions <- function(group_size=100, matrices_obj)
             position = ggplot2::position_dodge(width = 0.15), size=1.1) + ggthemes::theme_few()
   p <- p + ggplot2::labs(y = "Mean\n± standard deviation", title=expression(paste("Mean cell ratio modeled ", mu[italic(ij)]," and ", sigma[italic(ij)]^2))) +
     ggplot2::theme(axis.text = ggplot2::element_text(size = 15), axis.title = ggplot2::element_text(size=15), legend.text = ggplot2::element_text(size = 15),
-        plot.title = element_text(size = 20), legend.title = element_text(size = 15))
+        plot.title = ggplot2::element_text(size = 20), legend.title = ggplot2::element_text(size = 15))
   p
 }
