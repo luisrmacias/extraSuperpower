@@ -15,7 +15,7 @@ graph_twoway_assumptions <- function(group_size=100, matrices_obj)
     test_run <- twoway_simulation_independent(group_size=group_size, matrices_obj=matrices_obj, nsims=1)
   }else if (length(matrices_obj)==5)
   {
-    test_run <- twoway_simulation_correlated(group_size=group_size, matrices_obj=matrices_obj, nsims=1)
+    test_run <- twoway_simulation_correlated(group_size=group_size, matrices_obj=matrices_obj, nsims=1)$simulated_data
   }
   fA <- names(test_run)[4]
   fB <- names(test_run)[5]
