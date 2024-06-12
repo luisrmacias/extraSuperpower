@@ -63,7 +63,7 @@ twoway_simulation_independent <- function(group_size, matrices_obj, distribution
       } else if (distribution=="skewed")
     {
         y <- suppressMessages(replicate(nsims, reshape2::melt(mapply(fGarch::rsnorm, group_size,
-                                                                     mean_matrix, sd_matrix, 1))$value))
+                                                                     mean_matrix, sd_matrix, skewness))$value))
     }
   }
   sim <- lapply(seq(nsims),
