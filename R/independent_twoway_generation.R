@@ -55,7 +55,7 @@ twoway_simulation_independent <- function(group_size, matrices_obj, distribution
                            times = prod(factor_levels)/prod(factor_levels[j:2])))))
     }
     names(fdata)[4:5] <- names(label_list)
-
+    fdata$subject <- factor(1:nrow(fdata))
     if(distribution=="normal")
     {
         y <- suppressMessages(replicate(nsims, reshape2::melt(mapply(rnorm, group_size,
@@ -70,7 +70,6 @@ twoway_simulation_independent <- function(group_size, matrices_obj, distribution
                 function(x)
                 {
                   fdata$y <- y[,x]
-                  fdata$subject <- 1:nrow(fdata)
                   fdata$iteration <- x
                   fdata
                 })
