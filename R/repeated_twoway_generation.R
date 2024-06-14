@@ -12,6 +12,7 @@
 #'
 #' @return Dataframe with simulated outcome values, factor level labels and iteration number.
 #'
+#' @examples
 #' ## Repeated measures design, suppose subjects from 4 independent treatment groups measured at 5 different timepoints.
 #'
 #' refmean <- 1
