@@ -1,6 +1,6 @@
 Package: extraSuperpower
 Title: Inspired by package Superpower, this package calculates power for two-way factorial designs
-Version: 0.0.2.0000
+Version: 0.0.2.0001
 Authors@R: 
     person("Louis", "Macias", , "louis.macias@uni-luebeck.de", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-3080-2835"))
@@ -17,4 +17,8 @@ Imports:
 	ggplot2,
 	reshape2,
 	ggpubr,
-	ggthemes
+	ggthemes,
+	nparLD,
+	ez,
+	Rfit,
+	lmPerm
