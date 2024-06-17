@@ -88,5 +88,6 @@ twoway_simulation_correlated <- function(group_size, matrices_obj, nsims=500)
                   fdata
                 })
   sim <- do.call(rbind, sim)
+  sim$n <- group_size
   list(simulated_data = sim, withinf = withinf)
 }

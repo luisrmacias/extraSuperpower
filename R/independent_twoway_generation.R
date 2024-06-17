@@ -75,5 +75,7 @@ twoway_simulation_independent <- function(group_size, matrices_obj, distribution
                   fdata$iteration <- x
                   fdata
                 })
-  do.call(rbind, sim)
+  sim <- do.call(rbind, sim)
+  sim$n <- group_size
+  sim
 }
