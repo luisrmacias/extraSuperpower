@@ -123,7 +123,7 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
       pvecnames <- stringr::str_trim(rownames(coefs[[1]])[1:3])
     }
   }
-  n <- simulation[[1]]$n
+  n <- unique(simulation[[1]]$n)
   pprops <- rowSums(pvec<alpha)/ncol(pvec)
   lb <- round(pprops - qnorm(1-(0.05/2))*sqrt((pprops*(1-pprops))/ncol(pvec)), 4)
   lb[lb<0] <- 0.0000
