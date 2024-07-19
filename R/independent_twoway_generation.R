@@ -50,11 +50,12 @@ twoway_simulation_independent <- function(group_size, matrices_obj, distribution
                           value.name = "y")
     for (j in 1:2)
     {
-      fdata <- cbind(fdata,
-                     as.factor(unlist(
-                       rep(as.list(paste(names(label_list)[j], label_list[[j]], sep = "_")),
-                           each = group_size * prod(factor_levels)/prod(factor_levels[1:j]),
-                           times = prod(factor_levels)/prod(factor_levels[j:2])))))
+      assigned_factor_levels <- rep(as.list(paste(names(label_list)[j], label_list[[j]], sep = "_")),
+                                    each = group_size * prod(factor_levels)/prod(factor_levels[1:j]),
+                                    times = prod(factor_levels)/prod(factor_levels[j:2]))
+      assigned_factor_levels <- unlist(assigned_factor_levels)
+      assigned_factor_levels <- factor(assigned_factor_levels, levels = unique(assigned_factor_levels))
+      fdata <- cbind(fdata, assigned_factor_levels)
     }
     names(fdata)[4:5] <- names(label_list)
     fdata$subject <- factor(1:nrow(fdata))

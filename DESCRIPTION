@@ -1,6 +1,6 @@
 Package: extraSuperpower
 Title: Inspired by package Superpower, this package calculates power for two-way factorial designs
-Version: 0.0.2.0001
+Version: 0.0.2.0002
 Authors@R: 
     person("Louis", "Macias", , "louis.macias@uni-luebeck.de", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-3080-2835"))
@@ -10,7 +10,7 @@ Description: The basic use of this package is with 3 sequential functions. One t
 License: `use_mit_license()`
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2
 Imports:
 	MASS (>= 7.3.0),
 	afex (>= 1.3.0),
