@@ -59,7 +59,11 @@ twoway_simulation_independent <- function(group_size, matrices_obj, distribution
     }
     names(fdata)[4:5] <- names(label_list)
     fdata$subject <- factor(1:nrow(fdata))
-    if(distribution=="normal")
+    if((distribution=="normal" & skewness > 1) | (distribution =="normal" & skewness < 1))
+    {
+      stop("If skewness is set to a value different than 1 check distribution parameter")
+      }
+    if(distribution=="normal" & skewness == 1)
     {
         y <- suppressMessages(replicate(nsims, reshape2::melt(mapply(rnorm, group_size,
                                                                      mean_matrix, sd_matrix))$value))
