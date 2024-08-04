@@ -14,7 +14,7 @@ twoway_simulation_correlated(group_size, matrices_obj, nsims = 500)
 \item{nsims}{Integer - Number of iterations}
 }
 \value{
-Dataframe with simulated outcome values, factor level labels and iteration number.
+data.frame with modeled outcome values, factor level labels, iteration number and sample size.
 }
 \description{
 Both regular and internal function.

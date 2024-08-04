@@ -35,7 +35,6 @@
 #' @importFrom ggplot2 labs
 #' @importFrom scales pretty_breaks
 #'
-#' @export
 plot_powercurve <- function(exact_anova_power, target_power = NULL, title = NULL, target_line=TRUE)
 {
   if(is.null(target_power))

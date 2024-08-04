@@ -31,7 +31,7 @@ twoway_simulation_independent(
 \item{nsims}{Integer - Number of iterations}
 }
 \value{
-Dataframe with simulated outcome values, factor level labels, iteration number and sample size.
+data.frame with modeled outcome values, factor level labels, iteration number and sample size.
 }
 \description{
 Both regular and internal function.

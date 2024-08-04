@@ -12,7 +12,7 @@
 #' @param superior_limit Numeric - Value of the upper bound for the truncated distribution, defaults to 'Inf'
 #' @param nsims Integer - Number of iterations
 #'
-#' @return Dataframe with simulated outcome values, factor level labels, iteration number and sample size.
+#' @return List with of data.frames of simulated outcome values under different sample sizes. Each data.frame includes factor level labels, iteration number and sample size.
 #'
 #' @examples
 #' #' refmean <- 1
@@ -23,7 +23,7 @@
 #' ## Independent design
 #' effects_treat_time <- calculate_mean_matrix(refmean = refmean, fAeffect = treateff, fBeffect = timeeff, nlfA = treatgroups, nlfB = timepoints, label_list = list(treatment=letters[1:treatgroups], time=1:timepoints))
 #' ## Inspect plot to check if matrices correspond to design
-#' n <- seq(16, 24, 2)
+#' n <- seq(from = 16, to = 24, by = 2)
 #'
 #' ## In this case, the default 'repeated_measurements', 'distribution' and options are used.
 #' indep_simulation <- simulate_twoway_nrange(effects_treat_time, n)

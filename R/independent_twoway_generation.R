@@ -14,7 +14,7 @@
 #' @param superior_limit Numeric - Value of the upper bound for the truncated distribution, defaults to 'Inf'
 #' @param nsims Integer - Number of iterations
 #'
-#' @return Dataframe with simulated outcome values, factor level labels, iteration number and sample size.
+#' @return data.frame with modeled outcome values, factor level labels, iteration number and sample size.
 #'
 #' @examples
 #' refmean <- 1
