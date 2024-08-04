@@ -4,7 +4,16 @@
 \alias{test_power_overkn}
 \title{Test simulated two-way factorial design experiments over different sample sizes.}
 \usage{
-test_power_overkn(data, test = "ANOVA", plot = TRUE)
+test_power_overkn(
+  data,
+  test = "ANOVA",
+  plot = TRUE,
+  target_power = NULL,
+  title = NULL,
+  target_line = TRUE,
+  alpha_line = TRUE,
+  alpha = 0.05
+)
 }
 \arguments{
 \item{data}{data.frame - data.frame with modeled outcome values, factor level labels, iteration number and sample size.}
@@ -12,6 +21,20 @@ test_power_overkn(data, test = "ANOVA", plot = TRUE)
 \item{test}{character - Statistical test to be applied, possible values are 'ANOVA', 'rank' and 'permutation'.}
 
 \item{plot}{logical - Should the power curve be plotted. Default is TRUE.}
+
+\item{target_power}{Desired power to be attained. Accepts values between 0 and 1, defaults to 0.8.}
+
+\item{title}{Title for the graph. Defaults to 'Power curve from exact ANOVA test'}
+
+\item{target_line}{Set to TRUE. If FALSE no target line will be drawn. Overrides target_power.}
+
+\item{alpha_line}{\itemize{
+\item logical Should a line at the set type I error be plotted
+}}
+
+\item{alpha}{\itemize{
+\item numeric Type I error probability
+}}
 }
 \value{
 Data frame with power and confidence intervals for the main effects and interaction for each of the sample sizes.

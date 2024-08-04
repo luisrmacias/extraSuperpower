@@ -6,6 +6,11 @@
 #' @param data data.frame - data.frame with modeled outcome values, factor level labels, iteration number and sample size.
 #' @param test character - Statistical test to be applied, possible values are 'ANOVA', 'rank' and 'permutation'.
 #' @param plot logical - Should the power curve be plotted. Default is TRUE.
+#' @param target_power Desired power to be attained. Accepts values between 0 and 1, defaults to 0.8.
+#' @param title Title for the graph. Defaults to 'Power curve from exact ANOVA test'
+#' @param target_line Set to TRUE. If FALSE no target line will be drawn. Overrides target_power.
+#' @param alpha_line - logical Should a line at the set type I error be plotted
+#' @param alpha - numeric Type I error probability
 #'
 #' @return Data frame with power and confidence intervals for the main effects and interaction for each of the sample sizes.
 #' Also presented in graphical form if 'plot=TRUE'.
@@ -28,7 +33,7 @@
 #' test_power_overkn(indep_skewsim)
 #'
 #' @export
-test_power_overkn <- function(data, test="ANOVA", plot=TRUE)
+test_power_overkn <- function(data, test="ANOVA", plot=TRUE, target_power = NULL, title = NULL, target_line=TRUE, alpha_line=TRUE, alpha=0.05)
 {
   res <- lapply(data, twoway_simulation_testing, test=test)
   res <- do.call(rbind, res)
