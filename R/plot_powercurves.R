@@ -49,8 +49,7 @@ plot_powercurves <- function(power_over_nrange, target_power = NULL, title = NUL
   }
 
   p <- ggplot2::ggplot(power_over_nrange, ggplot2::aes(x=n, y=power, group=effect, color=effect)) + ggplot2::geom_line(linewidth=1.5)
-  p <- p + ggplot2::geom_point(size=2.4, position = position_dodge(0.1))
-  p <- p + ggplot2::geom_errorbar(ggplot2::aes(ymin=lower.bound.ci, ymax=upper.bound.ci), linewidth=1.2, width=0.2)
+  p <- p + ggplot2::geom_point(size=2.4, position = position_dodge(0.2)) + ggplot2::geom_errorbar(ggplot2::aes(ymin=lower.bound.ci, ymax=upper.bound.ci), linewidth=1.2, width=0.2, , position = position_dodge(0.2))
   p <- p + ggplot2::scale_x_continuous(
     breaks = scales::pretty_breaks(length(unique(power_over_nrange$n)))) +
     ggplot2::scale_y_continuous(labels = scales::percent) +
