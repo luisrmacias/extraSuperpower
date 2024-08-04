@@ -35,12 +35,12 @@
 #' @export
 test_power_overkn <- function(data, test="ANOVA", plot=TRUE, target_power = NULL, title = NULL, target_line=TRUE, alpha_line=TRUE, alpha=0.05)
 {
-  res <- lapply(data, twoway_simulation_testing, test=test)
+  res <- lapply(data, twoway_simulation_testing, test=test, alpha=alpha)
   res <- do.call(rbind, res)
   res$effect <- rownames(res)[1:3]
   if (plot)
   {
-    p <- plot_powercurves(res)
+    p <- plot_powercurves(res, target_power=target_power, title=title, target_line=target_line, alpha_line=alpha_line, alpha=alpha)
     list(power_table = res, power_curve = p)
   } else if (!plot)
     res
