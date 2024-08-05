@@ -3,6 +3,7 @@ R package for two-way factorial design sample size calculation. This is performe
 1. Calculates expected outcomes into a cell mean model.
 2. Simulates the data
 3. Estimates the power for a given sample size
+
 These steps allow for independent and repeated measures experiments. 
 
 For the first step we provide a function to create mean values and standard deviation matrices. For repeated measures designs correlation and covariance matrices are also generated. For the second step separate functions are used to simulate independent and repeated measures experiments. 
