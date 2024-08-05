@@ -1,6 +1,6 @@
 # extraSuperpower
 R package for two-way factorial design sample size calculation. This is performed in three steps.
-1. Calculate expected outcomes into a cell mean model.
+1. Calculates expected outcomes into a cell mean model.
 2. Simulates the data
 3. Estimates the power for a given sample size
 These steps allow for independent and repeated measures experiments. 
