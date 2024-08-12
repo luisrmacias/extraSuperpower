@@ -98,7 +98,7 @@ calculate_mean_matrix <- function(refmean, nlfA, nlfB, fAeffect, fBeffect, group
     {
       warning("\nBy setting '0' effects and proportional SD you will obtain groups with standard deviation of 0.")
     }
-    if(withinf=="fA" | withinf=="fB" | withinf=="both")
+    else if(withinf=="fA" | withinf=="fB" | withinf=="both")
     {
       warning("\nBy setting '0' effects and proportional SD you will obtain groups with standard deviation\nof 0 and individuals with 0 covariance.")
     }
