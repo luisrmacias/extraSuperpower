@@ -1,9 +1,7 @@
 #' Create input for simulation based two-way factorial experiments
 #'
-#' The calculate_mean_matrix function is intended as a companion function to the Superpower package ANOVA_design function,
-#' followed by the Superpower ANOVA_power function.
 #' The calculate_mean_matrix will generate a matrix of expected mean values for i*j group combinations of a two-way
-#' factorial design. It will additionally provide a standard deviation matrix for these i*j groups.
+#' factorial design, as well as a standard deviation matrix for these i*j groups.
 #' If the design has repeated measures it will additionally provide correlation and covariance matrices calculated
 #' depending on which factors are 'within' factors in the design.
 #'
@@ -14,15 +12,12 @@
 #' magnitude with respect to the reference mean, the expected change in the cell means will be incorporated to the
 #' aforementioned matrices.
 #'
-#' Finally, if it is a repeated measures design and a covariance matrix is required as output for dowstream analysis,
-#' the user must provide the within subject correlation and which factor is repeated within subjects.
-
 #' We were motivated by sample size calculation for two-way factorial designs with a,b,...,i levels of factor A and
 #' a,b,...,j levels of factor B in which the mean outcome value for replicates of cell A=a and B=a are known.
 #' Furthermore, there is an expected change in level mean for each of the factors. Finally, interaction can be explicitly
 #' introduced to level combinations in which it is expected to occur.
 #'
-#' @param refmean Numeric - expected mean for lowest level of both factors A and B
+#' @param refmean Numeric - expected mean for first level of both factors A and B
 #' @param nlfA Integer - number of levels of factor A
 #' @param nlfB integer - number of levels of factor B
 #' @param fAeffect Numeric - multiple by which the refmean is modified when going from one level to the next of factor A when endincrement is FALSE (default), or multiple by which the last level of factor A is modified with respect to refmean when endincrement is TRUE
@@ -34,12 +29,12 @@
 #' @param sdratio Numeric - value by which the expected mean value of a factor level combination is multiplied to obtain the respective standard deviation, defaults to 0.2.
 #' @param endincrement Logical - determines if the multiples provided in fAeffect and fBeffect refer to level to level changes (default) or change between first and last levels.
 #' @param rho Numeric between -1 and 1 - correlation in outcome within subjects
-#' @param whifinf Character - Names the factor with repeated measures. Possible values are NULL, "fA", "fB" or "both"
+#' @param whithinf Character - Names the factor with repeated measures. Possible values are NULL, "fA", "fB" or "both"
 #' @param plot Logical - Should a line plot with the modeled mean and standard deviations be part of the output. Default=TRUE
 #'
 #' @return If rho and whithinf are left at their default values of 0 and NULL, respectively, a list with two objects.
 #' @return The first consist of two matrices, one of expected means for each cell of the two-way factorial experiment, one of expected standard deviations for said cells.
-#' @return If rho is between -1 and 1 but different to 0 and whithinf is either "fA", "fB" or "both", along with the output mentioned above there will also be correlation and covariance matrices in the output.
+#' @return If rho is between -1 and 1 but different to 0 and whithinf is either "fA", "fB" or "both", along with the above mentioned output the output will include correlation and covariance matrices.
 #'
 #' @examples
 #' refmean <- 1
@@ -55,7 +50,7 @@
 #' head(independent_experiment, 10)
 #'
 #' ## Repeated measures design, suppose subjects from 4 independent treatment groups measured at 5 different timepoints.
-#' ## We use the same parameters as the independent design example, except we add within factor level correlation and we specify that facto B is the within factor.
+#' ## We use the same parameters as the independent design example, except we add within factor level correlation and we specify that factor B is the within factor.
 #'
 #' refmean <- 1
 #' treatgroups <- 4

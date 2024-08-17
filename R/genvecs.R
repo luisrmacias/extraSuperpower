@@ -3,7 +3,7 @@
 #'
 #' The vector's length is length equal to the number of levels of the experimental factor, defined in reps.
 #' he coefficients are estimated from a user defined change. Default is to generate linear vector, this can be modified with the
-#' @export
+#' @noRd
 genvecs <- function(change, reps, bystart=FALSE, scaler=refmean)
 {
   if(bystart)

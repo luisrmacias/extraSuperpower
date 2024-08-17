@@ -4,7 +4,7 @@
 #' for each combination of factor levels. The output given is Cohen's f. Calculations are done as exemplified in the
 #' G*Power 3.1 manual.
 #'
-#' @param matrices_obj List of 2 matrices, named mean.mat and sd.mat. It is the output of the mean_sd_matrix function
+#' @param matrices_obj List of 2 matrices, named mean.mat and sd.mat. It is the part of th output of the 'calculate_mean_matrix function'. This output can be used in full although only the matrices section is used.
 #'
 #' @return Vector of length 3. The first two elements are the effect sizes for the main effects of the first
 #' and second factors, respectively. The third element is the interaction effect size.
@@ -17,19 +17,23 @@
 #' timepoints <- 5
 #' treateff <- 1.5
 #' timeeff <- 0.85
-#' effects_treat_time <- mean_sd_matrix(refmean = refmean, nlfA = treatgroups, nlfB = timepoints, fAeffect = treateff, fBeffect = timeeff, label_list = list(treatment=letters[1:treatgroups], time=1:timepoints))
-#' anoveff(effects_treat_time)
+#' effects_treat_time <- calculate_mean_matrix(refmean = refmean, nlfA = treatgroups, nlfB = timepoints, fAeffect = treateff, fBeffect = timeeff, label_list = list(treatment=letters[1:treatgroups], time=1:timepoints))
+#' effsize(effects_treat_time)
 #'
 #' # we add cell specific interaction effect keeping design and main effect coefficients
 #' cellswithinteraction <- matrix(c(rep(2,3), 3:5), 3,2) #second level of factor A interacts with 3rd, 4th and 5th level of factor B
-#' effects_treat_time_interact <- mean_sd_matrix(refmean = refmean, nlfA = treatgroups, nlfB = timepoints, fAeffect = treateff, fBeffect = timeeff, label_list = list(treatment=letters[1:treatgroups], time=1:timepoints),
+#' effects_treat_time_interact <- calculate_mean_matrix(refmean = refmean, nlfA = treatgroups, nlfB = timepoints, fAeffect = treateff, fBeffect = timeeff, label_list = list(treatment=letters[1:treatgroups], time=1:timepoints),
 #'                       groupswinteraction = cellswithinteraction, interact=1.3)
-#' anoveff(effects_treat_time_interact)
+#' effsize(effects_treat_time_interact)
 #'
 #'
 #' @export
-anoveff <- function(matrices_obj)
+effsize <- function(matrices_obj)
   {
+  if(!all(sapply(matrices_obj, is.matrix)))
+  {
+    matrices_obj <- matrices_obj$matrices_obj
+  }
   mean_matrix <- matrices_obj$mean.mat
   factors <- names(dimnames(mean_matrix))
   sd_matrix <- matrices_obj$sd.mat
