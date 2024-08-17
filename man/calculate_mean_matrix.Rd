@@ -46,9 +46,9 @@ calculate_mean_matrix(
 
 \item{rho}{Numeric between -1 and 1 - correlation in outcome within subjects}
 
-\item{plot}{Logical - Should a line plot with the modeled mean and standard deviations be part of the output. Default=TRUE}
+\item{withinf}{Character - Names the factor with repeated measures. Possible values are NULL, "fA", "fB" or "both"}
 
-\item{whithinf}{Character - Names the factor with repeated measures. Possible values are NULL, "fA", "fB" or "both"}
+\item{plot}{Logical - Should a line plot with the modeled mean and standard deviations be part of the output. Default=TRUE}
 }
 \value{
 If rho and whithinf are left at their default values of 0 and NULL, respectively, a list with two objects.

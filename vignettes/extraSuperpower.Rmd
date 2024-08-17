@@ -24,7 +24,7 @@ _A priori_ sample size calculation for two-way factorial designs. Inspired by pa
 
 Install dependencies from CRAN:
 
-```{r}
+```{r, eval=FALSE}
 ## install the dependencies
 cran.dep <- c("stringr",
               "ggplot2",
@@ -78,7 +78,7 @@ If interaction effects are expected, the combination of levels and the ratio of 
 
 If the design includes repeated measurements, the correlation within subjects and the factor for which measures are repeated must be specified.
 
-We will start with an example of an independent measures design in which interaction is not expected.
+We will start with an example of an independent measures design in which interaction is not expected. Factor A is treatment group of "Group" and factor B is timepoint or "Time".
 
 ```{r}
 ## outcome mean in reference group at baseline is 10
@@ -103,26 +103,140 @@ simple_twoway <- calculate_mean_matrix(refmean = refmean, nlfA = Alevs, nlfB = B
 
 In this case the output is two matrices and a plot. The matrices are the cell means and standard deviations for each combination of levels of factors $A$ and $B$.
 
-```{r}
+```{r, fig.asp=0.8, fig.width=8}
 ##labelling factors and their levels is convenient
 simple_twoway
 ```
 
 As a default, the standard deviation is one fifth of the mean value of each cell. This proportion can be changed with the 'sdproportional' and the 'sdratio' options. By setting 'sdproportional = FALSE' standard deviation will be the same in all cells and estimated as a proportion of the mean of all cells in the mean matrix. By setting 'sdratio = 0.1' this proportion is 10%. 
 
-```{r}
+For all other parameters we will use the values from the previous example.
+
+```{r, fig.asp=0.8, fig.width=8}
 simple_twoway_sdadjusted <- calculate_mean_matrix(refmean = refmean, nlfA = Alevs, nlfB = Blevs,
                                                   fAeffect = fAeff, fBeffect = fBeff,
                                                   sdproportional = FALSE, sdratio = 0.1,
-                                                  rho = 0.5, withinf = "fB",
                                                   label_list = nameslist)
 simple_twoway_sdadjusted
 ```
 
 #### Including an interaction effect
 
-```{r}
+Now, instead of not expecting an interaction effect we are expecting it in the intervention group at times 2 and 3. The other parameters will be as in the first example.
 
+```{r, fig.asp=0.8, fig.width=8}
+#intervention group is the second row in the means matrix, times 2 and 3 the 2nd and 3rd columns.
+cellsinteraction <- c(2, 2, 2, 3)
+cellsinteraction <- matrix(cellsinteraction, 2, 2)
 
+interaction_twoway <- calculate_mean_matrix(refmean = refmean, nlfA = Alevs, nlfB = Blevs, 
+                                       fAeffect = fAeff, fBeffect = fBeff,
+                                       groupswinteraction = cellsinteraction, interact = 0.7,
+                                       label_list = nameslist)
+
+interaction_twoway
 ```
 
+#### Modeling a repeated measures experimet
+
+To end this section, we will switch from an independent measurements design to a design were treatment is a between factor, while "Time" is a between factor, that is, the same study participant has been measures over the different levels of factor "Time". All other parameters will stay as in the independent measures interaction example.
+
+```{r, fig.asp=0.8, fig.width=8}
+#Let's suppose within subject correlation is 0.7
+rho <- 0.7
+interaction_twoway_timewithin <- calculate_mean_matrix(refmean = refmean, nlfA = Alevs, nlfB = Blevs, 
+                                       fAeffect = fAeff, fBeffect = fBeff,
+                                       groupswinteraction = cellsinteraction, interact = 0.7,
+                                       rho = rho, withinf = "fB",
+                                       label_list = nameslist)
+
+interaction_twoway_timewithin
+```
+
+The cell matrices and the plot are the same, the difference lies in that we obtain correlation and covariance matrices as additional output. The 'withinf' option can take the values of 'NULL' value (in which case the 'calculate_mean_matrix' will assume independent measurements), 'fA', 'fB' or 'both', depending on which factor is the "within" factor in the design.
+
+### Simulating a two-way factorial experiment 
+
+Once we have set values for each combination of levels of factors $A$ and $B$ we will sample outcome values under these assumptions with different sample sizes. Sampling can be done from normal, skewed normal or truncated normal distributions. In the repeated measurements case these are multivariate distributions.
+
+Lets start with the independent measurement experiment in which we expect there will be interaction that we stored in the 'interaction_twoway' object. We will sample from the normal distribution, which is the default.
+
+```{r}
+set.seed(170824)
+n <- seq(3, 12, 3)
+indepmeasures_normal_sim <- simulate_twoway_nrange(matrices_obj = interaction_twoway,
+                                            nrange = n, distribution = "normal")
+length(indepmeasures_normal_sim)
+length(n)
+```
+
+The output is a list in which each element is a simulation of sample size specified by the 'nrange' vector.
+
+To sample from a skewed normal distribution.
+
+```{r}
+indepmeasures_skewed_sim <- simulate_twoway_nrange(matrices_obj = interaction_twoway,
+                                            nrange = n, distribution = "skewed", skewness = 2)
+```
+
+The same function is used to sample from a multivariate distribution but you must set the 'repeated_measurements' option to 'TRUE'.
+
+```{r}
+repmeasures_normal_sim <- simulate_twoway_nrange(matrices_obj = interaction_twoway_timewithin, 
+                                                 nrange = n, repeated_measurements = TRUE)
+```
+
+To end this section, we sample from a multivariate skewed normal distribution. The skewness parameter must be length 1, $a$, $b$ or $ab$.
+
+```{r}
+repmeasures_skewed_sim <- simulate_twoway_nrange(matrices_obj = interaction_twoway_timewithin, 
+                                                 nrange = n, repeated_measurements = TRUE,
+                                                 distribution = "skewed", skewness = c(0.2, 0.1))
+```
+
+### Estimating power from simulated data
+
+The final step is estimating the power under the different simulated sample sizes.
+We will start with the independent measurement example. Default test is ANOVA.
+
+```{r, fig.asp=0.8, fig.width=8}
+test_power_overkn(indepmeasures_normal_sim)
+```
+
+We go on with the simulation in which sampling was from a skewed distribution.
+
+```{r, fig.asp=0.8, fig.width=8}
+test_power_overkn(indepmeasures_skewed_sim)
+```
+
+Now we use a estimate the power of the rank test on the simulation sampled from the skewed normal distribution.
+
+```{r, fig.asp=0.8, fig.width=8}
+test_power_overkn(indepmeasures_skewed_sim, test = "rank")
+```
+
+Likewise, we estimate the power for the simulations sampled from multivariate normal and multivariate skewed normal distributions.
+
+```{r, fig.asp=0.8, fig.width=8}
+test_power_overkn(repmeasures_normal_sim)
+```
+
+In this case the power for the group effect is apparently lower than the independent measures design, while the power for interaction is higher. Lets see what happens with the rank test.
+
+```{r, fig.asp=0.8, fig.width=8, warning=FALSE, message=FALSE}
+test_power_overkn(repmeasures_normal_sim, test = "rank")
+```
+
+The power is lower using a rank test.
+
+What about the simulation in which we sampled from the skewed distribution?
+
+```{r, fig.asp=0.8, fig.width=8}
+test_power_overkn(repmeasures_skewed_sim)
+```
+
+Finally, the rank test for a skewed outcome, which is probably more appropriate.
+
+```{r, fig.asp=0.8, fig.width=8, warning=FALSE}
+test_power_overkn(repmeasures_skewed_sim, test = "rank")
+```

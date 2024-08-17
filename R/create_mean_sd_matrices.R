@@ -29,7 +29,7 @@
 #' @param sdratio Numeric - value by which the expected mean value of a factor level combination is multiplied to obtain the respective standard deviation, defaults to 0.2.
 #' @param endincrement Logical - determines if the multiples provided in fAeffect and fBeffect refer to level to level changes (default) or change between first and last levels.
 #' @param rho Numeric between -1 and 1 - correlation in outcome within subjects
-#' @param whithinf Character - Names the factor with repeated measures. Possible values are NULL, "fA", "fB" or "both"
+#' @param withinf Character - Names the factor with repeated measures. Possible values are NULL, "fA", "fB" or "both"
 #' @param plot Logical - Should a line plot with the modeled mean and standard deviations be part of the output. Default=TRUE
 #'
 #' @return If rho and whithinf are left at their default values of 0 and NULL, respectively, a list with two objects.

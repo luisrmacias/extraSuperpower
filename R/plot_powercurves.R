@@ -3,9 +3,11 @@
 #' Internal function, called by test_twoway_nrange, to plot power against sample size.
 #'
 #' @param power_over_nrange data.frame with sample sizes and corresponding powers to be plotted
-#' @param target_power Desired power to be attained. Accepts values between 0 and 1, defaults to 0.8.
-#' @param title Title for the graph. Defaults to 'Power curve from exact ANOVA test'
-#' @param target_line Set to TRUE. If FALSE no target line will be drawn. Overrides target_power.
+#' @param target_power Numeric. Desired power to be attained. Accepts values between 0 and 1, defaults to 0.8.
+#' @param title Character. Title for the graph. Defaults to 'Power curve from exact ANOVA test'
+#' @param target_line Logical. If FALSE no target line will be drawn. Overrides target_power. Default is TRUE.
+#' @param alpha Numeric. Type I error rate.
+#' @param alpha_line Logical. Should a dashed line at the set alpha level be drawn. Default is TRUE.
 #'
 #' @return Plot with power curves.
 #'

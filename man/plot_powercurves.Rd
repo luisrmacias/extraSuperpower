@@ -16,11 +16,15 @@ plot_powercurves(
 \arguments{
 \item{power_over_nrange}{data.frame with sample sizes and corresponding powers to be plotted}
 
-\item{target_power}{Desired power to be attained. Accepts values between 0 and 1, defaults to 0.8.}
+\item{target_power}{Numeric. Desired power to be attained. Accepts values between 0 and 1, defaults to 0.8.}
 
-\item{title}{Title for the graph. Defaults to 'Power curve from exact ANOVA test'}
+\item{title}{Character. Title for the graph. Defaults to 'Power curve from exact ANOVA test'}
 
-\item{target_line}{Set to TRUE. If FALSE no target line will be drawn. Overrides target_power.}
+\item{target_line}{Logical. If FALSE no target line will be drawn. Overrides target_power. Default is TRUE.}
+
+\item{alpha_line}{Logical. Should a dashed line at the set alpha level be drawn. Default is TRUE.}
+
+\item{alpha}{Numeric. Type I error rate.}
 }
 \value{
 Plot with power curves.
