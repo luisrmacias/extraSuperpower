@@ -30,7 +30,7 @@
 #' label_list = list(treatment=letters[1:treatgroups], time=1:timepoints))
 #'
 #' n <- 7
-#' correlated_sim <- twoway_simulation_correlated(group_size=n, matrices_obj=effects_treat_time
+#' correlated_sim <- twoway_simulation_correlated(group_size=n, matrices_obj=effects_treat_time)
 #' ## defaults to 500 iterations
 #'
 #' twoway_simulation_testing(correlated_sim)
@@ -39,7 +39,7 @@
 #' twoway_simulation_testing(correlated_sim, test="rank")
 #' ## rank based analysis of variance
 #'
-#' ##twoway_simulation_testing(correlated_sim, test="permutation")
+#' ## twoway_simulation_testing(correlated_sim, test="permutation")
 #' ## warning, permutation testing taked 25-40 seconds per iteration
 #'
 #' @export
