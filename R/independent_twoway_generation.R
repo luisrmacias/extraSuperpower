@@ -43,8 +43,14 @@ twoway_simulation_independent <- function(group_size, matrices_obj, distribution
   {
     stop("Number of elements of mean matrix must be a multiple of group size elements.")
   }
+  if(is.matrix(matrices_obj$sd.mat))
+  {
   sd_matrix <- as.vector(t(matrices_obj$sd.mat))
-  if(balanced & length(group_size)==1)
+  } else if (is.numeric(matrices_obj$sd.mat) & length(matrices_obj$sd.mat)==1)
+  {
+    sd_matrix <- matrices_obj$sd.mat
+  }
+    if(balanced & length(group_size)==1)
   {
     fdata <- as.data.frame(mapply(rnorm, group_size, mean_matrix, sd_matrix))
     fdata$subject <- 1:group_size

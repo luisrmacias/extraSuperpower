@@ -1,0 +1,123 @@
+---
+title: "extraSuperpower"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{extraSuperpower}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(extraSuperpower)
+```
+
+_A priori_ sample size calculation for two-way factorial designs. Inspired by package Superpower by Daniel Lakens and Aaron R. Caldwell, this package simulates two-way factorial experiments to estimate the power of a given sample size to identify main and interaction effects. Both independent and repeated measurements can be simulated. Outcomes can be sampled from normal, skewed normal or truncated normal distributions.
+
+## Installation
+
+Install dependencies from CRAN:
+
+```{r}
+## install the dependencies
+cran.dep <- c("stringr",
+              "ggplot2",
+              "reshape2",
+              "scales",
+              "ggpubr",
+              "ggthemes",
+              "fGarch",
+              "truncnorm",
+              "MASS",
+              "sn",
+              "tmvtnorm",
+              "afex",
+              "Rfit",
+              "lmPerm",
+              "nparLD",
+              "ez")
+
+cran.dep.to.install <- setdiff(cran.dep, 
+                               installed.packages()[, "Package"])
+
+if(length(cran.dep.to.install) > 0) {
+  install.packages(cran.dep.to.install)
+}
+```
+
+Then install the most recent version of extraSuperpower from GitHub:
+
+```{r}
+library(devtools)
+install_github("luisrmacias/extraSuperpower")
+```
+
+## Usage
+
+Sample size calculation with extraSuperpower is done in three steps:
+
+1. Define the study groups and expected outcomes from your experiment, possibly including interaction effects. If your design has repeated measurements, generate a covariance matrix as well.
+
+2. Simulate the outcomes with a user specified sample size or a set of sample sizes. Outcomes may have a normal, skewed normal or truncated normal distribution.
+
+3. Calculate the power for main effects and interaction based on the simulated data.
+
+### Creating a cell mean model for independent or repeated measures
+
+The minimal required input is the number of levels $a$ of factor $A$, number of levels $b$ of factor $B$, the mean outcome value of cell $a_1, b_1$ (generally a baseline value in control participants) and the ratio of change from one level to the next in each of the factors.
+
+A list with the names of the factors and each of the levels of each factor is highly recommended.
+
+If interaction effects are expected, the combination of levels and the ratio of change of this effect is required.
+
+If the design includes repeated measurements, the correlation within subjects and the factor for which measures are repeated must be specified.
+
+We will start with an example of an independent measures design in which interaction is not expected.
+
+```{r}
+## outcome mean in reference group at baseline is 10
+## a control group and an intervention group will be compared over 3 timepoints
+## all measurements are independent
+refmean <- 10
+Alevs <- 2
+Blevs <- 3
+fAeff <- 1.5
+fBeff <- 0.8
+
+## if you do not provide a list with names of factors and levels, factor names are to "fA" and "fB" and level names are set to 'letters[1:nlfA]' and 'letters[1:nlfB]'.
+
+Alevelnames <- c("control", "intervention")
+Blevelnames <- 1:Blevs
+nameslist <- list("Group" = Alevelnames, "Time" = Blevelnames)
+
+simple_twoway <- calculate_mean_matrix(refmean = refmean, nlfA = Alevs, nlfB = Blevs,
+                                       fAeffect = fAeff, fBeffect = fBeff,
+                                       label_list = nameslist)
+```
+
+In this case the output is two matrices and a plot. The matrices are the cell means and standard deviations for each combination of levels of factors $A$ and $B$.
+
+```{r}
+##labelling factors and their levels is convenient
+simple_twoway
+```
+
+As a default, the standard deviation is one fifth of the mean value of each cell. This proportion can be changed with the 'sdproportional' and the 'sdratio' options. By setting 'sdproportional = FALSE' standard deviation will be the same in all cells and estimated as a proportion of the mean of all cells in the mean matrix. By setting 'sdratio = 0.1' this proportion is 10%. 
+
+```{r}
+simple_twoway_sdadjusted <- calculate_mean_matrix(refmean = refmean, nlfA = Alevs, nlfB = Blevs,
+                                                  fAeffect = fAeff, fBeffect = fBeff,
+                                                  sdproportional = FALSE, sdratio = 0.1,
+                                                  label_list = nameslist, plot = FALSE)
+simple_twoway_sdadjusted
+```
+
+#### Including an interaction effect
+
+

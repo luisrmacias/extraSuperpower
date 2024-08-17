@@ -28,3 +28,7 @@ Imports:
 	ez,
 	Rfit,
 	lmPerm
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
