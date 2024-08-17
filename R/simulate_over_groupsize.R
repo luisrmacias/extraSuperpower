@@ -15,7 +15,7 @@
 #' @return List with of data.frames of simulated outcome values under different sample sizes. Each data.frame includes factor level labels, iteration number and sample size.
 #'
 #' @examples
-#' #' refmean <- 1
+#' refmean <- 1
 #' treatgroups <- 4
 #' timepoints <- 5
 #' treateff <- 1.5

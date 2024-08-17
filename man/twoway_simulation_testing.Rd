@@ -31,10 +31,24 @@ permutation testing.
 Permutation testing under a repeated measurements design may be very time consuming.
 }
 \examples{
+
 ## After creating a 'matrices_obj' with the 'calculate_mean_matrix' function.
 
+refmean <- 1
+treatgroups <- 4
+timepoints <- 5
+treateff <- 1.5
+timeeff <- 0.85
+rho <- 0.8
+withinf <- "fB"
+
+effects_treat_time <- calculate_mean_matrix(refmean = refmean, fAeffect = treateff, fBeffect = timeeff,
+nlfA = treatgroups,  nlfB = timepoints,
+rho = rho, withinf = withinf,
+label_list = list(treatment=letters[1:treatgroups], time=1:timepoints))
+
 n <- 7
-correlated_sim <- twoway_simulation_correlated(group_size=n, matrices_obj=matrices_obj)
+correlated_sim <- twoway_simulation_correlated(group_size=n, matrices_obj=effects_treat_time
 ## defaults to 500 iterations
 
 twoway_simulation_testing(correlated_sim)
@@ -43,7 +57,7 @@ twoway_simulation_testing(correlated_sim)
 twoway_simulation_testing(correlated_sim, test="rank")
 ## rank based analysis of variance
 
-twoway_simulation_testing(correlated_sim, test="permutation")
+##twoway_simulation_testing(correlated_sim, test="permutation")
 ## warning, permutation testing taked 25-40 seconds per iteration
 
 }

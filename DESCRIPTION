@@ -19,6 +19,7 @@ Imports:
 	reshape2,
 	ggpubr,
 	ggthemes,
+	fGarch,
 	nparLD,
 	ez,
 	Rfit,

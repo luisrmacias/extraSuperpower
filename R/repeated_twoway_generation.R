@@ -27,7 +27,8 @@
 #' rho <- 0.8
 #' withinf <- "fB"
 #'
-#' effects_treat_time <- calculate_mean_matrix(refmean = refmean, fAeffect = treateff, fBeffect = timeeff, nlfA = treatgroups,  nlfB = timepoints,
+#' effects_treat_time <- calculate_mean_matrix(refmean = refmean,
+#' fAeffect = treateff, fBeffect = timeeff, nlfA = treatgroups,  nlfB = timepoints,
 #' rho = rho, withinf = withinf, label_list = list(treatment=letters[1:treatgroups], time=1:timepoints))
 #'
 #' ## Inspect plot to check if matrices correspond to design

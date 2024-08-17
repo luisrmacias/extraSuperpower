@@ -31,10 +31,27 @@ Internal function, called by test_twoway_nrange, to plot power against sample si
 \examples{
 
 ## 'cornorm_model' is created with the calculate_mean_matrix function
+refmean <- 10
+treateff <- 1.2
+timeeff <- 0.75
 
-nrange <- 12:20
-cornorm_sim <- simulate_twoway_nrange(nrange, cornorm_model)
+treatgroups <- 3
+treatgroups_names <- c("wt", "DrugA", "DrugB")
 
-power_results <- test_twoway_nrange(cornorm_sim, test="rank", plot=TRUE)
+timepoints <- 4
+timepoints_names <- paste0("t", 1:timepoints)
+
+nameslist <- list(treatment=treatgroups_names, time=timepoints_names)
+
+rho = 0.7
+
+cornorm_model <- calculate_mean_matrix(refmean = refmean, fAeffect = treateff, fBeffect = timeeff,
+nlfA = treatgroups, nlfB = timepoints,
+rho = rho, withinf = "fB", label_list = nameslist)
+
+nrange <- seq(7, 14, 2)
+cornorm_sim <- simulate_twoway_nrange(cornorm_model, nrange)
+
+power_results <- test_power_overkn(cornorm_sim, test="rank", plot=TRUE)
 
 }

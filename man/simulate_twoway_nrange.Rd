@@ -40,7 +40,7 @@ Wrapper for both independent and repeated measures two-way simulations. A vector
 model provided.
 }
 \examples{
-#' refmean <- 1
+refmean <- 1
 treatgroups <- 4
 timepoints <- 5
 treateff <- 1.5
