@@ -39,7 +39,7 @@
 #' @export
 twoway_simulation_correlated <- function(group_size, matrices_obj, distribution="normal", shape.parameter=0, inferior_limit= -Inf, superior_limit=Inf, nsims=500)
 {
-  if(!all(sapply(matrices_obj[-1], is.matrix)))
+  if(!all(sapply(matrices_obj[-1], is.matrix)) & !is.numeric(matrices_obj[[2]][[2]]))
   {
     matrices_obj <- matrices_obj$matrices_obj
   }

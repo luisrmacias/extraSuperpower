@@ -22,6 +22,10 @@ gencovmat <- function(mean_matrix, sd_matrix, rho=rho, label_list, withinf, nlfA
 
   sigmat <- diag(0, prod(nlfA, nlfB))
   rownames(sigmat) <- colnames(sigmat) <- cnames
+  if(length(sd_matrix)==1)
+  {
+    sd_matrix <- matrix(sd_matrix, nrow = nrow(mean_matrix), ncol = ncol(mean_matrix))
+  }
 
   if(withinf=="fA")
   {

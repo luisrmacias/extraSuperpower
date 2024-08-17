@@ -114,10 +114,15 @@ As a default, the standard deviation is one fifth of the mean value of each cell
 simple_twoway_sdadjusted <- calculate_mean_matrix(refmean = refmean, nlfA = Alevs, nlfB = Blevs,
                                                   fAeffect = fAeff, fBeffect = fBeff,
                                                   sdproportional = FALSE, sdratio = 0.1,
+                                                  rho = 0.5, withinf = "fB",
                                                   label_list = nameslist)
 simple_twoway_sdadjusted
 ```
 
 #### Including an interaction effect
 
+```{r}
+
+
+```
 
