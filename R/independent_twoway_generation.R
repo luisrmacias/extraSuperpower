@@ -32,8 +32,7 @@
 #' @export
 twoway_simulation_independent <- function(group_size, matrices_obj, distribution="normal", skewness=1, inferior_limit=-Inf, superior_limit=Inf, balanced=TRUE, nsims=500)
 {
-  if(!all(sapply(matrices_obj, is.matrix)) |
-     sapply(matrices_obj, class)[[length(matrices_obj)]]!="numeric")
+  if(!all(sapply(matrices_obj, is.matrix)) & !is.numeric(matrices_obj[[2]]))
   {
     matrices_obj <- matrices_obj$matrices_obj
   }

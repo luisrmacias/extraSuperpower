@@ -53,7 +53,7 @@ if(length(cran.dep.to.install) > 0) {
 
 Then install the most recent version of extraSuperpower from GitHub:
 
-```{r}
+```{r, eval=FALSE}
 library(devtools)
 install_github("luisrmacias/extraSuperpower")
 ```
