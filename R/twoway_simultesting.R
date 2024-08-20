@@ -50,7 +50,7 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
   {
     withinf <- data$withinf
     simulation <- data$simulated_data
-    print(paste("Testing power on a repeated observations design experiment.\n Sample size =", unique(simulation$n)))
+    cat(paste("Testing power on a repeated observations design experiment.\n Sample size =", unique(simulation$n)))
     indep_vars <- names(simulation)[4:5]
     names(simulation)[4:5] <- c("indep_var1", "indep_var2")
     simulation <- split(simulation, simulation$iteration)
@@ -115,7 +115,7 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
   {
     indep_vars <- names(data)[4:5]
     simulation <- split(data, data$iteration)
-    print(paste("Testing power on an independent observations design experiment.\n Sample size =", unique(simulation$n)))
+    cat(paste("Testing power on an independent observations design experiment.\nSample size =", unique(simulation$n)))
     if(test=="ANOVA")
       {
       frml <- as.formula(paste("y ~ ", indep_vars[1], "*", indep_vars[2], "+ Error(1|subject)"))
