@@ -83,7 +83,7 @@ calculate_mean_matrix <- function(refmean, nlfA, nlfB, fAeffect, fBeffect, group
   {
     label_list <- list(fA = letters[1:nlfA], fB = letters[1:nlfB])
   }
-  if(rho < -1 | rho>1)
+  if(any(abs(rho)>1))
   {
     stop("\nRho must be a number between -1 and 1.")
   }
