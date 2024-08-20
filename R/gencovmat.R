@@ -5,6 +5,7 @@
 #' @param mean_matrix Matrix - cell mean value matrix
 #' @param sd_matrix Matrix - cell sd value matrix
 #' @param rho Numeric - correlation of within factors
+#' @param withinf Character- Factor for which measurements are repeated, options are NULL, "fA", "fB" and "both". If NULL (default) independent measurements will be considered.
 #' @param label_list List length 2 - Names of factor levels
 #' @param nlfA Integer - number of levels of factor A
 #' @param nlfB Integer - number of levels of factor B
