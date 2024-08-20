@@ -48,6 +48,7 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
   require(lmPerm)
   if(is.list(data) & is.null(dim(data)))
   {
+    print("Testing power on a repeated observations design experiment")
     withinf <- data$withinf
     simulation <- data$simulated_data
     indep_vars <- names(simulation)[4:5]
@@ -112,6 +113,7 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
     pvecnames <- gsub("indep_var2", indep_vars[2], pvecnames)
     } else if (is.data.frame(data))
   {
+    print("Testing power on an independent observations design experiment")
     indep_vars <- names(data)[4:5]
     simulation <- split(data, data$iteration)
 
