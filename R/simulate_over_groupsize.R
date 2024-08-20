@@ -44,7 +44,7 @@ simulate_twoway_nrange <- function(matrices_obj, nrange, repeated_measurements=F
     {
     print("Simulating independent observations experiment")
     sim_overens <- lapply(nrange, twoway_simulation_independent, matrices_obj, distribution=distribution, skewness=skewness, inferior_limit=inferior_limit, superior_limit=superior_limit, nsims=nsims)
-    } else if (repeated_measurements & length(matrices_obj)==5)
+    } else if (repeated_measurements & length(matrices_obj[[1]])==5)
     {
     sim_overens <- lapply(nrange, twoway_simulation_correlated, matrices_obj, distribution=distribution, shape.parameter=skewness, inferior_limit=inferior_limit, superior_limit=superior_limit, nsims=nsims)
     }
