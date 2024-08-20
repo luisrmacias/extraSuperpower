@@ -35,7 +35,6 @@ simulate_twoway_nrange <- function(matrices_obj, nrange, repeated_measurements=F
     {
     stop("It seems you have given a correlation value and a within factor as input to the 'calculate_mean_matrix' function.\nAre you sure you want to leave 'repeated_measurements' as 'FALSE'?")
     }
-  
   if(repeated_measurements & length(matrices_obj[[1]])==2)
     {
     stop("It seems you have not given a correlation value and a within factor as input to the 'calculate_mean_matrix' function.\nAre you sure you want to set 'repeated_measurements' to 'TRUE'?")
