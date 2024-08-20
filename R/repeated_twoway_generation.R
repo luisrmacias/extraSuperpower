@@ -39,7 +39,7 @@
 #' @export
 twoway_simulation_correlated <- function(group_size, matrices_obj, distribution="normal", shape.parameter=0, inferior_limit= -Inf, superior_limit=Inf, nsims=500)
 {
-  if(!is.character(matrices_obj[[1]][[1]])
+  if(!is.character(matrices_obj[[1]][[1]]))
      {
        stop("Your 'matrices_obj' does not specify which factor is within participants.\nIf you have a repeated measures design you need to specify the within factor and its correlation when using 'calculate_mean_matrix'.")
       }
