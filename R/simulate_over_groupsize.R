@@ -31,7 +31,7 @@
 #' @export
 simulate_twoway_nrange <- function(matrices_obj, nrange, repeated_measurements=FALSE, distribution="normal", skewness=1, inferior_limit=-Inf, superior_limit=Inf, nsims=500)
   {
-  if(!repeated_measurements & length(matrices_obj[[1]])==5)
+  if(length(matrices_obj[[1]])==5 & !repeated_measurements)
     {
     stop("It seems you have given a correlation value and a within factor as input to the 'calculate_mean_matrix' function.\nAre you sure you want to leave 'repeated_measurements' as 'FALSE'?")
     }
@@ -40,7 +40,7 @@ simulate_twoway_nrange <- function(matrices_obj, nrange, repeated_measurements=F
     {
     stop("It seems you have not given a correlation value and a within factor as input to the 'calculate_mean_matrix' function.\nAre you sure you want to set 'repeated_measurements' to 'TRUE'?")
     }
-  if(!repeated_measurements & length(matrices_obj[[1]])==2)
+  if(length(matrices_obj[[1]])==2 & !repeated_measurements)
     {
     print("Simulating independent observations experiment")
     sim_overens <- lapply(nrange, twoway_simulation_independent, matrices_obj, distribution=distribution, skewness=skewness, inferior_limit=inferior_limit, superior_limit=superior_limit, nsims=nsims)
