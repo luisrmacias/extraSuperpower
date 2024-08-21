@@ -44,7 +44,7 @@ calculate_mean_matrix(
 
 \item{endincrement}{Logical - determines if the multiples provided in fAeffect and fBeffect refer to level to level changes (default) or change between first and last levels.}
 
-\item{rho}{Numeric between -1 and 1 - correlation in outcome within subjects}
+\item{rho}{Vector length 1 or 2, or 2 by 2 matrix - Controls how the correlation and hence de covariance matrix is built.}
 
 \item{withinf}{Character - Names the factor with repeated measures. Possible values are NULL, "fA", "fB" or "both"}
 
@@ -75,6 +75,11 @@ We were motivated by sample size calculation for two-way factorial designs with 
 a,b,...,j levels of factor B in which the mean outcome value for replicates of cell A=a and B=a are known.
 Furthermore, there is an expected change in level mean for each of the factors. Finally, interaction can be explicitly
 introduced to level combinations in which it is expected to occur.
+
+If a repeated measures experiment is intended 'withinf' must be set to "fA", "fB" or "both", depending on which is the "within" factor. If 'rho' is a vector length 1, the within subject correlation
+will be constant for the factor defined in 'withinf'. If 'rho' is a vector length 2 and 'withinf' is either "fA" or "fB" a correlation gradient will be created from the first to second value of
+'rho'. If 'rho' is a vector length 2 and 'withinf="both"', the first element of 'rho' will be the correlation within factor A, while the second element will be the correlation within factor B. If
+'rho' is a 2*2 matrix, only possible if 'withinf="both"', a correlation gradient will be created across rows of 'rho' for each of the factors.
 }
 \examples{
 refmean <- 1

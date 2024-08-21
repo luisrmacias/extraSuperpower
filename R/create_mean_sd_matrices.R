@@ -28,13 +28,20 @@
 #' @param sdproportional Logical - whether the standard deviation for each combination of factor levels is a proportion of the respective factor level combination mean, defaults to TRUE
 #' @param sdratio Numeric - value by which the expected mean value of a factor level combination is multiplied to obtain the respective standard deviation, defaults to 0.2.
 #' @param endincrement Logical - determines if the multiples provided in fAeffect and fBeffect refer to level to level changes (default) or change between first and last levels.
-#' @param rho Numeric between -1 and 1 - correlation in outcome within subjects
+#' @param rho Vector length 1 or 2, or 2 by 2 matrix - Controls how the correlation and hence de covariance matrix is built.
 #' @param withinf Character - Names the factor with repeated measures. Possible values are NULL, "fA", "fB" or "both"
 #' @param plot Logical - Should a line plot with the modeled mean and standard deviations be part of the output. Default=TRUE
 #'
 #' @return If rho and whithinf are left at their default values of 0 and NULL, respectively, a list with two objects.
 #' @return The first consist of two matrices, one of expected means for each cell of the two-way factorial experiment, one of expected standard deviations for said cells.
 #' @return If rho is between -1 and 1 but different to 0 and whithinf is either "fA", "fB" or "both", along with the above mentioned output the output will include correlation and covariance matrices.
+#'
+#' @details
+#' If a repeated measures experiment is intended 'withinf' must be set to "fA", "fB" or "both", depending on which is the "within" factor. If 'rho' is a vector length 1, the within subject correlation
+#' will be constant for the factor defined in 'withinf'. If 'rho' is a vector length 2 and 'withinf' is either "fA" or "fB" a correlation gradient will be created from the first to second value of
+#' 'rho'. If 'rho' is a vector length 2 and 'withinf="both"', the first element of 'rho' will be the correlation within factor A, while the second element will be the correlation within factor B. If
+#' 'rho' is a 2*2 matrix, only possible if 'withinf="both"', a correlation gradient will be created across rows of 'rho' for each of the factors.
+#'
 #'
 #' @examples
 #' refmean <- 1
@@ -86,6 +93,14 @@ calculate_mean_matrix <- function(refmean, nlfA, nlfB, fAeffect, fBeffect, group
   if(any(abs(rho)>1))
   {
     stop("\nRho must be a number between -1 and 1.")
+  }
+  if(length(rho)==2 & withinf=="both")
+  {
+    cat("The first element of 'rho' will be the correlation for factor A, the second element of 'rho' the correlation for factor B")
+  }
+  if(is.matrix(rho) & withinf!="both")
+  {
+    stop("'rho' can only be a matrix if both factor A and factor B are within factors. In that case 'within' should be set to 'both'")
   }
   if((fAeffect==0|fBeffect==0) & isTRUE(sdproportional))
   {

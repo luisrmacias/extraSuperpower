@@ -4,16 +4,18 @@
 \alias{gencovmat}
 \title{Internal function that generates correlation and covariance matrices.}
 \usage{
-gencovmat(mean_matrix, sd_matrix, rho = rho, label_list, withinf, nlfA, nlfB)
+gencovmat(mean_matrix, sd_matrix, rho, label_list, withinf, nlfA, nlfB)
 }
 \arguments{
 \item{mean_matrix}{Matrix - cell mean value matrix}
 
 \item{sd_matrix}{Matrix - cell sd value matrix}
 
-\item{rho}{Numeric - correlation of within factors}
+\item{rho}{Vector length 1 or 2, or 2 by 2 matrix - Controls how the correlation and hence de covariance matrix is built.}
 
 \item{label_list}{List length 2 - Names of factor levels}
+
+\item{withinf}{Character- Factor for which measurements are repeated, options are NULL, "fA", "fB" and "both". If NULL (default) independent measurements will be considered.}
 
 \item{nlfA}{Integer - number of levels of factor A}
 

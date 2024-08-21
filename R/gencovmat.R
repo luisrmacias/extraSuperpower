@@ -4,7 +4,7 @@
 #'
 #' @param mean_matrix Matrix - cell mean value matrix
 #' @param sd_matrix Matrix - cell sd value matrix
-#' @param rho Numeric - correlation of within factors
+#' @param rho Vector length 1 or 2, or 2 by 2 matrix - Controls how the correlation and hence de covariance matrix is built.
 #' @param withinf Character- Factor for which measurements are repeated, options are NULL, "fA", "fB" and "both". If NULL (default) independent measurements will be considered.
 #' @param label_list List length 2 - Names of factor levels
 #' @param nlfA Integer - number of levels of factor A
@@ -13,7 +13,7 @@
 #' @return list length 2 with covariance and correlation matrices
 #'
 #' @export
-gencovmat <- function(mean_matrix, sd_matrix, rho=rho, label_list, withinf, nlfA, nlfB)
+gencovmat <- function(mean_matrix, sd_matrix, rho, label_list, withinf, nlfA, nlfB)
   {
   cnames <- expand.grid(label_list[[2]], label_list[[1]])
   cnames <- paste(cnames$Var2, cnames$Var1, sep = "_")
@@ -30,40 +30,127 @@ gencovmat <- function(mean_matrix, sd_matrix, rho=rho, label_list, withinf, nlfA
 
   if(withinf=="fA")
   {
+    if(length(rho)==1)
+    {
+      tmpmat <- matrix(rho, nlfA, nlfA)
+      diag(tmpmat) <- 1
+    } else if (length(rho)==2)
+    {
+      rho <- seq(rho[1], rho[2], length.out=nlfA-1)
+      tmpmat <- diag(nlfA)
+      for(i in seq(nlfA-1))
+      {
+        j <- i-1
+        tmpmat[-(1:i),i] <- rho[1:(length(rho)-j)]
+      }
+      tmpmat[upper.tri(tmpmat)] <- tmpmat[lower.tri(tmpmat)]
+    }
     rowpos <- sapply(1:nlfB, function(x) grep(paste0("_", label_list[[2]][x], "$"), rownames(cormat)))
     colpos <- sapply(1:nlfB, function(x) grep(paste0("_", label_list[[2]][x], "$"), colnames(cormat)))
     if(all.equal(rowpos, colpos))
     {
-      for(x in seq(nlfB))
+      for(i in seq(nlfB))
       {
-        cormat[rowpos[,x], colpos[,x]] <- rho
-        diag(cormat) <- 1
-        sigmat[rowpos[,x], colpos[,x]] <- cormat[rowpos[,x], colpos[,x]]*tcrossprod(sd_matrix[,x])
+        cormat[rowpos[,i], colpos[,i]] <- tmpmat
+        sigmat[rowpos[,i], colpos[,i]] <- cormat[rowpos[,i], colpos[,i]]*tcrossprod(sd_matrix[,i])
       }
     }
   }
   if(withinf=="fB")
   {
+    if(length(rho)==1)
+    {
+      tmpmat <- matrix(rho, nlfB, nlfB)
+      diag(tmpmat) <- 1
+    } else if (length(rho)==2)
+    {
+      rho <- seq(rho[1], rho[2], length.out=nlfB-1)
+      tmpmat <- diag(nlfB)
+      for(i in seq(nlfB-1))
+      {
+        j <- i-1
+        tmpmat[-(1:i),i] <- rho[1:(length(rho)-j)]
+      }
+      tmpmat[upper.tri(tmpmat)] <- tmpmat[lower.tri(tmpmat)]
+    }
     rowpos <- sapply(1:nlfA, function(x) grep(paste0("^", label_list[[1]][x], "_"), rownames(cormat)))
     colpos <- sapply(1:nlfA, function(x) grep(paste0("^", label_list[[1]][x], "_"), colnames(cormat)))
     if(all.equal(rowpos, colpos))
     {
-      for(x in seq(nlfA))
+      for(i in seq(nlfA))
       {
-        cormat[rowpos[,x], colpos[,x]] <- rho
+        cormat[rowpos[,i], colpos[,i]] <- tmpmat
       }
-      diag(cormat) <- 1
-      for(x in seq(nlfA))
+      for(i in seq(nlfA))
       {
-        x <- x-1
-        sigmat[(x*nlfB)+(1:nlfB), (x*nlfB)+(1:nlfB)] <- cormat[(x*nlfB)+(1:nlfB), (x*nlfB)+(1:nlfB)]*tcrossprod(sd_matrix[x+1,])
+        i <- i-1
+        sigmat[(i*nlfB)+(1:nlfB), (i*nlfB)+(1:nlfB)] <- cormat[(i*nlfB)+(1:nlfB), (i*nlfB)+(1:nlfB)]*tcrossprod(sd_matrix[i+1,])
       }
     }
   }
   if(withinf=="both")
   {
-    cormat[cormat!=1] <- rho
+    if(length(rho)==1)
+    {
+      cormat[cormat!=1] <- rho
+    } else if(length(rho)>1)
+    {
+    if (length(rho)==2)
+    {
+      tmpmatA <- matrix(rho[1], nlfA, nlfA)
+      diag(tmpmatA) <- 1
+      tmpmatB <- matrix(rho[2], nlfB, nlfB)
+      diag(tmpmatB) <- 1
+      # rowpos <- sapply(1:nlfA, function(x) grep(paste0("^", label_list[[1]][x], "_"), rownames(cormat)))
+      # colpos <- sapply(1:nlfA, function(x) grep(paste0("^", label_list[[1]][x], "_"), colnames(cormat)))
+      # if(all.equal(rowpos, colpos))
+      # {
+      #   for(i in seq(nlfA))
+      #   {
+      #     j <- i-1
+      #     cormat[rowpos[,i], colpos[,i]] <- tmpmat
+      #   }
+      # }
+    } else if (is.matrix(rho) & length(rho)==4)
+    {
+      rhoA <- seq(rho[1,1], rho[1,2], length.out=nlfA-1)
+      tmpmatA <- diag(nlfA)
+      rhoB <- seq(rho[2,1], rho[2,2], length.out=nlfB-1)
+      tmpmatB <- diag(nlfB)
+      for(i in seq(nlfA-1))
+      {
+        j <- i-1
+        tmpmatA[-(1:i),i] <- rhoA[1:(length(rhoA)-j)]
+      }
+      tmpmatA[upper.tri(tmpmatA)] <- tmpmatA[lower.tri(tmpmatA)]
+      for(i in seq(nlfB-1))
+      {
+        j <- i-1
+        tmpmatB[-(1:i),i] <- rhoB[1:(length(rhoB)-j)]
+      }
+      tmpmatB[upper.tri(tmpmatB)] <- tmpmatB[lower.tri(tmpmatB)]
+    }
+      rowpos <- sapply(1:nlfB, function(x) grep(paste0("_", label_list[[2]][x], "$"), rownames(cormat)))
+      colpos <- sapply(1:nlfB, function(x) grep(paste0("_", label_list[[2]][x], "$"), colnames(cormat)))
+      if(all.equal(rowpos, colpos))
+      {
+        for(x in seq(nlfB))
+        {
+          cormat[rowpos[,x], colpos[,x]] <- tmpmatA
+        }
+      }
+
+      rowpos <- sapply(1:nlfA, function(x) grep(paste0("^", label_list[[1]][x], "_"), rownames(cormat)))
+      colpos <- sapply(1:nlfA, function(x) grep(paste0("^", label_list[[1]][x], "_"), colnames(cormat)))
+      if(all.equal(rowpos, colpos))
+      {
+        for(i in seq(nlfA))
+        {
+          cormat[rowpos[,i], colpos[,i]] <- tmpmatB
+        }
+      }
+    }
     sigmat <- cormat*tcrossprod(as.vector(sd_matrix))
   }
-  list(cormat=cormat, sigmat=sigmat)
+  list(cormat=cormat, sigmat=Matrix::nearPD(sigmat)$mat)
 }
