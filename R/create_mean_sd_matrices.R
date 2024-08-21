@@ -79,6 +79,10 @@
 calculate_mean_matrix <- function(refmean, nlfA, nlfB, fAeffect, fBeffect, groupswinteraction=NULL, interact=1, label_list = NULL,
                                   sdproportional = TRUE, sdratio=0.2, endincrement=FALSE,  rho=0, withinf=NULL, plot=TRUE)
 {
+  if(is.null(withinf))
+  {
+    withinf=="none"
+  }
   ##Check if labels correspond to group sizes. If no labels are given, assign them.
   if(!is.null(label_list))
   {
@@ -94,23 +98,21 @@ calculate_mean_matrix <- function(refmean, nlfA, nlfB, fAeffect, fBeffect, group
   {
     stop("\nRho must be a number between -1 and 1.")
   }
-  if(length(rho)==2 & !is.null(withinf))
-  { if (withinf!="fA" & withif!="fB")
-    {
+  if(length(rho)==2 & withinf=="both")
+  {
     cat("The first element of 'rho' will be the correlation for factor A, the second element of 'rho' the correlation for factor B")
-    }
   }
-  if(is.matrix(rho) & (is.null(withinf) | withinf=="fA" | withinf =="fB"))
+  if(is.matrix(rho) & withinf!="both")
   {
     stop("'rho' can only be a matrix if both factor A and factor B are within factors. In that case 'within' should be set to 'both'")
   }
   if((fAeffect==0|fBeffect==0) & isTRUE(sdproportional))
   {
-    if(is.null(withinf))
+    if(withinf=="none")
     {
       warning("\nBy setting '0' effects and proportional SD you will obtain groups with standard deviation of 0.")
     }
-    else if(withinf=="fA" | withinf=="fB" | withinf=="both")
+    else if(withinf=="fA" | withinf=="fB" | withinf=="none")
     {
       warning("\nBy setting '0' effects and proportional SD you will obtain groups with standard deviation\nof 0 and individuals with 0 covariance.")
     }
@@ -148,10 +150,10 @@ calculate_mean_matrix <- function(refmean, nlfA, nlfB, fAeffect, fBeffect, group
     sd_matrix <- abs(mean(mean_matrix)*sdratio)
   }
   ## Function ends here if measurements are independent
-  if(is.null(withinf))
+  if(withinf=="none")
   {
     matrices_obj <- list(mean.mat = mean_matrix, sd.mat= sd_matrix)
-  } else if(!is.null(withinf))
+  } else if(withinf!="none")
   {
     if(withinf!="fA" & withinf!="fB" & withinf!="both")
     {
