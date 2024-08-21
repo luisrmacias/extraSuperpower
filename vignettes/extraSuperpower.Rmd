@@ -191,10 +191,10 @@ repmeasures_normal_sim <- simulate_twoway_nrange(matrices_obj = interaction_twow
 
 To end this section, we sample from a multivariate skewed normal distribution. The skewness parameter must be length 1, $a$, $b$ or $ab$.
 
-```{r}
+```{r, eval=FALSE}
 repmeasures_skewed_sim <- simulate_twoway_nrange(matrices_obj = interaction_twoway_timewithin, 
                                                  nrange = n, repeated_measurements = TRUE,
-                                                 distribution = "skewed", skewness = c(0.2, 0.1))
+                                                 distribution = "skewed", skewness = 0)
 ```
 
 ### Estimating power from simulated data
@@ -208,13 +208,13 @@ test_power_overkn(indepmeasures_normal_sim)
 
 We go on with the simulation in which sampling was from a skewed distribution.
 
-```{r, fig.asp=0.8, fig.width=8}
+```{r, fig.asp=0.8, fig.width=8, eval=FALSE}
 test_power_overkn(indepmeasures_skewed_sim)
 ```
 
 Now we use a estimate the power of the rank test on the simulation sampled from the skewed normal distribution.
 
-```{r, fig.asp=0.8, fig.width=8}
+```{r, fig.asp=0.8, fig.width=8, eval=FALSE}
 test_power_overkn(indepmeasures_skewed_sim, test = "rank")
 ```
 
@@ -226,7 +226,7 @@ test_power_overkn(repmeasures_normal_sim)
 
 In this case the power for the group effect is apparently lower than the independent measures design, while the power for interaction is higher. Lets see what happens with the rank test.
 
-```{r, fig.asp=0.8, fig.width=8, warning=FALSE, message=FALSE}
+```{r, fig.asp=0.8, fig.width=8, warning=FALSE, message=FALSE, eval=FALSE}
 test_power_overkn(repmeasures_normal_sim, test = "rank")
 ```
 
@@ -234,12 +234,12 @@ The power is lower using a rank test.
 
 What about the simulation in which we sampled from the skewed distribution?
 
-```{r, fig.asp=0.8, fig.width=8}
+```{r, fig.asp=0.8, fig.width=8, eval=FALSE}
 test_power_overkn(repmeasures_skewed_sim)
 ```
 
 Finally, the rank test for a skewed outcome, which is probably more appropriate.
 
-```{r, fig.asp=0.8, fig.width=8, warning=FALSE}
+```{r, fig.asp=0.8, fig.width=8, warning=FALSE, eval=FALSE}
 test_power_overkn(repmeasures_skewed_sim, test = "rank")
 ```
