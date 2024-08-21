@@ -24,12 +24,13 @@ _A priori_ sample size calculation for two-way factorial designs. Inspired by pa
 
 Install dependencies from CRAN:
 
-```{r, eval=FALSE}
+```{r dependency instalation}
 ## install the dependencies
 cran.dep <- c("stringr",
               "ggplot2",
               "reshape2",
               "scales",
+              "Matrix",
               "ggpubr",
               "ggthemes",
               "fGarch",
@@ -53,9 +54,12 @@ if(length(cran.dep.to.install) > 0) {
 
 Then install the most recent version of extraSuperpower from GitHub:
 
-```{r, eval=FALSE}
+```{r package installation}
 library(devtools)
-install_github("luisrmacias/extraSuperpower")
+if(!"extraSuperpower" %in% installed.packages()[, "Package"])
+{
+  install_github("luisrmacias/extraSuperpower")
+}  
 ```
 
 ## Usage

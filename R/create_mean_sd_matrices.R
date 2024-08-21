@@ -94,9 +94,11 @@ calculate_mean_matrix <- function(refmean, nlfA, nlfB, fAeffect, fBeffect, group
   {
     stop("\nRho must be a number between -1 and 1.")
   }
-  if(length(rho)==2 & withinf=="both")
-  {
+  if(length(rho)==2 & !is.null(withinf))
+  { if (withinf!="fA" & withif!="fB")
+    {
     cat("The first element of 'rho' will be the correlation for factor A, the second element of 'rho' the correlation for factor B")
+    }
   }
   if(is.matrix(rho) & withinf!="both")
   {
