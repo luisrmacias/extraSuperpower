@@ -100,7 +100,7 @@ calculate_mean_matrix <- function(refmean, nlfA, nlfB, fAeffect, fBeffect, group
     cat("The first element of 'rho' will be the correlation for factor A, the second element of 'rho' the correlation for factor B")
     }
   }
-  if(is.matrix(rho) & withinf!="both")
+  if(is.matrix(rho) & (is.null(withinf) | withinf=="fA" | withinf =="fB"))
   {
     stop("'rho' can only be a matrix if both factor A and factor B are within factors. In that case 'within' should be set to 'both'")
   }

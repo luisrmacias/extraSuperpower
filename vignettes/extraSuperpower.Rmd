@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+```{r setup, include=FALSE}
 library(extraSuperpower)
 ```
 
@@ -55,10 +55,9 @@ if(length(cran.dep.to.install) > 0) {
 Then install the most recent version of extraSuperpower from GitHub:
 
 ```{r package installation}
-library(devtools)
 if(!"extraSuperpower" %in% installed.packages()[, "Package"])
 {
-  install_github("luisrmacias/extraSuperpower")
+  devtools::install_github("luisrmacias/extraSuperpower")
 }  
 ```
 
