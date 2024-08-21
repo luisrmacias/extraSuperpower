@@ -81,7 +81,7 @@ calculate_mean_matrix <- function(refmean, nlfA, nlfB, fAeffect, fBeffect, group
 {
   if(is.null(withinf))
   {
-    withinf=="none"
+    withinf <- "none"
   }
   ##Check if labels correspond to group sizes. If no labels are given, assign them.
   if(!is.null(label_list))
