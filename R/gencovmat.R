@@ -152,5 +152,9 @@ gencovmat <- function(mean_matrix, sd_matrix, rho, label_list, withinf, nlfA, nl
     }
     sigmat <- cormat*tcrossprod(as.vector(sd_matrix))
   }
-  list(cormat=cormat, sigmat=Matrix::nearPD(sigmat)$mat)
+  if(length(rho)>1)
+  {
+    sigmat <- Matrix::nearPD(sigmat)$mat
+  }
+  list(cormat=cormat, sigmat=sigmat)
 }
