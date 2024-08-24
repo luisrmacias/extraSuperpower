@@ -75,7 +75,7 @@ plot_powercurves <- function(power_over_nrange, target_power = NULL, title = NUL
   p <- p + ggplot2::geom_line(linewidth=1.5, position = position_dodge(0.2)) + ggplot2::geom_point(size=2.4, position = position_dodge(0.2))
   if(all(c("lower.bound.ci", "upper.bound.ci") %in% names(power_over_nrange)))
   {
-    p <- ggplot2::geom_errorbar(ggplot2::aes(ymin=lower.bound.ci, ymax=upper.bound.ci), linewidth=1.2, width=0.2, position = position_dodge(0.2))
+    p <- p + ggplot2::geom_errorbar(ggplot2::aes(ymin=lower.bound.ci, ymax=upper.bound.ci), linewidth=1.2, width=0.2, position = position_dodge(0.2))
     ylab <- "Power (95% confidence interval)"
   } else if (!"lower.bound.ci"%in% names(power_over_nrange))
   {
