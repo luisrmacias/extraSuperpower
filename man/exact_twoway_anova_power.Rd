@@ -10,7 +10,11 @@ exact_twoway_anova_power(
   effect_sizes,
   n,
   alpha = 0.05,
-  factor_names = NULL
+  factor_names = NULL,
+  plot = TRUE,
+  target_power = NULL,
+  target_line = TRUE,
+  alpha_line = TRUE
 )
 }
 \arguments{
@@ -23,11 +27,23 @@ and second factors, respectively. The third element is the interaction effect si
 
 \item{n}{Number of experimental units in each group for which power (1-beta) will be calculated.}
 
-\item{alpha}{Accepted type 1 error. Defaults to 0.05}
+\item{alpha}{Numeric. Type I error probability. Defaults to 0.05}
 
 \item{factor_names}{Character vector of length 2. Names of the 2 factors to be evaluated. Default is to inherit names
 from effect_sizes. If effect_sizes has no names and no factor_names are provided, factors will be named 'FactorA' and
 'FactorB'.}
+
+\item{plot}{logical - Should the power curve be plotted. Default is TRUE.}
+
+\item{target_power}{Desired power to be attained. Accepts values between 0 and 1, defaults to 0.8.}
+
+\item{target_line}{Set to TRUE. If FALSE no target line will be drawn. Overrides target_power.}
+
+\item{alpha_line}{\itemize{
+\item logical Should a line at the set type I error be plotted
+}}
+
+\item{title}{Title for the graph. Defaults to 'Power curve from exact ANOVA test'}
 }
 \value{
 A list that contains the number of levels for each factor, the chosen significance level and a data.frame in which the

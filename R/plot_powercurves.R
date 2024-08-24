@@ -81,8 +81,7 @@ plot_powercurves <- function(power_over_nrange, target_power = NULL, title = NUL
   {
     ylab <- "Power"
   }
-  p <- p + ggplot2::scale_x_continuous(
-    breaks = scales::pretty_breaks(length(unique(power_over_nrange$n)))) +
+  p <- p + ggplot2::scale_x_continuous(breaks = scales::pretty_breaks(length(unique(power_over_nrange$n)))) +
     ggplot2::scale_y_continuous(labels = scales::percent) +
     ggplot2::labs(col="Effect", title=title, y= ylab, x=expression(paste(italic(n), " per group")))
   if(target_line)
