@@ -8,10 +8,17 @@
 #' @param effect_sizes Vector of length 3. The first two elements are the effect sizes for the main effects of the first
 #' and second factors, respectively. The third element is the interaction effect size.
 #' @param n Number of experimental units in each group for which power (1-beta) will be calculated.
-#' @param alpha Accepted type 1 error. Defaults to 0.05
+#' @param alpha Numeric. Type I error probability. Defaults to 0.05
 #' @param factor_names Character vector of length 2. Names of the 2 factors to be evaluated. Default is to inherit names
 #' from effect_sizes. If effect_sizes has no names and no factor_names are provided, factors will be named 'FactorA' and
 #' 'FactorB'.
+#' @param plot logical - Should the power curve be plotted. Default is TRUE.
+#' @param target_power Desired power to be attained. Accepts values between 0 and 1, defaults to 0.8.
+#' @param title Title for the graph. Defaults to 'Power curve from exact ANOVA test'
+#' @param target_line Set to TRUE. If FALSE no target line will be drawn. Overrides target_power.
+#' @param alpha_line - logical Should a line at the set type I error be plotted
+#'
+
 #'
 #' @return A list that contains the number of levels for each factor, the chosen significance level and a data.frame in which the
 #' first column is the group sample size and the remaining three columns are the power for the main effect of the first
@@ -33,7 +40,7 @@
 #' exact_twoway_anova_power(a= treatgroups, b=timepoints, effect_sizes=fxs, n=5:20)
 #'
 #' @export
-exact_twoway_anova_power <- function(a, b, effect_sizes, n, alpha = 0.05, factor_names = NULL)
+exact_twoway_anova_power <- function(a, b, effect_sizes, n, alpha = 0.05, factor_names = NULL, plot=TRUE, target_power=NULL, target_line=TRUE, alpha_line=TRUE)
 {
   if (length(a)!=1 | length(b)!=1 | a %% 1 != 0 | b %% 1 != 0 | a == 0 | b == 0)
   {
@@ -85,9 +92,17 @@ exact_twoway_anova_power <- function(a, b, effect_sizes, n, alpha = 0.05, factor
   }
   powercurve <- data.frame(powercurve)
   names(powercurve) <- c("n", factor_names)
+  powercurve <- reshape2::melt(powercurve, id.var="n", value.name = "power", variable.name="effect")
   NOTE <- paste("n is number in each group, total sample = n *",
                 a * b)
   METHOD <- "Balanced two-way analysis of variance power calculation"
-  list(a = a, b = b, sig.level = alpha, powercurve = powercurve, note=NOTE,
+  if(!plot)
+  {
+    list(a = a, b = b, sig.level = alpha, powercurve = powercurve, note=NOTE,
        method = METHOD)
+  } else if(plot)
+    exactpower <- list(a = a, b = b, sig.level = alpha, powercurve = powercurve, note=NOTE,
+                       method = METHOD)
+   list(exactpower = exactpower, powerplot = plot_powercurves(exactpower$powercurve))
 }
+

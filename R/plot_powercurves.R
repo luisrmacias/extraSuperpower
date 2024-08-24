@@ -50,6 +50,10 @@
 #' @export
 plot_powercurves <- function(power_over_nrange, target_power = NULL, title = NULL, target_line=TRUE, alpha_line=TRUE, alpha=0.05)
 {
+  if(!is.data.frame(power_over_nrange))
+  {
+    stop("The 'power_over_nrange' object should be a 'data.frame'")
+  }
   if(is.null(target_power))
   {
     target_power = 0.8
@@ -67,12 +71,20 @@ plot_powercurves <- function(power_over_nrange, target_power = NULL, title = NUL
     stop("title should be a character string")
   }
 
-  p <- ggplot2::ggplot(power_over_nrange, ggplot2::aes(x=n, y=power, group=effect, color=effect)) + ggplot2::geom_line(linewidth=1.5)
-  p <- p + ggplot2::geom_point(size=2.4, position = position_dodge(0.2)) + ggplot2::geom_errorbar(ggplot2::aes(ymin=lower.bound.ci, ymax=upper.bound.ci), linewidth=1.2, width=0.2, , position = position_dodge(0.2))
+  p <- ggplot2::ggplot(power_over_nrange, ggplot2::aes(x=n, y=power, group=effect, color=effect))
+  p <- p + ggplot2::geom_line(linewidth=1.5, position = position_dodge(0.2)) + ggplot2::geom_point(size=2.4, position = position_dodge(0.2))
+  if(all(c("lower.bound.ci", "upper.bound.ci") %in% names(power_over_nrange)))
+  {
+    p <- ggplot2::geom_errorbar(ggplot2::aes(ymin=lower.bound.ci, ymax=upper.bound.ci), linewidth=1.2, width=0.2, position = position_dodge(0.2))
+    ylab <- "Power (95% confidence interval)"
+  } else if (!"lower.bound.ci"%in% names(power_over_nrange))
+  {
+    ylab <- "Power"
+  }
   p <- p + ggplot2::scale_x_continuous(
     breaks = scales::pretty_breaks(length(unique(power_over_nrange$n)))) +
     ggplot2::scale_y_continuous(labels = scales::percent) +
-    ggplot2::labs(col="Effect", title=title, y="Power (95% confidence interval)", x=expression(paste(italic(n), " per group")))
+    ggplot2::labs(col="Effect", title=title, y= ylab, x=expression(paste(italic(n), " per group")))
   if(target_line)
   {
     p <- p + ggplot2::geom_hline(yintercept = target_power, linetype="dashed", color = "red", linewidth=1.1)
