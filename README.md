@@ -4,9 +4,9 @@ R package for two-way factorial design sample size calculation. This is performe
 2. Simulates the data
 3. Estimates the power for a given sample size
 
-These steps allow for independent and repeated measures experiments. 
+These steps allow for independent and repeated measures experiments with balanced or unbalanced design. 
 
-For the first step we provide a function to create mean values and standard deviation matrices. For repeated measures designs correlation and covariance matrices are also generated. For the second step separate functions are used to simulate independent and repeated measures experiments. 
+For the first step we provide a function to create mean values and standard deviation matrices. For repeated measures designs correlation and covariance matrices are also generated. For the second step separate functions are used to simulate independent and repeated measures experiments. Once the two-way factorial study is simulated under different sample sizes, the power under different statistical tests for these sample sizes can be estimated.
 
 ``extraSuperpower`` depends on packages ``MASS``, ``Matrix``, ``rlist``, ``afex``, ``fGarch``, ``truncnorm``, ``lmPerm``, ``ez``, ``nparLD``, ``Rfit``, ``stringr``, ``reshape2``, ``ggplot2`` and ``ggpubr``. 
 
