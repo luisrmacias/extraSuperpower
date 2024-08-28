@@ -161,31 +161,31 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
   ub <- round(pprops + qnorm(1-(0.05/2))*sqrt((pprops*(1-pprops))/ncol(pvec)), 4)
   ub[ub<0] <- 0.0000
 
-  if(length(unique(simulation[[1]]$simulated_data$n))==1) {
+  if(length(unique(simulation[[1]]$n))==1) {
     n <- unique(simulation[[1]]$n)
-  } else if (length(unique(simulation[[1]]$simulated_data$n))>1)
+  } else if (length(unique(simulation[[1]]$n))>1)
   {
     n <- range(simulation[[1]]$n)
   }
 
   if(test=="rank")
   {
-    if(length(unique(simulation[[1]]))==1)
+    if(length(unique(simulation[[1]]$n))==1)
     {
       data.frame(n = n, power=pprops, "lower bound ci" = lb, "upper bound ci" = ub)
     }
-    else if (length(unique(simulation[[1]]))>1)
+    else if (length(unique(simulation[[1]]$n))>1)
     {
       data.frame("smallest group" = n[1], "largest group" = n[2], "mean group size" = mean(n), power=pprops, "lower bound ci" = lb, "upper bound ci" = ub)
     }
   } else if (test!="rank")
   {
     names(pprops) <- pvecnames
-    if(length(unique(simulation[[1]]))==1)
+    if(length(unique(simulation[[1]]$n))==1)
     {
       data.frame(n = n, power=pprops, "lower bound ci" = lb, "upper bound ci" = ub)
     }
-    else if (length(unique(simulation[[1]]))>1)
+    else if (length(unique(simulation[[1]]$n))>1)
     {
       data.frame("smallest group" = n[1], "largest group" = n[2], "mean group size" = mean(n), power=pprops, "lower bound ci" = lb, "upper bound ci" = ub)
     }
