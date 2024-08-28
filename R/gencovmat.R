@@ -27,7 +27,10 @@ gencovmat <- function(mean_matrix, sd_matrix, rho, label_list, withinf, nlfA, nl
   {
     sd_matrix <- matrix(sd_matrix, nrow = nrow(mean_matrix), ncol = ncol(mean_matrix))
   }
-
+  if((length(rho)>2 & is.vector(rho)) | (is.matrix(rho) & length(rho)!=4))
+  {
+    stop("'rho' must be a single value, a vector length 2 or a 2 by 2 matrix")
+  }
   if(withinf=="fA")
   {
     if(length(rho)==1)
