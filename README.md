@@ -8,7 +8,7 @@ These steps allow for independent and repeated measures experiments.
 
 For the first step we provide a function to create mean values and standard deviation matrices. For repeated measures designs correlation and covariance matrices are also generated. For the second step separate functions are used to simulate independent and repeated measures experiments. 
 
-``extraSuperpower`` depends on packages ``MASS``, ``Matrix``, ``afex``, ``fGarch``, ``truncnorm``, ``lmPerm``, ``ez``, ``nparLD``, ``Rfit``, ``stringr``, ``reshape2``, ``ggplot2`` and ``ggpubr``. 
+``extraSuperpower`` depends on packages ``MASS``, ``Matrix``, ``rlist``, ``afex``, ``fGarch``, ``truncnorm``, ``lmPerm``, ``ez``, ``nparLD``, ``Rfit``, ``stringr``, ``reshape2``, ``ggplot2`` and ``ggpubr``. 
 
 To install, install dependencies and ``devtools``, if not done already.
 
