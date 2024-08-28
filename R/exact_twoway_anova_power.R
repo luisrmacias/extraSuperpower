@@ -92,7 +92,7 @@ exact_twoway_anova_power <- function(a, b, effect_sizes, n, alpha = 0.05, factor
   }
   powercurve <- data.frame(powercurve)
   names(powercurve) <- c("n", factor_names)
-  powercurve <- reshape2::melt(powercurve, id.var="n", value.name = "power", variable.name="effect")
+  longpowercurve <- reshape2::melt(powercurve, id.var="n", value.name = "power", variable.name="effect")
   NOTE <- paste("n is number in each group, total sample = n *",
                 a * b)
   METHOD <- "Balanced two-way analysis of variance power calculation"
@@ -103,6 +103,6 @@ exact_twoway_anova_power <- function(a, b, effect_sizes, n, alpha = 0.05, factor
   } else if(plot)
     exactpower <- list(a = a, b = b, sig.level = alpha, powercurve = powercurve, note=NOTE,
                        method = METHOD)
-   list(exactpower = exactpower, powerplot = plot_powercurves(exactpower$powercurve))
+   list(exactpower = exactpower, powerplot = plot_powercurves(longpowercurve))
 }
 

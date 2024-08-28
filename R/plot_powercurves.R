@@ -70,7 +70,7 @@ plot_powercurves <- function(power_over_nrange, target_power = NULL, title = NUL
   {
     stop("title should be a character string")
   }
-  if("n" %in% names(power_over_nrange) & ncol(power_over_nrange)==5)
+  if("n" %in% names(power_over_nrange) & ncol(power_over_nrange)<=5)
   {
     p <- ggplot2::ggplot(power_over_nrange, ggplot2::aes(x=n, y=power, group=effect, color=effect))
     xlabel <- expression(paste(italic(n), " per group"))
