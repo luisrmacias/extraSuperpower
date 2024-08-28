@@ -12,9 +12,13 @@ For the first step we provide a function to create mean values and standard devi
 
 To install, install dependencies and ``devtools``, if not done already.
 
+``devtools::install_github("luisrmacias/extraSuperpower")``
+
 Further installation and user guide in the ``vignette`` (vignettes folder).
 
-``devtools::install_github("luisrmacias/extraSuperpower")``
+``devtools::install_github("luisrmacias/extraSuperpower", build_vignettes = TRUE)``
+
+First steps:
 
 ``library(extraSuperpower)``
 
