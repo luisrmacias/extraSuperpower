@@ -48,6 +48,12 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
   require(lmPerm)
   if(is.list(data) & is.null(dim(data)))
   {
+    checkFunction <- function() {
+      user_input <- readline("Permutation testing for repeated measurement designs can take several hours. Are you sure you want to run this? (y/n)  ")
+      if(user_input != 'y') stop('Exiting')
+      print('Permutation testing starts')
+    }
+
     withinf <- data$withinf
     simulation <- data$simulated_data
     cat(paste("Testing power on a repeated observations design experiment.\n Sample size =", unique(simulation$n),"\n"))
@@ -63,6 +69,7 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
         pvecnames <- rownames(suppressMessages(afex::aov_ez(id = "subject", dv = "y", within = "indep_var1", between = "indep_var2",  data = simulation[[1]])$anova_table))
       } else if(test=="permutation")
       {
+        checkFunction()
         pvec <- sapply(simulation, function(i) ez::ezPerm(wid=subject, dv = y, within = indep_var1, between = indep_var2, data = i)$p)
         pvecnames <- ez::ezPerm(wid=subject, dv = y, within = indep_var1,  between = indep_var2, data = simulation[[1]])$Effect
       } else if(test=="rank")
@@ -81,6 +88,7 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
 
       } else if(test=="permutation")
       {
+        checkFunction()
         pvec <- sapply(simulation,
                        function(i) ez::ezPerm(wid=subject, dv = y, between = indep_var1, within = indep_var2, data=i)$p)
         pvecnames <- ez::ezPerm(wid=subject, dv = y, between = indep_var1, within = indep_var2, data = simulation[[1]])$Effect
@@ -99,6 +107,7 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
         pvecnames <- rownames(suppressMessages(afex::aov_ez(id = "subject", dv = "y", within = c("indep_var1", "indep_var2"),  data = simulation[[1]])$anova_table))
       }else if(test=="permutation")
       {
+        checkFunction()
         pvec <- sapply(simulation,
                        function(i) ez::ezPerm(wid=subject, dv = y, within = .(indep_var1, indep_var2),  data = i)$p)
         pvecnames <- ez::ezPerm(wid=subject, dv = y, within = .(indep_var1, indep_var2), data = simulation[[1]])$Effect
