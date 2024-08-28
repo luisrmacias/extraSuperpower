@@ -53,8 +53,8 @@ cornorm_model <- calculate_mean_matrix(refmean = refmean, fAeffect = treateff, f
 nlfA = treatgroups, nlfB = timepoints,
 rho = rho, withinf = "fB", label_list = nameslist)
 
-nrange <- seq(7, 14, 2)
-cornorm_sim <- simulate_twoway_nrange(cornorm_model, nrange, repeated_measurements=TRUE)
+nset <- seq(7, 14, 2)
+cornorm_sim <- simulate_twoway_nrange(cornorm_model, nset, repeated_measurements=TRUE)
 
 power_results <- test_power_overkn(cornorm_sim, test="rank", plot=TRUE)
 

@@ -1,5 +1,5 @@
 ---
-title: "extraSuperpower"
+title: "extraSuperpower: Balanced designs"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{extraSuperpower}
@@ -140,7 +140,7 @@ interaction_twoway <- calculate_mean_matrix(refmean = refmean, nlfA = Alevs, nlf
 interaction_twoway
 ```
 
-#### Modeling a repeated measures experimet
+#### Modeling a repeated measures experiment
 
 To end this section, we will switch from an independent measurements design to a design were treatment is a between factor, while "Time" is a between factor, that is, the same study participant has been measures over the different levels of factor "Time". All other parameters will stay as in the independent measures interaction example.
 
@@ -168,7 +168,7 @@ Lets start with the independent measurement experiment in which we expect there 
 set.seed(170824)
 n <- seq(3, 12, 3)
 indepmeasures_normal_sim <- simulate_twoway_nrange(matrices_obj = interaction_twoway,
-                                            nrange = n, distribution = "normal")
+                                            nset = n, distribution = "normal")
 length(indepmeasures_normal_sim)
 length(n)
 ```
@@ -179,21 +179,21 @@ To sample from a skewed normal distribution.
 
 ```{r}
 indepmeasures_skewed_sim <- simulate_twoway_nrange(matrices_obj = interaction_twoway,
-                                            nrange = n, distribution = "skewed", skewness = 2)
+                                            nset = n, distribution = "skewed", skewness = 2)
 ```
 
 The same function is used to sample from a multivariate distribution but you must set the 'repeated_measurements' option to 'TRUE'.
 
 ```{r normally distributed repeated measures simulation}
 repmeasures_normal_sim <- simulate_twoway_nrange(matrices_obj = interaction_twoway_timewithin, 
-                                                 nrange = n, repeated_measurements = TRUE)
+                                                 nset = n, repeated_measurements = TRUE)
 ```
 
 To end this section, we sample from a multivariate skewed normal distribution. The skewness parameter must be length 1, $a$, $b$ or $ab$.
 
 ```{r skewed repeated measures simulation}
 repmeasures_skewed_sim <- simulate_twoway_nrange(matrices_obj = interaction_twoway_timewithin, 
-                                                 nrange = n, repeated_measurements = TRUE,
+                                                 nset = n, repeated_measurements = TRUE,
                                                  distribution = "skewed", skewness = 0.2)
 ```
 

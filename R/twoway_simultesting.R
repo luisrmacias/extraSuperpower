@@ -40,7 +40,7 @@
 #' ## rank based analysis of variance
 #'
 #' ## twoway_simulation_testing(correlated_sim, test="permutation")
-#' ## warning, permutation testing taked 25-40 seconds per iteration
+#' ## warning, permutation testing takes 25-40 seconds per iteration
 #'
 #' @export
 twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
