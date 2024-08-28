@@ -44,7 +44,7 @@
 #'
 #' @export
 twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
-  {
+{
   require(lmPerm)
   if(is.list(data) & is.null(dim(data)))
   {
@@ -57,7 +57,7 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
     if(withinf=="fA")
     {
       if(test=="ANOVA")
-        {
+      {
         pvec <- sapply(simulation, function(i)
           suppressMessages(afex::aov_ez(id = "subject", dv = "y", within = "indep_var1", between = "indep_var2",  data = i))$anova_table$`Pr(>F)`)
         pvecnames <- rownames(suppressMessages(afex::aov_ez(id = "subject", dv = "y", within = "indep_var1", between = "indep_var2",  data = simulation[[1]])$anova_table))
@@ -87,7 +87,7 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
       } else if(test=="rank")
       {
         pvec <- sapply(simulation, function(i) nparLD::f1.ld.f1(y=i$y, time = i$indep_var2, group = i$indep_var1, subject = i$subject,
-                                                                 plot.RTE = FALSE, order.warning = FALSE, description = FALSE, show.covariance = FALSE)$ANOVA.test[,3])
+                                                                plot.RTE = FALSE, order.warning = FALSE, description = FALSE, show.covariance = FALSE)$ANOVA.test[,3])
         pvecnames <- c("indep_var1", "indep_var2", "indep_var1:indep_var2" )
       }
     } else if (withinf=="both")
@@ -105,19 +105,26 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
       } else if(test=="rank")
       {
         pvec <- sapply(simulation, function(i) suppressWarnings(nparLD::ld.f2(y=i$y, time1 = i$indep_var1, time2 = i$indep_var2, subject = i$subject,
-                                                             plot.RTE = FALSE, order.warning = FALSE, description = FALSE, show.covariance = FALSE))$ANOVA.test[,3])
+                                                                              plot.RTE = FALSE, order.warning = FALSE, description = FALSE, show.covariance = FALSE))$ANOVA.test[,3])
         pvecnames <- c("indep_var1", "indep_var2", "indep_var1:indep_var2" )
       }
     }
     pvecnames <- gsub("indep_var1", indep_vars[1], pvecnames)
     pvecnames <- gsub("indep_var2", indep_vars[2], pvecnames)
-    } else if (is.data.frame(data))
+  } else if (is.data.frame(data))
   {
     indep_vars <- names(data)[4:5]
     simulation <- split(data, data$iteration)
-    cat(paste("Testing power on an independent observations design experiment.\nSample size =", unique(simulation[[1]]$n), "\n"))
+    if(length(unique(simulation[[1]]))==1)
+    {
+      cat(paste("Testing power on an independent observations design experiment.\nSample size per group =", unique(simulation[[1]]$n), "\n"))
+    } else if (length(unique(simulation[[1]]))>1)
+    {
+      cat(paste("Testing power on an independent observations design experiment.\nMean sample size per group =", round(mean(simulation[[1]]$n),1), "\n"))
+    }
+
     if(test=="ANOVA")
-      {
+    {
       frml <- as.formula(paste("y ~ ", indep_vars[1], "*", indep_vars[2], "+ Error(1|subject)"))
       pvec <- sapply(simulation,
                      function(i) suppressMessages(afex::aov_car(frml, i)$anova_table$`Pr(>F)`))
@@ -134,24 +141,44 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
                      function(i) {
                        coefs <- summary(lmPerm::aovp(frml, data = i))
                        coefs[[1]][1:3,5]
-                       })
+                     })
       coefs <- summary(lmPerm::aovp(frml, data=simulation[[1]]))
       pvecnames <- stringr::str_trim(rownames(coefs[[1]])[1:3])
     }
   }
-  n <- unique(simulation[[1]]$n)
   pprops <- rowSums(pvec<alpha)/ncol(pvec)
   lb <- round(pprops - qnorm(1-(0.05/2))*sqrt((pprops*(1-pprops))/ncol(pvec)), 4)
   lb[lb<0] <- 0.0000
   ub <- round(pprops + qnorm(1-(0.05/2))*sqrt((pprops*(1-pprops))/ncol(pvec)), 4)
   ub[ub<0] <- 0.0000
 
+  if(length(unique(simulation[[1]]))==1) {
+    n <- unique(simulation[[1]]$n)
+  } else if (length(unique(simulation[[1]]))>1)
+  {
+    n <- range(simulation[[1]]$n)
+  }
+
   if(test=="rank")
   {
-    data.frame(n = n, power=pprops, "lower bound ci" = lb, "upper bound ci" = ub)
+    if(length(unique(simulation[[1]]))==1)
+    {
+      data.frame(n = n, power=pprops, "lower bound ci" = lb, "upper bound ci" = ub)
+    }
+    else if (length(unique(simulation[[1]]))>1)
+    {
+      data.frame("smallest group" = n[1], "largest group" = n[2], "mean group size" = mean(n), power=pprops, "lower bound ci" = lb, "upper bound ci" = ub)
+    }
   } else if (test!="rank")
   {
     names(pprops) <- pvecnames
-    data.frame(n = n, power=pprops, "lower bound ci" = lb, "upper bound ci" = ub)
+    if(length(unique(simulation[[1]]))==1)
+    {
+      data.frame(n = n, power=pprops, "lower bound ci" = lb, "upper bound ci" = ub)
+    }
+    else if (length(unique(simulation[[1]]))>1)
+    {
+      data.frame("smallest group" = n[1], "largest group" = n[2], "mean group size" = mean(n), power=pprops, "lower bound ci" = lb, "upper bound ci" = ub)
+    }
   }
-  }
+}

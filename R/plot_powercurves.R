@@ -70,8 +70,15 @@ plot_powercurves <- function(power_over_nrange, target_power = NULL, title = NUL
   {
     stop("title should be a character string")
   }
-
-  p <- ggplot2::ggplot(power_over_nrange, ggplot2::aes(x=n, y=power, group=effect, color=effect))
+  if("n" %in% names(power_over_nrange) & ncol(power_over_nrange)==5)
+  {
+    p <- ggplot2::ggplot(power_over_nrange, ggplot2::aes(x=n, y=power, group=effect, color=effect))
+    xlabel <- expression(paste(italic(n), " per group"))
+  } else if ("mean.group.size" %in% names(power_over_nrange) & ncol(power_over_nrange)==7)
+  {
+    p <- ggplot2::ggplot(power_over_nrange, ggplot2::aes(x=mean.group.size, y=power, group=effect, color=effect))
+    xlabel <- expression(paste("Mean ", italic(n), " per group"))
+  }
   p <- p + ggplot2::geom_line(linewidth=1.5, position = position_dodge(0.2)) + ggplot2::geom_point(size=2.4, position = position_dodge(0.2))
   if(all(c("lower.bound.ci", "upper.bound.ci") %in% names(power_over_nrange)))
   {
@@ -83,7 +90,7 @@ plot_powercurves <- function(power_over_nrange, target_power = NULL, title = NUL
   }
   p <- p + ggplot2::scale_x_continuous(breaks = scales::pretty_breaks(length(unique(power_over_nrange$n)))) +
     ggplot2::scale_y_continuous(labels = scales::percent) +
-    ggplot2::labs(col="Effect", title=title, y= ylab, x=expression(paste(italic(n), " per group")))
+    ggplot2::labs(col="Effect", title=title, y= ylab, x=xlabel)
   if(target_line)
   {
     p <- p + ggplot2::geom_hline(yintercept = target_power, linetype="dashed", color = "red", linewidth=1.1)

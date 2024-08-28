@@ -45,3 +45,4 @@ test_power_overkn <- function(data, test="ANOVA", plot=TRUE, target_power = NULL
   } else if (!plot)
     res
 }
+
