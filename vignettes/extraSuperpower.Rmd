@@ -157,7 +157,7 @@ interaction_twoway_timewithin <- calculate_mean_matrix(refmean = refmean, nlfA =
 interaction_twoway_timewithin
 ```
 
-The cell matrices and the plot are the same, the difference lies in that we obtain correlation and covariance matrices as additional output. The 'withinf' option can take the values of 'NULL' value (in which case the 'calculate_mean_matrix' will assume independent measurements), 'fA', 'fB' or 'both', depending on which factor is the "within" factor in the design.
+The cell matrices and the plot are the same, the difference lies in that we obtain correlation and covariance matrices as additional output. The 'withinf' option can take the values of 'NULL' (in which case the 'calculate_mean_matrix' will assume independent measurements), 'fA', 'fB' or 'both', depending on which factor is the "within" factor in the design.
 
 ### Simulating a two-way factorial experiment 
 
