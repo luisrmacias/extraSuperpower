@@ -143,7 +143,7 @@ interaction_twoway
 
 #### Modeling a repeated measures experiment
 
-To end this section, we will switch from an independent measurements design to a design were treatment is a between factor, while "Time" is a between factor, that is, the same study participant has been measures over the different levels of factor "Time". All other parameters will stay as in the independent measures interaction example.
+To end this section, we will switch from an independent measurements design to a design were treatment is a between factor, while "Time" is a within factor, that is, the same study participant has been measures over the different levels of factor "Time". All other parameters will stay as in the independent measures interaction example.
 
 ```{r, fig.asp=0.8, fig.width=8}
 #Let's suppose within subject correlation is 0.7
