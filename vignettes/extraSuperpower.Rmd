@@ -174,7 +174,7 @@ length(indepmeasures_normal_sim)
 length(n)
 ```
 
-The output is a list in which each element is a simulation of sample size specified by the 'nrange' vector.
+The output is a list in which each element is a simulation of sample size specified by the 'nset' vector.
 
 To sample from a skewed normal distribution.
 
