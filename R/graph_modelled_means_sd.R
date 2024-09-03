@@ -21,9 +21,11 @@ graph_twoway_assumptions <- function(group_size=100, matrices_obj)
   }
   fA <- names(test_run)[4]
   fB <- names(test_run)[5]
+  test_run[4] <- gsub("$fA_, "", test_run[4])
+  test_run[5] <- gsub("$fA_, "", test_run[5])
   p <- ggline(data=test_run, x = fB, y = "y", color = fA, add = c("mean_sd"),
             position = ggplot2::position_dodge(width = 0.15), size=1.1) + ggthemes::theme_few()
-  p <- p + ggplot2::labs(y = "Mean\n\u00B1 standard deviation", title=expression(paste("Mean cell ratio modeled ", mu[italic(ij)]," and ", sigma[italic(ij)]^2))) +
+  p <- p + ggplot2::labs(y = "Outcome\n\u00B1 standard deviation", title=expression(paste("Mean cell ratio modeled ", mu[italic(ij)]," and ", sigma[italic(ij)]^2))) +
     ggplot2::theme(axis.text = ggplot2::element_text(size = 15), axis.title = ggplot2::element_text(size=15), legend.text = ggplot2::element_text(size = 15),
         plot.title = ggplot2::element_text(size = 20), legend.title = ggplot2::element_text(size = 15))
   p
