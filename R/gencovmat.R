@@ -46,7 +46,7 @@ gencovmat <- function(mean_matrix, sd_matrix, rho, label_list, withinf, nlfA, nl
         j <- i-1
         tmpmat[-(1:i),i] <- rho[1:(length(rho)-j)]
       }
-      tmpmat[upper.tri(tmpmat)] <- t(tmpmat)[lower.tri(tmpmat)]
+      tmpmat[upper.tri(tmpmat)] <- t(tmpmat)[upper.tri(tmpmat)]
     }
     rowpos <- sapply(1:nlfB, function(x) grep(paste0("_", label_list[[2]][x], "$"), rownames(cormat)))
     colpos <- sapply(1:nlfB, function(x) grep(paste0("_", label_list[[2]][x], "$"), colnames(cormat)))
@@ -74,7 +74,7 @@ gencovmat <- function(mean_matrix, sd_matrix, rho, label_list, withinf, nlfA, nl
         j <- i-1
         tmpmat[-(1:i),i] <- rho[1:(length(rho)-j)]
       }
-      tmpmat[upper.tri(tmpmat)] <- t(tmpmat)[lower.tri(tmpmat)]
+      tmpmat[upper.tri(tmpmat)] <- t(tmpmat)[upper.tri(tmpmat)]
     }
     rowpos <- sapply(1:nlfA, function(x) grep(paste0("^", label_list[[1]][x], "_"), rownames(cormat)))
     colpos <- sapply(1:nlfA, function(x) grep(paste0("^", label_list[[1]][x], "_"), colnames(cormat)))
@@ -131,7 +131,7 @@ gencovmat <- function(mean_matrix, sd_matrix, rho, label_list, withinf, nlfA, nl
         j <- i-1
         tmpmatB[-(1:i),i] <- rhoB[1:(length(rhoB)-j)]
       }
-      tmpmatB[upper.tri(tmpmatB)] <- tmpmatB[lower.tri(tmpmatB)]
+      tmpmatB[upper.tri(tmpmatB)] <- tmpmatB[upper.tri(tmpmatB)]
     }
       rowpos <- sapply(1:nlfB, function(x) grep(paste0("_", label_list[[2]][x], "$"), rownames(cormat)))
       colpos <- sapply(1:nlfB, function(x) grep(paste0("_", label_list[[2]][x], "$"), colnames(cormat)))
