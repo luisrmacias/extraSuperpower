@@ -24,6 +24,6 @@ First steps:
 
 ``library(extraSuperpower)``
 
-``?calculate_mean_matrix    ## example of one between, one within (repeated measure) factorial design simulation``
+``?calculate_mean_matrix    ## example of one between, one within (repeated measures) factorial design simulation``
 
-``?test_power_overkn    ## example of independent measurements sample size calculation with plot``
+``?test_power_overkn    ## example of independent measures sample size calculation with plot``
