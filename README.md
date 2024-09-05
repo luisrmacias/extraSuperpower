@@ -17,7 +17,7 @@ To install, install dependencies and ``devtools``, if not done already.
 Further installation and user guide in the ``vignette`` (vignettes folder).
 Installation with vignettes takes a bit longer, nothing unbearable.
 
-``devtools::install_github("luisrmacias/extraSuperpower", build_vignettes = TRUE)``
+``devtools::install_github("luisrmacias/extraSuperpower", build_vignettes = TRUE)``  
 ``browseVignettes(package = "extraSuperpower")``
 
 First steps:
