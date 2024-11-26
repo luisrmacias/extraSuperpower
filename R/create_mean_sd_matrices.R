@@ -27,7 +27,7 @@
 #' @param label_list List length 2 - vectors with the names of the factor levels. The objects in this list should be named as the factors. The use of this option is encouraged as these names are inherited to ANOVA_design.
 #' @param sdproportional Logical - whether the standard deviation for each combination of factor levels is a proportion of the respective factor level combination mean, defaults to TRUE
 #' @param sdratio Numeric - value by which the expected mean value of a factor level combination is multiplied to obtain the respective standard deviation, defaults to 0.2.
-#' @param endincrement Logical - determines if the multiples provided in fAeffect and fBeffect refer to level to level changes (default) or change between first and last levels.
+#' @param endincrement Logical - determines if the multiples provided in fAeffect and fBeffect refer to change between first and last levels (default) or level to level changes.
 #' @param rho Vector length 1 or 2, or 2 by 2 matrix - Controls how the correlation and hence de covariance matrix is built.
 #' @param withinf Character - Names the factor with repeated measures. Possible values are NULL, "fA", "fB" or "both"
 #' @param plot Logical - Should a line plot with the modeled mean and standard deviations be part of the output. Default=TRUE
@@ -118,8 +118,8 @@ calculate_mean_matrix <- function(refmean, nlfA, nlfB, fAeffect, fBeffect, group
     }
   }
   ## Generation of mean matrix
-  fAvec <- genvecs(change = fAeffect, reps = nlfA, bystart = endincrement)
-  fBvec <- genvecs(change = fBeffect, reps = nlfB, bystart = endincrement)
+  fAvec <- genvecs(change = fAeffect, reps = nlfA, bystart = endincrement, scaler = refmean)
+  fBvec <- genvecs(change = fBeffect, reps = nlfB, bystart = endincrement, scaler = refmean)
   effects <- rowSums(expand.grid(fAvec, fBvec-1))
   effmat <- matrix(effects, nlfA, nlfB, dimnames = label_list)
   ## Modify mean matrix depending on interaction terms
