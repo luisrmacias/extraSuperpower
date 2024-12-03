@@ -17,7 +17,7 @@ gencovmat <- function(mean_matrix, sd_matrix, rho, label_list=NULL, withinf, nlf
   {
   if(is.null(label_list))
   {
-    label_list <- list(fA = letters[1:nlfA], fB = letters[1:nlfB])
+    label_list <- list(fA = LETTERS[1:nlfA], fB = letters[1:nlfB])
   }
   cnames <- expand.grid(label_list[[2]], label_list[[1]])
   cnames <- paste(cnames$Var2, cnames$Var1, sep = "_")
