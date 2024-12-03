@@ -13,8 +13,12 @@
 #' @return list length 2 with covariance and correlation matrices
 #'
 #' @export
-gencovmat <- function(mean_matrix, sd_matrix, rho, label_list, withinf, nlfA, nlfB)
+gencovmat <- function(mean_matrix, sd_matrix, rho, label_list=NULL, withinf, nlfA, nlfB)
   {
+  if(is.null(label_list))
+  {
+    label_list <- list(fA = letters[1:nlfA], fB = letters[1:nlfB])
+  }
   cnames <- expand.grid(label_list[[2]], label_list[[1]])
   cnames <- paste(cnames$Var2, cnames$Var1, sep = "_")
 
