@@ -82,19 +82,16 @@ test_that("factor A covariance", {
   expect_true(identical(linpk::cor2cov(covcor_mats[[1]], sd), strippedres))
 
   ##cell variant standard deviation
-  ## meansd_mats <- calculate_mean_matrix(refmean = 10, nlfA = fA, nlfB = fB,
-  ##                                      fAeffect = faeff, fBeffect = fbeff,
-  ##                                      plot = FALSE)
-  ## sd_mat <- meansd_mats[[2]]
-  ## facdim <- dim(meansd_mats[[1]])
-  ## covcor_mats <- gencovmat(meansd_mats[[1]], sd_mat,
-  ##                          rho = rho, withinf =fwhithin,
-  ##                          nlfA = facdim[1], nlfB = facdim[2])
-  ## cov_mat <- covcor_mats[[2]]
-  ## levacov <- cov_mat[grep("_a", names(cov_mat[,1])),grep("_a", names(cov_mat[1,]))]
-  ## levacov <- c(levacov[upper.tri(levacov)], levacov[lower.tri(levacov)])
-  ## levbcov <- cov_mat[grep("_b", names(cov_mat[,1])),grep("_b", names(cov_mat[1,]))]
-  ## levbcov <- c(levbcov[upper.tri(levbcov)], levbcov[lower.tri(levbcov)])
+  meansd_mats <- calculate_mean_matrix(refmean = 10, nlfA = fA, nlfB = fB,
+                                        fAeffect = faeff, fBeffect = fbeff,
+                                        plot = FALSE)
+  sd_mat <- meansd_mats[[2]]
+  facdim <- dim(meansd_mats[[1]])
+  covcor_mats <- gencovmat(meansd_mats[[1]], sd_mat,
+                          rho = rho, withinf =fwhithin,
+                          nlfA = facdim[1], nlfB = facdim[2])
+  cov_mat <- covcor_mats[[2]]
+  expect_true(identical(cov2cor(cov_mat), covcor_mats[[1]]))
 })
 
 
