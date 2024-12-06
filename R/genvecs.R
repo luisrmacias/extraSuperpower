@@ -6,6 +6,8 @@
 #' @noRd
 genvecs <- function(change, reps, bystart=FALSE, scaler=refmean)
 {
+  if(reps%%1>0 | reps<=0)
+  {stop("Number of factor levels (nlfA and nlfB) must be positive integers")}
   if(bystart)
   {
     reps <- reps-1
