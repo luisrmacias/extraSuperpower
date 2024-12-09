@@ -7,6 +7,21 @@ test_that("matrices dimensions", {
   expect_equal(dim(mean_mat), c(4, 5))
 })
 
+test_that("data entry type for labels", {
+  faeff <- 1
+  fA <- 2
+  fbeff <- 3
+  fB <- 2
+  labels <- letters[1:4]
+  expect_error(calculate_mean_matrix(refmean = 10, nlfA = fA, nlfB = fB,
+                        fAeffect = fAeffect, fBeffect = fbeff,
+                        label_list = labels))
+  labels <- list(letters[1:4])
+  expect_error(calculate_mean_matrix(refmean = 10, nlfA = fA, nlfB = fB,
+                                     fAeffect = fAeffect, fBeffect = fbeff,
+                                     label_list = labels))
+})
+
 test_that("standard deviation proportionality", {
   mean_mats <- calculate_mean_matrix(refmean = 10, nlfA = 5, nlfB = 4,
                                      fAeffect = 2, fBeffect = 3,

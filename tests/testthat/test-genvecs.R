@@ -6,4 +6,5 @@ test_that("vectors change accordingly", {
 test_that("data entry type", {
   expect_error(genvecs(change = 1.2, reps = 4.2))
   expect_error(genvecs(change = "A", reps = 4))
+  expect_error(genvecs(change = -2, reps = 4))
 })
