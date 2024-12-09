@@ -4,7 +4,7 @@
 \alias{gencovmat}
 \title{Internal function that generates correlation and covariance matrices.}
 \usage{
-gencovmat(mean_matrix, sd_matrix, rho, label_list, withinf, nlfA, nlfB)
+gencovmat(mean_matrix, sd_matrix, rho, label_list = NULL, withinf, nlfA, nlfB)
 }
 \arguments{
 \item{mean_matrix}{Matrix - cell mean value matrix}
