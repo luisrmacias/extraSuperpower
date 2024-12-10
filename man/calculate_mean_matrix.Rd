@@ -44,7 +44,7 @@ calculate_mean_matrix(
 
 \item{endincrement}{Logical - determines if the multiples provided in fAeffect and fBeffect refer to change between first and last levels (default) or level to level changes.}
 
-\item{rho}{Vector length 1 or 2, or 2 by 2 matrix - Controls how the correlation and hence de covariance matrix is built.}
+\item{rho}{Vector length 1 or 2, or 2 by 2 matrix - Controls how the correlation and hence de covariance matrix is built. See details.}
 
 \item{withinf}{Character - Names the factor with repeated measures. Possible values are NULL, "fA", "fB" or "both"}
 

@@ -28,7 +28,7 @@
 #' @param sdproportional Logical - whether the standard deviation for each combination of factor levels is a proportion of the respective factor level combination mean, defaults to TRUE
 #' @param sdratio Numeric - value by which the expected mean value of a factor level combination is multiplied to obtain the respective standard deviation, defaults to 0.2.
 #' @param endincrement Logical - determines if the multiples provided in fAeffect and fBeffect refer to change between first and last levels (default) or level to level changes.
-#' @param rho Vector length 1 or 2, or 2 by 2 matrix - Controls how the correlation and hence de covariance matrix is built.
+#' @param rho Vector length 1 or 2, or 2 by 2 matrix - Controls how the correlation and hence de covariance matrix is built. See details.
 #' @param withinf Character - Names the factor with repeated measures. Possible values are NULL, "fA", "fB" or "both"
 #' @param plot Logical - Should a line plot with the modeled mean and standard deviations be part of the output. Default=TRUE
 #'
@@ -160,9 +160,13 @@ calculate_mean_matrix <- function(refmean, nlfA, nlfB, fAeffect, fBeffect, group
       stop("Possible values for the 'withinf' parameter are 'fA', 'fB' or 'both'")
     }
     ## Generation of correlation and covariance matrices
-    partialoutput <- gencovmat(mean_matrix = mean_matrix, sd_matrix = sd_matrix, rho = rho,
-                               label_list = label_list, withinf = withinf, nlfA = nlfA, nlfB = nlfB)
-    matrices_obj <- list(within.factor = withinf, mean.mat = mean_matrix, sd.mat= sd_matrix, cormat = partialoutput[[1]], sigmat = partialoutput[[2]])
+    cormat <- gencorrelationmat(mean_matrix = mean_matrix, rho = rho,
+                        label_list = label_list, withinf = withinf,
+                        nlfA = nlfA, nlfB = nlfB)
+    sigmat <- gencovariancemat(correlation_matrix = cormat, sd_matrix = sd_matrix,
+                               label_list = label_list, withinf = withinf,
+                               nlfA = nlfA, nlfB = nlfB)
+    matrices_obj <- list(within.factor = withinf, mean.mat = mean_matrix, sd.mat= sd_matrix, cormat = cormat, sigmat = sigmat)
   }
   if(plot)
   {
