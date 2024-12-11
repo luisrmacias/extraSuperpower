@@ -15,7 +15,7 @@ test_that("different dimensions of mean and correlation throws error", {
                     nlfA = facdim[2], nlfB = facdim[2]))
 })
 
-test_that("transferability of factor and level labels", {
+test_that("transferability of level labels", {
   fwithin <-"fA"
   rho <- 0.8
   factors_levels <- list(treatment=letters[1:fA], time=c("before", "after"))
@@ -26,8 +26,25 @@ test_that("transferability of factor and level labels", {
   facdim <- dim(meansd_mats[[1]])
   cor_mat <- gencorrelationmat(meansd_mats[[1]],
                                rho = rho, withinf =fwithin,
-                               nlfA = facdim[1], nlfB = facdim[2],
-                              label_list = factors_levels)
+                               nlfA = facdim[1], nlfB = facdim[2])
+  vec1 <- rep(dimnames(meansd_mats[[1]])[[1]], each=fB)
+  vec2 <- rep(dimnames(meansd_mats[[1]])[[2]], fA)
+  expect_true(identical(paste(vec1, vec2, sep = "_"), colnames(cor_mat)))
+
+  fA <- 5
+  fB <- 3
+  factors_levels <- list(treatment=letters[1:fA], time=c("before", "during", "after"))
+  meansd_mats <- calculate_mean_matrix(refmean = 10, nlfA = fA, nlfB = fB,
+                                       fAeffect = faeff, fBeffect = fbeff,
+                                       label_list = factors_levels,
+                                       plot = FALSE)
+  facdim <- dim(meansd_mats[[1]])
+  cor_mat <- gencorrelationmat(meansd_mats[[1]],
+                               rho = rho, withinf =fwithin,
+                               nlfA = facdim[1], nlfB = facdim[2])
+  vec1 <- rep(dimnames(meansd_mats[[1]])[[1]], each=fB)
+  vec2 <- rep(dimnames(meansd_mats[[1]])[[2]], fA)
+  expect_true(identical(paste(vec1, vec2, sep = "_"), colnames(cor_mat)))
 })
 
 test_that("correlation when factor A is the repeated factor", {
