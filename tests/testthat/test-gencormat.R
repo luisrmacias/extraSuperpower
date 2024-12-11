@@ -1,0 +1,58 @@
+faeff <- 2
+fA <- 3
+fbeff <- 0.5
+fB <- 2
+
+test_that("factor A correlation", {
+  fwithin <-"fA"
+  #positive correlation
+  rho <- 0.8
+  meansd_mats <- calculate_mean_matrix(refmean = 10, nlfA = fA, nlfB = fB,
+                                       fAeffect = faeff, fBeffect = fbeff,
+                                       plot = FALSE)
+  facdim <- dim(meansd_mats[[1]])
+  cor_mat <- gencorrelationmat(meansd_mats[[1]],
+                               rho = rho, withinf =fwithin,
+                               nlfA = facdim[1], nlfB = facdim[2])
+  levacor <- cor_mat[grep("_a", names(cor_mat[,1])),grep("_a", names(cor_mat[1,]))]
+  levbcor <- cor_mat[grep("_b", names(cor_mat[,1])),grep("_b", names(cor_mat[1,]))]
+  expect_true(all(c(levacor, levbcor)==rho | c(levacor, levbcor)==1))
+})
+
+test_that("factor B correlation", {
+  faeff <- 2
+  fA <- 2
+  fbeff <- 3
+  fB <- 3
+  rho <- 0.9
+  fwithin <- "fB"
+  meansd_mats <- calculate_mean_matrix(refmean = 10, nlfA = fA, nlfB = fB,
+                                       fAeffect = faeff, fBeffect = fbeff,
+                                       plot = FALSE)
+  facdim <- dim(meansd_mats[[1]])
+  cor_mat <- gencorrelationmat(meansd_mats[[1]],
+                               rho = rho, withinf =fwithin,
+                               nlfA = facdim[1], nlfB = facdim[2])
+  levacor <- cor_mat[grep("A_", names(cor_mat[,1])),grep("A_", names(cor_mat[1,]))]
+  levbcor <- cor_mat[grep("B_", names(cor_mat[,1])),grep("B_", names(cor_mat[1,]))]
+  expect_true(all(c(levacor, levbcor)==rho | c(levacor, levbcor)==1))
+})
+
+test_that("both factor correlation", {
+  faeff <- 2
+  fA <- 2
+  fbeff <- 3
+  fB <- 3
+  rho <- 0.9
+  fwithin <- "both"
+  meansd_mats <- calculate_mean_matrix(refmean = 10, nlfA = fA, nlfB = fB,
+                                       fAeffect = faeff, fBeffect = fbeff,
+                                       plot = FALSE)
+  facdim <- dim(meansd_mats[[1]])
+  cor_mat <- gencorrelationmat(meansd_mats[[1]],
+                               rho = rho, withinf =fwithin,
+                               nlfA = facdim[1], nlfB = facdim[2])
+  triupper <- cor_mat[upper.tri(cor_mat)]
+  trilower <- cor_mat[lower.tri(cor_mat)]
+  expect_true(all(c(triupper, trilower)==rho & all(diag(cor_mat)==1)))
+})
