@@ -92,7 +92,7 @@ calculate_mean_matrix <- function(refmean, nlfA, nlfB, fAeffect, fBeffect, group
   }
   if(is.null(label_list))
   {
-    label_list <- list(fA = letters[1:nlfA], fB = letters[1:nlfB])
+    label_list <- list(fA = LETTERS[1:nlfA], fB = letters[1:nlfB])
   }
   if(any(abs(rho)>1))
   {

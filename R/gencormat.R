@@ -20,12 +20,6 @@
 #' @export
 gencorrelationmat <- function(mean_matrix, rho, label_list=NULL, withinf, nlfA, nlfB)
   {
-  if(is.null(label_list))
-  {
-    label_list <- list(fA = LETTERS[1:nlfA], fB = letters[1:nlfB])
-  }
-  cnames <- expand.grid(label_list[[2]], label_list[[1]])
-  cnames <- paste(cnames$Var2, cnames$Var1, sep = "_")
   if(nlfA!=nrow(mean_matrix))
   {
     stop(paste0("Number of rows in 'mean_matrix' must be equal to number of levels of '", names(label_list)[1], "'"))
@@ -36,13 +30,34 @@ gencorrelationmat <- function(mean_matrix, rho, label_list=NULL, withinf, nlfA, 
     stop(paste0("Number of columns in 'mean_matrix' must be equal to number of levels of '", names(label_list)[2], "'"))
   }
 
-  cormat <- diag(1, prod(nlfA, nlfB))
-  rownames(cormat) <- colnames(cormat) <- cnames
-
   if((length(rho)>2 & is.vector(rho)) | (is.matrix(rho) & length(rho)!=4))
   {
     stop("'rho' must be a single value, a vector length 2 or a 2 by 2 matrix")
   }
+
+  generic_labels <- list(fA = LETTERS[1:nlfA], fB = letters[1:nlfB])
+
+    if(is.null(label_list) & identical(dimnames(mean_matrix), generic_labels))
+  {
+    label_list <-  generic_labels
+  } else if (is.null(label_list) & !identical(dimnames(mean_matrix), generic_labels))
+  {
+    label_list <- dimnames(mean_matrix)
+    message("Correlation matrix names were based on names from the mean matrix")
+  } else if (!is.null(label_list) & identical(dimnames(mean_matrix), generic_labels) & all.equal(sapply(label_list, length), c(nlfA, nlfB), check.attributes=FALSE))
+  {
+    warning("The correlation matrix will be generated with user provided names although the mean matrix has generic names")
+  } else if (!is.null(label_list) & !identical(dimnames(mean_matrix), label_list))
+  {
+    stop("Provided label list differs from mean matrix names")
+  }
+
+  cnames <- expand.grid(label_list[[2]], label_list[[1]])
+  cnames <- paste(cnames$Var2, cnames$Var1, sep = "_")
+
+  cormat <- diag(1, prod(nlfA, nlfB))
+  rownames(cormat) <- colnames(cormat) <- cnames
+
   if(withinf=="fA")
   {
     if(length(rho)==1)

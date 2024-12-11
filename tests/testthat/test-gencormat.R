@@ -3,7 +3,34 @@ fA <- 3
 fbeff <- 0.5
 fB <- 2
 
-test_that("factor A correlation", {
+test_that("different dimensions of mean and correlation throws error", {
+  fwithin <-"fA"
+  rho <- 0.8
+  meansd_mats <- calculate_mean_matrix(refmean = 10, nlfA = fA, nlfB = fB,
+                                       fAeffect = faeff, fBeffect = fbeff,
+                                       plot = FALSE)
+  facdim <- dim(meansd_mats[[1]])
+  expect_error(gencorrelationmat(meansd_mats[[1]],
+                    rho = rho, withinf =fwithin,
+                    nlfA = facdim[2], nlfB = facdim[2]))
+})
+
+test_that("transferability of factor and level labels", {
+  fwithin <-"fA"
+  rho <- 0.8
+  factors_levels <- list(treatment=letters[1:fA], time=c("before", "after"))
+  meansd_mats <- calculate_mean_matrix(refmean = 10, nlfA = fA, nlfB = fB,
+                                       fAeffect = faeff, fBeffect = fbeff,
+                                       label_list = factors_levels,
+                                       plot = FALSE)
+  facdim <- dim(meansd_mats[[1]])
+  cor_mat <- gencorrelationmat(meansd_mats[[1]],
+                               rho = rho, withinf =fwithin,
+                               nlfA = facdim[1], nlfB = facdim[2],
+                              label_list = factors_levels)
+})
+
+test_that("correlation when factor A is the repeated factor", {
   fwithin <-"fA"
   #positive correlation
   rho <- 0.8
@@ -19,7 +46,7 @@ test_that("factor A correlation", {
   expect_true(all(c(levacor, levbcor)==rho | c(levacor, levbcor)==1))
 })
 
-test_that("factor B correlation", {
+test_that("correlation when factor B is the repeated factor", {
   faeff <- 2
   fA <- 2
   fbeff <- 3
@@ -38,7 +65,7 @@ test_that("factor B correlation", {
   expect_true(all(c(levacor, levbcor)==rho | c(levacor, levbcor)==1))
 })
 
-test_that("both factor correlation", {
+test_that("correlation when both factors are repeated", {
   faeff <- 2
   fA <- 2
   fbeff <- 3
