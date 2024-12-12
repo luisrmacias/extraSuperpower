@@ -90,6 +90,16 @@ test_that("label incompatibilities are detected", {
   expect_true(is(cor_mat, "matrix"))
 })
 
+test_that("correlation input", {
+  fwithin <-"fA"
+  rho <- matrix(c(0.4, 0.2, 0.3, 0.1), 2, 2)
+  meansd_mats <- calculate_mean_matrix(refmean = 10, nlfA = fA, nlfB = fB,
+                                       fAeffect = faeff, fBeffect = fbeff,
+                                       plot = FALSE)
+  expect_error(gencorrelationmat(meansd_mats[[1]], rho=, withinf = "fA", nlfA = 3, nlfB = 2))
+})
+
+
 ##fixed correlation
 test_that("correlation when factor A is the repeated factor", {
   fwithin <-"fA"
