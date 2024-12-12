@@ -90,9 +90,11 @@ calculate_mean_matrix <- function(refmean, nlfA, nlfB, fAeffect, fBeffect, group
     {
       stop("\nNumber of labels must match number of levels for each factor")}
   }
+  generic_labels <- FALSE
   if(is.null(label_list))
   {
     label_list <- list(fA = LETTERS[1:nlfA], fB = letters[1:nlfB])
+    generic_labels <- TRUE
   }
   if(any(abs(rho)>1))
   {
@@ -160,9 +162,17 @@ calculate_mean_matrix <- function(refmean, nlfA, nlfB, fAeffect, fBeffect, group
       stop("Possible values for the 'withinf' parameter are 'fA', 'fB' or 'both'")
     }
     ## Generation of correlation and covariance matrices
-    cormat <- gencorrelationmat(mean_matrix = mean_matrix, rho = rho,
-                        label_list = label_list, withinf = withinf,
-                        nlfA = nlfA, nlfB = nlfB)
+    if(generic_labels)
+    {
+      cormat <- suppressWarnings(gencorrelationmat(mean_matrix = mean_matrix, rho = rho,
+                                                   label_list = label_list, withinf = withinf,
+                                                   nlfA = nlfA, nlfB = nlfB))
+    } else if (!generic_labels)
+    {
+      cormat <- gencorrelationmat(mean_matrix = mean_matrix, rho = rho,
+                                                   label_list = label_list, withinf = withinf,
+                                                   nlfA = nlfA, nlfB = nlfB)
+    }
     sigmat <- gencovariancemat(correlation_matrix = cormat, sd_matrix = sd_matrix,
                                label_list = label_list, withinf = withinf,
                                nlfA = nlfA, nlfB = nlfB)

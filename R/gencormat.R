@@ -43,13 +43,13 @@ gencorrelationmat <- function(mean_matrix, rho, label_list=NULL, withinf, nlfA, 
   } else if (is.null(label_list) & !identical(dimnames(mean_matrix), generic_labels))
   {
     label_list <- dimnames(mean_matrix)
-    message("Correlation matrix names were based on names from the mean matrix")
+    message("Correlation matrix names assigned based on names from the mean matrix")
   } else if (!is.null(label_list) & identical(dimnames(mean_matrix), generic_labels) & all.equal(sapply(label_list, length), c(nlfA, nlfB), check.attributes=FALSE))
   {
     warning("The correlation matrix will be generated with user provided names although the mean matrix has generic names")
   } else if (!is.null(label_list) & !identical(dimnames(mean_matrix), label_list))
   {
-    stop("Provided label list differs from mean matrix names")
+    stop("Provided label list and mean matrix names do not match")
   }
 
   cnames <- expand.grid(label_list[[2]], label_list[[1]])

@@ -18,6 +18,7 @@ test_that("different dimensions of mean and correlation throws error", {
 test_that("transferability of level labels", {
   fwithin <-"fA"
   rho <- 0.8
+  ##test with 'small' number of levels
   factors_levels <- list(treatment=letters[1:fA], time=c("before", "after"))
   meansd_mats <- calculate_mean_matrix(refmean = 10, nlfA = fA, nlfB = fB,
                                        fAeffect = faeff, fBeffect = fbeff,
@@ -29,8 +30,9 @@ test_that("transferability of level labels", {
                                nlfA = facdim[1], nlfB = facdim[2])
   vec1 <- rep(dimnames(meansd_mats[[1]])[[1]], each=fB)
   vec2 <- rep(dimnames(meansd_mats[[1]])[[2]], fA)
-  expect_true(identical(paste(vec1, vec2, sep = "_"), colnames(cor_mat)))
+  expect_identical(paste(vec1, vec2, sep = "_"), colnames(cor_mat))
 
+  ##test with 'large' number of levels
   fA <- 5
   fB <- 3
   factors_levels <- list(treatment=letters[1:fA], time=c("before", "during", "after"))
@@ -44,8 +46,50 @@ test_that("transferability of level labels", {
                                nlfA = facdim[1], nlfB = facdim[2])
   vec1 <- rep(dimnames(meansd_mats[[1]])[[1]], each=fB)
   vec2 <- rep(dimnames(meansd_mats[[1]])[[2]], fA)
-  expect_true(identical(paste(vec1, vec2, sep = "_"), colnames(cor_mat)))
+  expect_identical(paste(vec1, vec2, sep = "_"), colnames(cor_mat))
+
+  ##test with same number of levels for both factors
+  fA <- 4
+  fB <- 4
+  factors_levels <- list(treatment=letters[1:fA], time=c("before", "early", "late", "after"))
+  meansd_mats <- calculate_mean_matrix(refmean = 10, nlfA = fA, nlfB = fB,
+                                       fAeffect = faeff, fBeffect = fbeff,
+                                       label_list = factors_levels,
+                                       plot = FALSE)
+  facdim <- dim(meansd_mats[[1]])
+  cor_mat <- gencorrelationmat(meansd_mats[[1]],
+                               rho = rho, withinf =fwithin,
+                               nlfA = facdim[1], nlfB = facdim[2])
+  vec1 <- rep(dimnames(meansd_mats[[1]])[[1]], each=fB)
+  vec2 <- rep(dimnames(meansd_mats[[1]])[[2]], fA)
+  expect_identical(paste(vec1, vec2, sep = "_"), colnames(cor_mat))
 })
+
+test_that("label incompatibilities are detected", {
+  ##factors are inverted
+  fA <- 3
+  fB <- 3
+  fwithin <-"fA"
+  rho <- 0.8
+  factors_levels <- list(treatment=letters[1:fA], time=c("before", "during", "after"))
+  meansd_mats <- calculate_mean_matrix(refmean = 10, nlfA = fA, nlfB = fB,
+                                       fAeffect = faeff, fBeffect = fbeff,
+                                       label_list = factors_levels,
+                                       plot = FALSE)
+  facdim <- dim(meansd_mats[[1]])
+  expect_error(gencorrelationmat(meansd_mats[[1]],
+                                 rho = rho, withinf =fwithin,
+                                 nlfA = facdim[1], nlfB = facdim[2],
+                                 label_list = rev(factors_levels)))
+
+  ##different classes
+  cor_mat <- gencorrelationmat(meansd_mats[[1]],
+                               rho = rho, withinf =fwithin,
+                               nlfA = facdim[1], nlfB = facdim[2],
+                               label_list = list(treatment=as.character(factors_levels$treatment), time=factors_levels$time))
+  expect_true(is(cor_mat, "matrix"))
+})
+
 
 test_that("correlation when factor A is the repeated factor", {
   fwithin <-"fA"
