@@ -35,6 +35,10 @@ gencorrelationmat <- function(mean_matrix, rho, label_list=NULL, withinf, nlfA, 
     stop("'rho' must be a single value, a vector length 2 or a 2 by 2 matrix")
   }
 
+  if(is(rho, "matrix") & withinf!="both")
+  {
+    stop("'rho' can only be a matrix if 'withinf' is set to 'both'")
+  }
   generic_labels <- list(fA = LETTERS[1:nlfA], fB = letters[1:nlfB])
 
     if(is.null(label_list) & identical(dimnames(mean_matrix), generic_labels))

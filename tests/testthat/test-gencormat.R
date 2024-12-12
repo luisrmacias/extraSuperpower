@@ -90,7 +90,7 @@ test_that("label incompatibilities are detected", {
   expect_true(is(cor_mat, "matrix"))
 })
 
-
+##fixed correlation
 test_that("correlation when factor A is the repeated factor", {
   fwithin <-"fA"
   #positive correlation
@@ -104,7 +104,15 @@ test_that("correlation when factor A is the repeated factor", {
                                nlfA = facdim[1], nlfB = facdim[2])
   levacor <- cor_mat[grep("_a", names(cor_mat[,1])),grep("_a", names(cor_mat[1,]))]
   levbcor <- cor_mat[grep("_b", names(cor_mat[,1])),grep("_b", names(cor_mat[1,]))]
-  expect_true(all(c(levacor, levbcor)==rho | c(levacor, levbcor)==1))
+  expect_identical(unique(c(levbcor, levacor)), c(1, rho))
+  #negative correlation
+  rho <- -0.8
+  cor_mat <- gencorrelationmat(meansd_mats[[1]],
+                               rho = rho, withinf =fwithin,
+                               nlfA = facdim[1], nlfB = facdim[2])
+  levacor <- cor_mat[grep("_a", names(cor_mat[,1])),grep("_a", names(cor_mat[1,]))]
+  levbcor <- cor_mat[grep("_b", names(cor_mat[,1])),grep("_b", names(cor_mat[1,]))]
+  expect_identical(unique(c(levbcor, levacor)), c(1, rho))
 })
 
 test_that("correlation when factor B is the repeated factor", {
@@ -112,8 +120,10 @@ test_that("correlation when factor B is the repeated factor", {
   fA <- 2
   fbeff <- 3
   fB <- 3
-  rho <- 0.9
+
   fwithin <- "fB"
+  ##positive correlation
+  rho <- 0.9
   meansd_mats <- calculate_mean_matrix(refmean = 10, nlfA = fA, nlfB = fB,
                                        fAeffect = faeff, fBeffect = fbeff,
                                        plot = FALSE)
@@ -123,16 +133,27 @@ test_that("correlation when factor B is the repeated factor", {
                                nlfA = facdim[1], nlfB = facdim[2])
   levacor <- cor_mat[grep("A_", names(cor_mat[,1])),grep("A_", names(cor_mat[1,]))]
   levbcor <- cor_mat[grep("B_", names(cor_mat[,1])),grep("B_", names(cor_mat[1,]))]
-  expect_true(all(c(levacor, levbcor)==rho | c(levacor, levbcor)==1))
+  expect_identical(unique(c(levbcor, levacor)), c(1, rho))
+
+  ##negative correlation
+  rho <- -0.9
+  cor_mat <- gencorrelationmat(meansd_mats[[1]],
+                               rho = rho, withinf =fwithin,
+                               nlfA = facdim[1], nlfB = facdim[2])
+  levacor <- cor_mat[grep("A_", names(cor_mat[,1])),grep("A_", names(cor_mat[1,]))]
+  levbcor <- cor_mat[grep("B_", names(cor_mat[,1])),grep("B_", names(cor_mat[1,]))]
+  expect_identical(unique(c(levbcor, levacor)), c(1, rho))
 })
+
 
 test_that("correlation when both factors are repeated", {
   faeff <- 2
   fA <- 2
   fbeff <- 3
   fB <- 3
-  rho <- 0.9
   fwithin <- "both"
+  #positive correlation
+  rho <- 0.9
   meansd_mats <- calculate_mean_matrix(refmean = 10, nlfA = fA, nlfB = fB,
                                        fAeffect = faeff, fBeffect = fbeff,
                                        plot = FALSE)
@@ -143,4 +164,111 @@ test_that("correlation when both factors are repeated", {
   triupper <- cor_mat[upper.tri(cor_mat)]
   trilower <- cor_mat[lower.tri(cor_mat)]
   expect_true(all(c(triupper, trilower)==rho & all(diag(cor_mat)==1)))
+
+  #negative correlation
+  rho <- -0.9
+  cor_mat <- gencorrelationmat(meansd_mats[[1]],
+                               rho = rho, withinf =fwithin,
+                               nlfA = facdim[1], nlfB = facdim[2])
+  triupper <- cor_mat[upper.tri(cor_mat)]
+  trilower <- cor_mat[lower.tri(cor_mat)]
+  expect_true(all(c(triupper, trilower)==rho & all(diag(cor_mat)==1)))
+})
+
+
+##correlation gradient
+
+test_that("correlation gradient when factor A is the repeated factor", {
+  fwithin <-"fA"
+  fA <- 4
+  fB <- 3
+  #positive correlation
+  rho <- c(-0.8, 0)
+  meansd_mats <- calculate_mean_matrix(refmean = 10, nlfA = fA, nlfB = fB,
+                                       fAeffect = faeff, fBeffect = fbeff,
+                                       plot = FALSE)
+  facdim <- dim(meansd_mats[[1]])
+  cor_mat <- gencorrelationmat(meansd_mats[[1]],
+                               rho = rho, withinf =fwithin,
+                               nlfA = facdim[1], nlfB = facdim[2])
+  levacor <- cor_mat[grep("_a", names(cor_mat[,1])),grep("_a", names(cor_mat[1,]))]
+  levbcor <- cor_mat[grep("_b", names(cor_mat[,1])),grep("_b", names(cor_mat[1,]))]
+  topvector <- c(1, seq(rho[1], rho[2], length.out=fA-1))
+  expect_identical(as.vector(levacor[1,]), topvector)
+  expect_identical(as.vector(levacor[fA,]), rev(topvector))
+  expect_identical(as.vector(levbcor[,1]), topvector)
+  expect_identical(as.vector(levbcor[,fA]), rev(topvector))
+  #negative correlation
+  rho <- c(-0.8, 0)
+  cor_mat <- gencorrelationmat(meansd_mats[[1]],
+                               rho = rho, withinf =fwithin,
+                               nlfA = facdim[1], nlfB = facdim[2])
+  levacor <- cor_mat[grep("_a", names(cor_mat[,1])),grep("_a", names(cor_mat[1,]))]
+  levbcor <- cor_mat[grep("_b", names(cor_mat[,1])),grep("_b", names(cor_mat[1,]))]
+  topvector <- c(1, seq(rho[1], rho[2], length.out=fA-1))
+  expect_identical(as.vector(levacor[1,]), topvector)
+  expect_identical(as.vector(levacor[fA,]), rev(topvector))
+  expect_identical(as.vector(levbcor[,1]), topvector)
+  expect_identical(as.vector(levbcor[,fA]), rev(topvector))
+})
+
+test_that("correlation gradient when factor B is the repeated factor", {
+  fwithin <-"fB"
+  fA <- 4
+  fB <- 6
+  #positive correlation gradient
+  rho <- c(0.8, 0.2)
+  meansd_mats <- calculate_mean_matrix(refmean = 10, nlfA = fA, nlfB = fB,
+                                       fAeffect = faeff, fBeffect = fbeff,
+                                       plot = FALSE)
+  facdim <- dim(meansd_mats[[1]])
+  cor_mat <- gencorrelationmat(meansd_mats[[1]],
+                               rho = rho, withinf =fwithin,
+                               nlfA = facdim[1], nlfB = facdim[2])
+  levacor <- cor_mat[grep("A_", names(cor_mat[,1])),grep("A_", names(cor_mat[1,]))]
+  levbcor <- cor_mat[grep("B_", names(cor_mat[,1])),grep("B_", names(cor_mat[1,]))]
+  topvector <- c(1, seq(rho[1], rho[2], length.out=fB-1))
+  expect_identical(as.vector(levacor[1,]), topvector)
+  expect_identical(as.vector(levacor[fB,]), rev(topvector))
+  expect_identical(as.vector(levbcor[,1]), topvector)
+  expect_identical(as.vector(levbcor[,fB]), rev(topvector))
+  #negative correlation
+  rho <- c(-0.8, 0)
+  cor_mat <- gencorrelationmat(meansd_mats[[1]],
+                               rho = rho, withinf =fwithin,
+                               nlfA = facdim[1], nlfB = facdim[2])
+  levacor <- cor_mat[grep("A_", names(cor_mat[,1])),grep("A_", names(cor_mat[1,]))]
+  levbcor <- cor_mat[grep("B_", names(cor_mat[,1])),grep("B_", names(cor_mat[1,]))]
+  topvector <- c(1, seq(rho[1], rho[2], length.out=fB-1))
+  expect_identical(as.vector(levacor[1,]), topvector)
+  expect_identical(as.vector(levacor[fB,]), rev(topvector))
+  expect_identical(as.vector(levbcor[,1]), topvector)
+  expect_identical(as.vector(levbcor[,fB]), rev(topvector))
+})
+
+test_that("correlation gradient when both factors are repeated", {
+  fwithin <-"both"
+  fA <- 4
+  fB <- 6
+  #positive correlation gradient
+  rho <- matrix(c(0.8, -0.8, 0.2, -0.1), 2, 2)
+  meansd_mats <- calculate_mean_matrix(refmean = 10, nlfA = fA, nlfB = fB,
+                                       fAeffect = faeff, fBeffect = fbeff,
+                                       plot = FALSE)
+  facdim <- dim(meansd_mats[[1]])
+  cor_mat <- gencorrelationmat(meansd_mats[[1]],
+                               rho = rho, withinf =fwithin,
+                               nlfA = facdim[1], nlfB = facdim[2])
+  levacor <- cor_mat[grep("A_", names(cor_mat[,1])),grep("A_", names(cor_mat[1,]))]
+  levbcor <- cor_mat[grep("B_", names(cor_mat[,1])),grep("B_", names(cor_mat[1,]))]
+  expect_identical(as.vector(levacor), as.vector(levbcor))
+  corleva <- cor_mat[grep("_a", names(cor_mat[,1])),grep("_a", names(cor_mat[1,]))]
+  corlevb <- cor_mat[grep("_b", names(cor_mat[,1])),grep("_b", names(cor_mat[1,]))]
+  expect_identical(as.vector(corleva), as.vector(corlevb))
+  topvector <- c(1, seq(rho[2,1], rho[2,2], length.out=fB-1))
+  expect_identical(as.vector(levacor[1,]), topvector)
+  expect_identical(as.vector(levacor[fB,]), rev(topvector))
+  topvector <- c(1, seq(rho[1,1], rho[1,2], length.out=fA-1))
+  expect_identical(as.vector(corleva[1,]), topvector)
+  expect_identical(as.vector(corleva[fA,]), rev(topvector))
 })
