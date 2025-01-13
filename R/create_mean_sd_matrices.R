@@ -160,10 +160,10 @@ calculate_mean_matrix <- function(refmean, nlfA, nlfB, fAeffect, fBeffect, group
       stop("Possible values for the 'withinf' parameter are 'fA', 'fB' or 'both'")
     }
     ## Generation of correlation and covariance matrices
-    cormat <- gencorrelationmat(mean_matrix = mean_matrix, rho = rho, withinf = withinf,
-                                                   nlfA = nlfA, nlfB = nlfB)
-    sigmat <- gencovariancemat(correlation_matrix = cormat, sd_matrix = sd_matrix, withinf = withinf,
-                               nlfA = nlfA, nlfB = nlfB)
+    cormat <- suppressMessages(gencorrelationmat(mean_matrix = mean_matrix, rho = rho, withinf = withinf,
+                                                   nlfA = nlfA, nlfB = nlfB))
+    sigmat <- suppressMessages(gencovariancemat(correlation_matrix = cormat, sd_matrix = sd_matrix, withinf = withinf,
+                               nlfA = nlfA, nlfB = nlfB))
     matrices_obj <- list(within.factor = withinf, mean.mat = mean_matrix, sd.mat= sd_matrix, cormat = cormat, sigmat = sigmat)
   }
   if(plot)

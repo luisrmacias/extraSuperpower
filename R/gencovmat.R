@@ -14,25 +14,39 @@
 #' @export
 gencovariancemat <- function(correlation_matrix, sd_matrix, withinf, label_list=NULL, nlfA, nlfB)
   {
-  if(is.null(label_list))
-    {
-      label_list <- list(fA = LETTERS[1:nlfA], fB = letters[1:nlfB])
-    }
-  cnames <- expand.grid(label_list[[2]], label_list[[1]])
-  cnames <- paste(cnames$Var2, cnames$Var1, sep = "_")
 
   if(length(sd_matrix)>1)
+  {
+    if(nlfA!=nrow(sd_matrix))
     {
-      if(nlfA!=nrow(sd_matrix))
-      {
-        stop(paste("Number of rows in sd_matrix must be equal to number of levels of ", names(label_list)[1]))
-      }
-
-      if(nlfB!=ncol(sd_matrix))
-      {
-        stop(paste("Number of columns in sd_matrix must be equal to number of levels of ", names(label_list)[2]))
-      }
+      stop(paste("Number of rows in sd_matrix must be equal to number of levels of ", names(label_list)[1]))
     }
+
+    if(nlfB!=ncol(sd_matrix))
+    {
+      stop(paste("Number of columns in sd_matrix must be equal to number of levels of ", names(label_list)[2]))
+    }
+  }
+
+  generic_labels <- list(fA = LETTERS[1:nlfA], fB = letters[1:nlfB])
+
+  if(is.null(label_list) & identical(dimnames(sd_matrix), generic_labels))
+  {
+    label_list <-  generic_labels
+  } else if (is.null(label_list) & !identical(dimnames(sd_matrix), generic_labels))
+  {
+    label_list <- dimnames(sd_matrix)
+    message("Covariance matrix names assigned based on names from the standard deviation matrix")
+  } else if (!is.null(label_list) & identical(dimnames(sd_matrix), generic_labels) & all.equal(sapply(label_list, length), c(nlfA, nlfB), check.attributes=FALSE))
+  {
+    warning("The covariance matrix will be generated with user provided names although the standard deviation matrix has generic names")
+  } else if (!is.null(label_list) & !identical(dimnames(sd_matrix), label_list))
+  {
+    stop("Provided label list and standard deviation matrix names do not match")
+  }
+
+  cnames <- expand.grid(label_list[[2]], label_list[[1]])
+  cnames <- paste(cnames$Var2, cnames$Var1, sep = "_")
 
 
   sigmat <- diag(0, prod(nlfA, nlfB))
@@ -73,7 +87,7 @@ gencovariancemat <- function(correlation_matrix, sd_matrix, withinf, label_list=
     sigmat <- correlation_matrix*tcrossprod(as.vector(sd_matrix))
   }
   if(!identical(sign(correlation_matrix), sign(sigmat)))
-  {stop("Within factor or factors specified for correlation matrix is different from factor or factors specified for covariance matrix")}
+  {stop("Within factor or factors specified for correlation matrix are different from factor or factors specified for covariance matrix")}
   rhokind <- unique(as.vector(correlation_matrix))
   rhokind <- rhokind[-which(rhokind==0|rhokind==1)]
   if(length(rhokind)>1)
