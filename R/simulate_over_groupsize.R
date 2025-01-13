@@ -42,7 +42,7 @@
 #' indep_simulation <- simulate_twoway_nrange(effects_treat_time, n)
 #'
 #' @export
-simulate_twoway_nrange <- function(matrices_obj, nset, balanced=TRUE, group_size=NULL, loss=NULL, repeated_measurements=FALSE, distribution="normal", skewness=1, inferior_limit=-Inf, superior_limit=Inf, nsims=500)
+simulate_twoway_nrange <- function(matrices_obj, nset, balanced=TRUE, group_size=NULL, loss=NULL, repeated_measurements=FALSE, distribution="normal", skewness=1, inferior_limit=-Inf, superior_limit=Inf, nsims=200)
 {
   if(length(matrices_obj[[1]])==5 & !repeated_measurements)
   {
