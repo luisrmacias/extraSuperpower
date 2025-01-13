@@ -15,7 +15,7 @@ simulate_twoway_nrange(
   skewness = 1,
   inferior_limit = -Inf,
   superior_limit = Inf,
-  nsims = 500
+  nsims = 200
 )
 }
 \arguments{

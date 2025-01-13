@@ -46,7 +46,7 @@
 #' head(repeatedmeasures_experiment, 10)
 #'
 #' @export
-twoway_simulation_correlated <- function(group_size, matrices_obj, distribution="normal", shape.parameter=0, inferior_limit= -Inf, superior_limit=Inf, balanced=TRUE, loss=NULL, nsims=500)
+twoway_simulation_correlated <- function(group_size, matrices_obj, distribution="normal", shape.parameter=0, inferior_limit= -Inf, superior_limit=Inf, balanced=TRUE, loss=NULL, nsims=200)
 {
   if(!is.character(matrices_obj[[1]][[1]]))
   {

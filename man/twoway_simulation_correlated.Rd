@@ -13,7 +13,7 @@ twoway_simulation_correlated(
   superior_limit = Inf,
   balanced = TRUE,
   loss = NULL,
-  nsims = 500
+  nsims = 200
 )
 }
 \arguments{

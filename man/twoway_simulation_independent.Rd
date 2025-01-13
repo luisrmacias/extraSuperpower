@@ -12,7 +12,7 @@ twoway_simulation_independent(
   inferior_limit = -Inf,
   superior_limit = Inf,
   balanced = TRUE,
-  nsims = 500
+  nsims = 200
 )
 }
 \arguments{
