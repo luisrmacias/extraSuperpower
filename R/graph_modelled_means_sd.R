@@ -11,7 +11,6 @@
 #' @export
 graph_twoway_assumptions <- function(group_size=100, matrices_obj)
 {
-  require(ggpubr)
   if(length(matrices_obj)==2)
   {
     test_run <- twoway_simulation_independent(group_size=group_size, matrices_obj=matrices_obj, nsims=1)
@@ -23,8 +22,11 @@ graph_twoway_assumptions <- function(group_size=100, matrices_obj)
   fB <- names(test_run)[5]
   test_run[,4] <- gsub(paste0("^", fA, "_"), "", test_run[,4])
   test_run[,5] <- gsub(paste0("^", fB, "_"), "", test_run[,5])
-  p <- ggline(data=test_run, x = fB, y = "y", color = fA, add = c("mean_sd"),
-            position = ggplot2::position_dodge(width = 0.15), size=1.1) + ggthemes::theme_few()
+  summarized_test <- summarySEwithin(test_run, measurevar = "y", groupvars=c(fA, fB))
+  p <- ggplot2::ggplot(data=summarized_test, aes(x = fB, y = "y", color = fA)) +
+    geom_errorbar(aes(ymin=len-se, ymax=len+se), width=.1) +
+    geom_line(position = ggplot2::position_dodge(width = 0.15), size=1.1) +
+    geom_point(position = ggplot2::position_dodge(width = 0.15), size=1.1) + ggthemes::theme_few()
   p <- p + ggplot2::labs(y = "Outcome\n\u00B1 standard deviation", title=expression(paste("Mean cell ratio modeled ", mu[italic(ij)]," and ", sigma[italic(ij)]^2))) +
     ggplot2::theme(axis.text = ggplot2::element_text(size = 15), axis.title = ggplot2::element_text(size=15), legend.text = ggplot2::element_text(size = 15),
         plot.title = ggplot2::element_text(size = 20), legend.title = ggplot2::element_text(size = 15))

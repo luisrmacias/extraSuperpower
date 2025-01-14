@@ -45,7 +45,7 @@
 #' @export
 twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
 {
-  require(lmPerm)
+  requireNamespace(lmPerm, quietly = TRUE)
   if(is.list(data) & is.null(dim(data)))
   {
     checkFunction <- function() {
