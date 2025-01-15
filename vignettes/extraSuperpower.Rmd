@@ -145,7 +145,7 @@ interaction_twoway
 
 #### Modeling a repeated measures experiment
 
-To end this section, we will switch from an independent measurements design to a design were treatment is a between factor, while "Time" is a within factor, that is, the same study participant has been measures over the different levels of factor "Time". All other parameters will stay as in the independent measures interaction example.
+To end this section, we will switch from an independent measurements design to a design were treatment is a between factor, while "Time" is a within factor. In other words, the same study participant has been measured over the different levels of factor "Time". All other parameters will stay as in the independent measures interaction example.
 
 ```{r, fig.asp=0.8, fig.width=8}
 #Let's suppose within subject correlation is 0.7
@@ -159,7 +159,11 @@ interaction_twoway_timewithin <- calculate_mean_matrix(refmean = refmean, nlfA =
 interaction_twoway_timewithin
 ```
 
-The cell matrices and the plot are the same, the difference lies in that we obtain correlation and covariance matrices as additional output. The 'withinf' option can take the values of 'NULL' (in which case the 'calculate_mean_matrix' will assume independent measurements), 'fA', 'fB' or 'both', depending on which factor is the "within" factor in the design.
+The cell matrices and the plot are the same, the difference lies in that we obtain correlation and covariance matrices as additional output. The 'withinf' option can take the values of 'NULL' (in which case the 'calculate_mean_matrix' will assume independent measurements), 'fA', 'fB' or 'both', depending on which factor is the "within" factor in the design. 
+
+For the within factor correlation we can provide a constant or, if more than 1 value is provided, a correlation gradient can be generated in the matrix.
+
+_Note_ Functions to generate correlation and covariance matrices may also be run separately. To generate te correlation matrix the required input is the mean matrix, 
 
 ### Simulating a two-way factorial experiment 
 

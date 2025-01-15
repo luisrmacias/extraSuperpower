@@ -73,8 +73,14 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
         pvecnames <- ez::ezPerm(wid=subject, dv = y, within = indep_var1,  between = indep_var2, data = simulation[[1]])$Effect
       } else if(test=="rank")
       {
-        pvec <- sapply(simulation, function(i) nparLD::f1.ld.f1(y=i$y, time = i$indep_var1, group = i$indep_var2, subject = i$subject,
-                                                                plot.RTE = FALSE, order.warning = FALSE, description = FALSE, show.covariance = FALSE)$ANOVA.test[,3])
+        pvec <- NULL
+        for (i in seq(simulation))
+        {
+          capture.output(res <- nparLD::f1.ld.f1(y=simulation[[i]]$y, time = simulation[[i]]$indep_var1, group = simulation[[i]]$indep_var2, subject = simulation[[i]]$subject,
+                                                 plot.RTE = FALSE, order.warning = FALSE, description = FALSE, show.covariance = FALSE)$ANOVA.test[,3],
+                         file = nullfile())
+          pvec <- cbind(pvec, res)
+        }
         pvecnames <- c("indep_var1", "indep_var2", "indep_var1:indep_var2" )
       }
     } else if (withinf=="fB")
@@ -93,8 +99,14 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
         pvecnames <- ez::ezPerm(wid=subject, dv = y, between = indep_var1, within = indep_var2, data = simulation[[1]])$Effect
       } else if(test=="rank")
       {
-        pvec <- sapply(simulation, function(i) nparLD::f1.ld.f1(y=i$y, time = i$indep_var2, group = i$indep_var1, subject = i$subject,
-                                                                plot.RTE = FALSE, order.warning = FALSE, description = FALSE, show.covariance = FALSE)$ANOVA.test[,3])
+        pvec <- NULL
+        for (i in seq(simulation))
+        {
+          capture.output(res <- nparLD::f1.ld.f1(y=simulation[[i]]$y, time = simulation[[i]]$indep_var2, group = simulation[[i]]$indep_var1, subject = simulation[[i]]$subject,
+                                                 plot.RTE = FALSE, order.warning = FALSE, description = FALSE, show.covariance = FALSE)$ANOVA.test[,3],
+                         file = nullfile())
+          pvec <- cbind(pvec, res)
+        }
         pvecnames <- c("indep_var1", "indep_var2", "indep_var1:indep_var2" )
       }
     } else if (withinf=="both")
@@ -112,8 +124,14 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
         pvecnames <- ez::ezPerm(wid=subject, dv = y, within = .(indep_var1, indep_var2), data = simulation[[1]])$Effect
       } else if(test=="rank")
       {
-        pvec <- sapply(simulation, function(i) suppressWarnings(nparLD::ld.f2(y=i$y, time1 = i$indep_var1, time2 = i$indep_var2, subject = i$subject,
-                                                                              plot.RTE = FALSE, order.warning = FALSE, description = FALSE, show.covariance = FALSE))$ANOVA.test[,3])
+        pvec <- NULL
+        for (i in seq(simulation))
+        {
+          capture.output(res <- nparLD::f2(y=simulation[[i]]$y, time1 = simulation[[i]]$indep_var1, time2 = simulation[[i]]$indep_var2, subject = simulation[[i]]$subject,
+                                                 plot.RTE = FALSE, order.warning = FALSE, description = FALSE, show.covariance = FALSE)$ANOVA.test[,3],
+                         file = nullfile())
+          pvec <- cbind(pvec, res)
+        }
         pvecnames <- c("indep_var1", "indep_var2", "indep_var1:indep_var2" )
       }
     }
