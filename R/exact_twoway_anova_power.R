@@ -18,7 +18,7 @@
 #' @param target_line Set to TRUE. If FALSE no target line will be drawn. Overrides target_power.
 #' @param alpha_line - logical Should a line at the set type I error be plotted
 #'
-
+#' @details Probably the best way to calculate power for independent balanced designs
 #'
 #' @return A list that contains the number of levels for each factor, the chosen significance level and a data.frame in which the
 #' first column is the group sample size and the remaining three columns are the power for the main effect of the first
@@ -40,7 +40,7 @@
 #' exact_twoway_anova_power(a= treatgroups, b=timepoints, effect_sizes=fxs, n=5:20)
 #'
 #' @export
-exact_twoway_anova_power <- function(a, b, effect_sizes, n, alpha = 0.05, factor_names = NULL, plot=TRUE, target_power=NULL, target_line=TRUE, alpha_line=TRUE)
+exact_twoway_anova_power <- function(a, b, effect_sizes, n, alpha = 0.05, factor_names = NULL, plot=TRUE, title = NULL, target_power=NULL, target_line=TRUE, alpha_line=TRUE)
 {
   if (length(a)!=1 | length(b)!=1 | a %% 1 != 0 | b %% 1 != 0 | a == 0 | b == 0)
   {

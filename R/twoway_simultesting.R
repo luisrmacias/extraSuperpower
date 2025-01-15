@@ -45,7 +45,6 @@
 #' @export
 twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
 {
-  requireNamespace(lmPerm, quietly = TRUE)
   if(is.list(data) & is.null(dim(data)))
   {
     checkFunction <- function() {
@@ -145,6 +144,7 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
                      function(i) Rfit::raov(frml, i)$table[,5])
     } else if(test=="permutation")
     {
+      lmp <- lmPerm::lmp
       frml <- as.formula(paste("y ~ ", indep_vars[1], "*", indep_vars[2]))
       pvec <- sapply(simulation,
                      function(i) {
