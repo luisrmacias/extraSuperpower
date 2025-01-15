@@ -35,5 +35,5 @@ Suggests:
     rmarkdown,
     testthat (>= 3.0.0),
     linpk
-VignetteBuilder: knitr
+VignetteBuilder: knitr, rmarkdown
 Config/testthat/edition: 3

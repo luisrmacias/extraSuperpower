@@ -1,10 +1,13 @@
 ---
 title: "extraSuperpower: Balanced designs"
-output: rmarkdown::html_vignette
+output: 
+  rmarkdown::html_vignette:
+    toc: true
 vignette: >
   %\VignetteIndexEntry{extraSuperpower}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  
 ---
 
 ```{r, include = FALSE}
@@ -81,7 +84,7 @@ If interaction effects are expected, the combination of levels and the ratio of 
 
 If the design includes repeated measurements, the correlation within subjects and the factor for which measures are repeated must be specified.
 
-We will start with an example of an independent measures design in which interaction is not expected. Factor A is treatment group of "Group" and factor B is timepoint or "Time".
+We will start with an example of an independent measures design in which interaction is not expected. Factor A is treatment group simply labelled as "Group" and factor B is timepoint or simply "Time".
 
 ```{r}
 ## outcome mean in reference group at baseline is 10
