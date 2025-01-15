@@ -14,19 +14,30 @@ graph_twoway_assumptions <- function(group_size=100, matrices_obj)
   if(length(matrices_obj)==2)
   {
     test_run <- twoway_simulation_independent(group_size=group_size, matrices_obj=matrices_obj, nsims=1)
+    label_list <- dimnames(matrices_obj[[1]])
   }else if (length(matrices_obj)==5)
   {
     test_run <- twoway_simulation_correlated(group_size=group_size, matrices_obj=matrices_obj, nsims=1)$simulated_data
+    label_list <- dimnames(matrices_obj[[2]])
   }
   fA <- names(test_run)[4]
   fB <- names(test_run)[5]
   test_run[,4] <- gsub(paste0("^", fA, "_"), "", test_run[,4])
   test_run[,5] <- gsub(paste0("^", fB, "_"), "", test_run[,5])
-  summarized_test <- summarySEwithin(test_run, measurevar = "y", groupvars=c(fA, fB))
-  p <- ggplot2::ggplot(data=summarized_test, aes(x = fB, y = "y", color = fA)) +
-    geom_errorbar(aes(ymin=len-se, ymax=len+se), width=.1) +
-    geom_line(position = ggplot2::position_dodge(width = 0.15), size=1.1) +
-    geom_point(position = ggplot2::position_dodge(width = 0.15), size=1.1) + ggthemes::theme_few()
+  summarized_test <- summarySE(test_run, measurevar = "y", groupvars=c(fA, fB))
+  summarized_test[,1] <- factor(summarized_test[,1], levels = label_list[[1]])
+  summarized_test[,2] <- factor(summarized_test[,2], levels = label_list[[2]])
+  plotmeans_sd <- function(df, column1, column2)
+  {
+    gg <- ggplot2::ggplot(data=summarized_test, ggplot2::aes(x = .data[[column2]], y = y, group = .data[[column1]], colour=.data[[column1]])) +
+      ggplot2::geom_errorbar(ggplot2::aes(ymin=y-sd, ymax=y+sd), width=.1, position = ggplot2::position_dodge(width = 0.15)) +
+      ggplot2::geom_line(position = ggplot2::position_dodge(width = 0.15), linewidth=1.1) +
+      ggplot2::geom_point(position = ggplot2::position_dodge(width = 0.15), size=1.1) + ggthemes::theme_few()
+    gg
+  }
+
+  p <- plotmeans_sd(summarized_test, fA, fB)
+
   p <- p + ggplot2::labs(y = "Outcome\n\u00B1 standard deviation", title=expression(paste("Mean cell ratio modeled ", mu[italic(ij)]," and ", sigma[italic(ij)]^2))) +
     ggplot2::theme(axis.text = ggplot2::element_text(size = 15), axis.title = ggplot2::element_text(size=15), legend.text = ggplot2::element_text(size = 15),
         plot.title = ggplot2::element_text(size = 20), legend.title = ggplot2::element_text(size = 15))
