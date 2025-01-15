@@ -127,7 +127,7 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
         pvec <- NULL
         for (i in seq(simulation))
         {
-          capture.output(res <- nparLD::f2(y=simulation[[i]]$y, time1 = simulation[[i]]$indep_var1, time2 = simulation[[i]]$indep_var2, subject = simulation[[i]]$subject,
+          capture.output(res <- nparLD::ld.f2(y=simulation[[i]]$y, time1 = simulation[[i]]$indep_var1, time2 = simulation[[i]]$indep_var2, subject = simulation[[i]]$subject,
                                                  plot.RTE = FALSE, order.warning = FALSE, description = FALSE, show.covariance = FALSE)$ANOVA.test[,3],
                          file = nullfile())
           pvec <- cbind(pvec, res)
