@@ -30,9 +30,13 @@
 #' @export
 effsize <- function(matrices_obj)
   {
-  if(!all(sapply(matrices_obj, is.matrix)))
+  if(length(matrices_obj)==2 & any(unlist(sapply(matrices_obj, class))=="gg"))
   {
     matrices_obj <- matrices_obj$matrices_obj
+  }
+  if(any(!c("mean.mat", "sd.mat") %in% names(matrices_obj)) | !is.list(matrices_obj))
+  {
+   stop("A list with matrices called 'mean.mat' and 'sd.mat' is required")
   }
   mean_matrix <- matrices_obj$mean.mat
   factors <- names(dimnames(mean_matrix))
