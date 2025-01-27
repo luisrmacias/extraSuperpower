@@ -64,7 +64,7 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
       if(test=="ANOVA")
       {
         pvec <- sapply(simulation, function(i)
-          suppressMessages(suppressWarnings(afex::aov_ez(id="subject", dv="y", between="indep_var1", within="indep_var2", data=test)$anova_table))$`Pr(>F)`)
+          suppressMessages(suppressWarnings(afex::aov_ez(id="subject", dv="y", between="indep_var1", within="indep_var2", data=i)$anova_table))$`Pr(>F)`)
         pvecnames <- rownames(suppressMessages(afex::aov_ez(id = "subject", dv = "y", within = "indep_var1", between = "indep_var2",  data = simulation[[1]])$anova_table))
       } else if(test=="permutation")
       {
@@ -88,7 +88,7 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
       if(test=="ANOVA")
       {
         pvec <- sapply(simulation, function(i)
-          suppressMessages(suppressWarnings(afex::aov_ez(id="subject", dv="y", between="indep_var1", within="indep_var2", data=test)$anova_table))$`Pr(>F)`)
+          suppressMessages(suppressWarnings(afex::aov_ez(id="subject", dv="y", between="indep_var1", within="indep_var2", data=i)$anova_table))$`Pr(>F)`)
         pvecnames <- rownames(suppressMessages(afex::aov_ez(id = "subject", dv = "y", between = "indep_var1", within = "indep_var2",  data = simulation[[1]])$anova_table))
 
       } else if(test=="permutation")
@@ -114,7 +114,7 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
       if(test=="ANOVA")
       {
         pvec <- sapply(simulation, function(i)
-          suppressMessages(suppressWarnings(afex::aov_ez(id="subject", dv="y", between="indep_var1", within="indep_var2", data=test)$anova_table))$`Pr(>F)`)
+          suppressMessages(suppressWarnings(afex::aov_ez(id="subject", dv="y", between="indep_var1", within="indep_var2", data=i)$anova_table))$`Pr(>F)`)
         pvecnames <- rownames(suppressMessages(afex::aov_ez(id = "subject", dv = "y", within = c("indep_var1", "indep_var2"),  data = simulation[[1]])$anova_table))
       }else if(test=="permutation")
       {
