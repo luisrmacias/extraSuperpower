@@ -87,8 +87,8 @@ gencovariancemat <- function(correlation_matrix, sd_matrix, withinf, label_list=
   {
     sigmat <- correlation_matrix*tcrossprod(as.vector(sd_matrix))
   }
-  if(!identical(sign(correlation_matrix), sign(sigmat)))
-  {stop("Within factor or factors specified for correlation matrix are different from factor or factors specified for covariance matrix")}
+  if(!identical(dim(cor.mat), dim(cov.mat)) & identical(colnames(cor.mat), colnames(cov.mat)) & identical(rownames(cor.mat), rownames(cov.mat)))
+  {stop("Factors specified for correlation matrix are different from factor or factors specified for covariance matrix")}
   rhokind <- unique(as.vector(correlation_matrix))
   rhokind <- rhokind[-which(rhokind==0|rhokind==1)]
   if(length(rhokind)>1)
