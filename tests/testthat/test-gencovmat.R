@@ -281,3 +281,23 @@ test_that("both factor covariance with correlation gradient", {
   expect_true(all.equal(cov2cor(fastcovmat), cor_mat))
 })
 
+##test correlation and covariance concordance when standard deviation is 0
+
+
+test_that("covariance matrix with 0 standard deviation", {
+  fwithin <- "fB"
+  rho <- 0.8
+  #constant standard deviation
+  meansd_mats <- calculate_mean_matrix(refmean = 10, nlfA = fA, nlfB = fB,
+                                       fAeffect = faeff, fBeffect = fbeff,
+                                       plot = FALSE)
+  sd <- meansd_mats[[2]]
+  sd[1,3:4] <- 0
+  facdim <- dim(meansd_mats[[1]])
+  cor_mat <- gencorrelationmat(meansd_mats[[1]],
+                               rho = rho, withinf =fwithin,
+                               nlfA = facdim[1], nlfB = facdim[2])
+  cov_mat <- gencovariancemat(cor_mat, sd_matrix = sd,
+                              withinf = fwithin, nlfA = facdim[1], nlfB = facdim[2])
+  expect_equal(cor_mat*tcrossprod(as.vector(t(sd))), cov_mat)
+})
