@@ -38,9 +38,14 @@
 #' @export
 twoway_simulation_independent <- function(group_size, matrices_obj, distribution="normal", skewness=1, inferior_limit=-Inf, superior_limit=Inf, balanced=TRUE, nsims=200)
 {
+
   if(!all(sapply(matrices_obj, is.matrix)) & !is.numeric(matrices_obj[[2]]))
   {
     matrices_obj <- matrices_obj$matrices_obj
+  }
+  if(is.null(dimnames(matrices_obj$mean.mat)) | is.null(names(matrices_obj$mean.mat)) | is.null(rownames(matrices_obj$mean.mat) | is.null(colnames(matrices_obj$mean.mat))))
+  {
+    stop("The cell mean model must full dimnames")
   }
   label_list <- dimnames(matrices_obj$mean.mat)
   factor_levels <- dim(matrices_obj$mean.mat)
