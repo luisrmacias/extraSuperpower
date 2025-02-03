@@ -43,7 +43,7 @@ twoway_simulation_independent <- function(group_size, matrices_obj, distribution
   {
     matrices_obj <- matrices_obj$matrices_obj
   }
-  if(is.null(dimnames(matrices_obj$mean.mat)) | is.null(names(matrices_obj$mean.mat)) | is.null(rownames(matrices_obj$mean.mat) | is.null(colnames(matrices_obj$mean.mat))))
+  if(is.null(dimnames(matrices_obj$mean.mat)) | is.null(names(dimnames(matrices_obj$mean.mat))))
   {
     stop("The cell mean model must full dimnames")
   }
