@@ -40,13 +40,14 @@ test_that("number of subject generated correspond to sample size", {
 test_that("simulated values match expectations", {
   nlevfA <- 2
   nlevfB <- 2
-  group_size <- 5
-  iterations <- 3
-  mean.mat <- matrix(c(1, 0, 0, 0), nlevfA, nlevfB, dimnames = list(groups=LETTERS[1:nlevfA], treatment=letters[1:nlevfB]))
-  sd.mat <- 2
+  group_size <- 1000
+  iterations <- 1
+  mean.mat <- matrix(c(1, 0.001, 0.001, 0.001), nlevfA, nlevfB,
+                     dimnames = list(groups=LETTERS[1:nlevfA], treatment=letters[1:nlevfB]))
+  sd.mat <- 1
   matlist <- list(mean.mat=mean.mat, sd.mat=sd.mat)
   simdat <- twoway_simulation_independent(group_size = group_size, matrices_obj = matlist, nsims = iterations)
-  expect_equal(nrow(simdat), nlevfA*nlevfB*group_size*iterations)
+  gmeans_simdat <- aggregate(y ~ groups + treatment, data = simdat, FUN = mean)
 
   nlevfA <- 3
   nlevfB <- 6

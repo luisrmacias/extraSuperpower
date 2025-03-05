@@ -16,26 +16,26 @@ test_that("concordance with Superpower, no interaction effects", {
                                      fAeffect = 2, fBeffect = 3,
                                      plot = FALSE)
   design <- Superpower::ANOVA_design(
-    n = 25,
+    n = 100,
     design = "4b*5b",
     mu = as.vector(mean_mats$mean.mat),
     sd=as.vector(mean_mats$sd.mat), plot = FALSE
   )
   spres <- Superpower::ANOVA_exact(design, verbose = FALSE)
-  expect_true(all(abs(spres$main_results$cohen_f[c(2,1,3)]/ effsize(mean_mats))-1 <0.05))
+  expect_true(all(abs(spres$main_results$cohen_f[c(2,1,3)]/ effsize(mean_mats))-1 <0.01))
 
   sdcoef <- 0.1
   mean_mats <- calculate_mean_matrix(refmean = 10, nlfA = 5, nlfB = 4,
                                      fAeffect = 2, fBeffect = 3, sdratio = sdcoef,
                                      plot = FALSE)
   design <- Superpower::ANOVA_design(
-    n = 25,
+    n = 100,
     design = "4b*5b",
     mu = as.vector(mean_mats$mean.mat),
     sd=as.vector(mean_mats$sd.mat), plot = FALSE
   )
   spres <- Superpower::ANOVA_exact(design, verbose = FALSE)
-  expect_true(all(abs(spres$main_results$cohen_f[c(2,1,3)]/effsize(mean_mats))-1 <0.05))
+  expect_true(all(abs(spres$main_results$cohen_f[c(2,1,3)]/effsize(mean_mats))-1 <0.01))
 })
 
 
@@ -51,11 +51,11 @@ test_that("concordance with Superpower, interaction effects", {
                                       groupswinteraction = ginteract, interact = intereff,
                                       plot = FALSE)
   design <- Superpower::ANOVA_design(
-    n = 25,
+    n = 100,
     design = "4b*5b",
     mu = as.vector(int_mean_mat$mean.mat),
     sd=as.vector(int_mean_mat$sd.mat), plot = FALSE
   )
   spres <- Superpower::ANOVA_exact(design, verbose = FALSE)
-  expect_true(all(abs(spres$main_results$cohen_f[c(2,1,3)]/effsize(int_mean_mat))-1 <0.05))
+  expect_true(all(abs(spres$main_results$cohen_f[c(2,1,3)]/effsize(int_mean_mat))-1 <0.01))
 })
