@@ -105,25 +105,52 @@ test_that("sd of simulated values match sd matrix", {
   expect_true(all((abs(gsds_simdat$y) - matlist$sd.mat)/matlist$sd.mat<0.05))
 })
 
-# test_that("simulated values are normally distributed", {
-#   nlevfA <- 2
-#   nlevfB <- 2
-#   group_size <- 200
-#   iterations <- 5
-#   matlist <- calculate_mean_matrix(refmean = 1, nlfA = nlevfA, nlfB = nlevfB,
-#                                    fAeffect = 0.01, fBeffect = 0.01, plot = FALSE, sdratio = 0.1, sdproportional = FALSE,
-#                                    label_list = list(groups=LETTERS[1:nlevfA], treatment=letters[1:nlevfB]))
-#   simdat <- twoway_simulation_independent(group_size = group_size, matrices_obj = matlist, nsims = iterations)
-#   gmeans_simdat <- aggregate(y ~ groups + treatment, data = simdat, FUN = mean)
-#   expect_true(all(abs(gmeans_simdat$y - matlist$mean.mat)<1e-4))
-#
-#   nlevfA <- 3
-#   nlevfB <- 6
-#   matlist <- calculate_mean_matrix(refmean = 1, nlfA = nlevfA, nlfB = nlevfB,
-#                                    fAeffect = 0.01, fBeffect = 0.01, plot = FALSE, sdratio = 0.1, sdproportional = FALSE,
-#                                    groupswinteraction = matrix(c(2,2,3,3,1,4,2,5,3,6), 5, 2, byrow = TRUE), interact = 50,
-#                                    label_list = list(groups=LETTERS[1:nlevfA], treatment=letters[1:nlevfB]))
-#   simdat <- twoway_simulation_independent(group_size = group_size, matrices_obj = matlist, nsims = iterations)
-#   gmeans_simdat <- aggregate(y ~ groups + treatment, data = simdat, FUN = mean)
-#   expect_true(all(abs(gmeans_simdat$y - matlist$mean.mat)<1e-4))
-# })
+test_that("simulated values are normally distributed", {
+  nlevfA <- 2
+  nlevfB <- 2
+  group_size <- 100
+  iterations <- 1
+  matlist <- calculate_mean_matrix(refmean = 1, nlfA = nlevfA, nlfB = nlevfB,
+                                   fAeffect = 0.01, fBeffect = 0.01, plot = FALSE, sdratio = 0.1, sdproportional = FALSE,
+                                   label_list = list(groups=LETTERS[1:nlevfA], treatment=letters[1:nlevfB]))
+  set.seed(160724)
+  simdat <- twoway_simulation_independent(group_size = group_size, matrices_obj = matlist, nsims = iterations)
+  distest <- tapply(simdat$y, simdat$cond, shapiro.test)
+  expect_true(all(sapply(distest, "[", "p.value")>0.05))
+
+  nlevfA <- 3
+  nlevfB <- 6
+  matlist <- calculate_mean_matrix(refmean = 1, nlfA = nlevfA, nlfB = nlevfB,
+                                   fAeffect = 0.01, fBeffect = 0.01, plot = FALSE, sdratio = 0.1, sdproportional = FALSE,
+                                   groupswinteraction = matrix(c(2,2,3,3,1,4,2,5,3,6), 5, 2, byrow = TRUE), interact = 50,
+                                   label_list = list(groups=LETTERS[1:nlevfA], treatment=letters[1:nlevfB]))
+  simdat <- twoway_simulation_independent(group_size = group_size, matrices_obj = matlist, nsims = iterations)
+  distest <- tapply(simdat$y, simdat$cond, shapiro.test)
+  pvals <- unlist(sapply(distest, "[", "p.value"))
+  expect_true(all(p.adjust(pvals)>0.05))
+})
+
+test_that("simulated values respect truncation limit", {
+  nlevfA <- 2
+  nlevfB <- 2
+  group_size <- 100
+  iterations <- 1
+  matlist <- calculate_mean_matrix(refmean = 1, nlfA = nlevfA, nlfB = nlevfB,
+                                   fAeffect = 0.01, fBeffect = 0.01, plot = FALSE, sdratio = 0.3,
+                                   label_list = list(groups=LETTERS[1:nlevfA], treatment=letters[1:nlevfB]))
+  set.seed(160724)
+  simdat <- twoway_simulation_independent(group_size = group_size, matrices_obj = matlist, nsims = iterations, inferior_limit = -1)
+
+  expect_true(all(sapply(distest, "[", "p.value")>0.05))
+
+  nlevfA <- 3
+  nlevfB <- 6
+  matlist <- calculate_mean_matrix(refmean = 1, nlfA = nlevfA, nlfB = nlevfB,
+                                   fAeffect = 0.01, fBeffect = 0.01, plot = FALSE, sdratio = 0.1, sdproportional = FALSE,
+                                   groupswinteraction = matrix(c(2,2,3,3,1,4,2,5,3,6), 5, 2, byrow = TRUE), interact = 50,
+                                   label_list = list(groups=LETTERS[1:nlevfA], treatment=letters[1:nlevfB]))
+  simdat <- twoway_simulation_independent(group_size = group_size, matrices_obj = matlist, nsims = iterations)
+  distest <- tapply(simdat$y, simdat$cond, shapiro.test)
+  pvals <- unlist(sapply(distest, "[", "p.value"))
+  expect_true(all(p.adjust(pvals)>0.05))
+})
