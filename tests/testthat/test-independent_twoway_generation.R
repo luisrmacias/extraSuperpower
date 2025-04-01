@@ -1,3 +1,4 @@
+set.seed(1552104)
 test_that("number of levels generated correspond to model", {
   nlevfA <- 2
   nlevfB <- 2

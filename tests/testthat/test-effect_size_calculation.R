@@ -1,3 +1,38 @@
+test_that("independent matrix and plot are taken as input", {
+  faeff <- 2
+  fA <- 3
+  fbeff <- 0.5
+  fB <- 2
+  meansd_mats <- calculate_mean_matrix(refmean = 10, nlfA = fA, nlfB = fB,
+                                       fAeffect = faeff, fBeffect = fbeff)
+  res <- effsize(meansd_mats)
+  expect_type(res, "double")
+})
+
+test_that("names of matrices error", {
+  nlevfA <- 2
+  nlevfB <- 2
+  group_size <- 5
+  first.mat <- matrix(c(1, 0, 0, 0), nlevfA, nlevfB, dimnames = list(groups=LETTERS[1:nlevfA], treatment=letters[1:nlevfB]))
+  second.mat <- 2
+  matlist <- list(first.mat=first.mat, second.mat=second.mat)
+  expect_error(effsize(matlist))
+
+  matlist <- list(mean.mat=first.mat, sd.mat=second.mat)
+  expect_type(effsize(matlist), "double")
+})
+
+# test_that("repeated measures matrix is not taken as input", {
+#   faeff <- 2
+#   fA <- 3
+#   fbeff <- 0.5
+#   fB <- 2
+#   meansd_mats <- calculate_mean_matrix(refmean = 10, nlfA = fA, nlfB = fB,
+#                                        fAeffect = faeff, fBeffect = fbeff, plot = FALSE)
+#   res <- effsize(meansd_mats)
+#   expect_type(res, "double")
+# })
+
 test_that("simpleeffectsizeestimates", {
   ##examples from Daniel Lakens' blog
   ##'http://daniellakens.blogspot.com/2020/03/effect-sizes-and-power-for-interactions.html'
@@ -59,3 +94,4 @@ test_that("concordance with Superpower, interaction effects", {
   spres <- Superpower::ANOVA_exact(design, verbose = FALSE)
   expect_true(all(abs(spres$main_results$cohen_f[c(2,1,3)]/effsize(int_mean_mat))-1 <0.01))
 })
+

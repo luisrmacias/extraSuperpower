@@ -13,7 +13,11 @@ test_that("different dimensions of mean and correlation throws error", {
   expect_error(gencorrelationmat(meansd_mats[[1]],
                     rho = rho, withinf =fwithin,
                     nlfA = facdim[2], nlfB = facdim[2]))
-})
+
+  expect_error(gencorrelationmat(meansd_mats[[1]],
+                                 rho = rho, withinf =fwithin,
+                                 nlfA = facdim[1], nlfB = facdim[1]))
+  })
 
 test_that("transferability of level labels", {
   fwithin <-"fA"
@@ -90,15 +94,33 @@ test_that("label incompatibilities are detected", {
   expect_true(is(cor_mat, "matrix"))
 })
 
-test_that("correlation input", {
+test_that("error is shown when rho is out of format", {
+  fwithin <-"fA"
+  rho <- c(0.4, 0.2, 0.3)
+  meansd_mats <- calculate_mean_matrix(refmean = 10, nlfA = fA, nlfB = fB,
+                                       fAeffect = faeff, fBeffect = fbeff,
+                                       plot = FALSE)
+  expect_error(gencorrelationmat(meansd_mats[[1]], rho=rho, withinf = fwithin, nlfA = 3, nlfB = 2))
+})
+
+test_that("correlation input format and design are consistent", {
   fwithin <-"fA"
   rho <- matrix(c(0.4, 0.2, 0.3, 0.1), 2, 2)
   meansd_mats <- calculate_mean_matrix(refmean = 10, nlfA = fA, nlfB = fB,
                                        fAeffect = faeff, fBeffect = fbeff,
                                        plot = FALSE)
-  expect_error(gencorrelationmat(meansd_mats[[1]], rho=, withinf = "fA", nlfA = 3, nlfB = 2))
+  expect_error(gencorrelationmat(meansd_mats[[1]], rho=rho, withinf = fwithin, nlfA = 3, nlfB = 2))
 })
 
+test_that("warning appears when late labelling is used", {
+  fwithin <-"fA"
+  meansd_mats <- calculate_mean_matrix(refmean = 10, nlfA = fA, nlfB = fB,
+                                       fAeffect = faeff, fBeffect = fbeff,
+                                       plot = FALSE)
+  levels_list <- list(treatment=c("control", "MedA", "MedB"), time=c("before", "after"))
+  expect_warning(gencorrelationmat(meansd_mats[[1]], rho=0.8, withinf = fwithin, nlfA = 3, nlfB = 2,
+                                    label_list = levels_list))
+})
 
 ##fixed correlation
 test_that("correlation when factor A is the repeated factor", {
