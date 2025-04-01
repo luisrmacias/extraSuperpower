@@ -11,6 +11,7 @@
 #' @export
 graph_twoway_assumptions <- function(group_size=100, matrices_obj)
 {
+
   if(length(matrices_obj)==2)
   {
     test_run <- twoway_simulation_independent(group_size=group_size, matrices_obj=matrices_obj, nsims=1)
@@ -25,6 +26,10 @@ graph_twoway_assumptions <- function(group_size=100, matrices_obj)
   test_run[,4] <- gsub(paste0("^", fA, "_"), "", test_run[,4])
   test_run[,5] <- gsub(paste0("^", fB, "_"), "", test_run[,5])
   summarized_test <- summarySE(test_run, measurevar = "y", groupvars=c(fA, fB))
+  if(any(is.na(summarized_test$y)))
+  {
+    warning("There are missing values in the expected outcomes")
+  }
   summarized_test[,1] <- factor(summarized_test[,1], levels = label_list[[1]])
   summarized_test[,2] <- factor(summarized_test[,2], levels = label_list[[2]])
   plotmeans_sd <- function(df, column1, column2)
