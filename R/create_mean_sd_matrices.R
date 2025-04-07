@@ -86,9 +86,13 @@ calculate_mean_matrix <- function(refmean, nlfA, nlfB, fAeffect, fBeffect, group
   ##Check if labels correspond to group sizes. If no labels are given, assign them.
   if(!is.null(label_list))
   {
-    if(!all.equal(as.vector(sapply(label_list, length)), c(nlfA, nlfB)))
+    if(length(label_list)!=2)
     {
-      stop("\nNumber of labels must match number of levels for each factor")}
+      stop("Label names must be a list of length 2")
+    } else if (length(label_list[[1]]) != nlfA | length(label_list[[2]]) != nlfB)
+    {
+      stop("\nNumber of labels must match number of levels for each factor")
+    }
   }
   if(is.null(label_list))
   {
@@ -100,7 +104,7 @@ calculate_mean_matrix <- function(refmean, nlfA, nlfB, fAeffect, fBeffect, group
   }
   if(length(rho)==2 & withinf=="both")
   {
-    cat("The first element of 'rho' will be the correlation for factor A, the second element of 'rho' the correlation for factor B")
+    message("The first element of 'rho' will be the correlation for factor A, the second element of 'rho' the correlation for factor B")
   }
   if(is.matrix(rho) & withinf!="both")
   {
@@ -112,7 +116,7 @@ calculate_mean_matrix <- function(refmean, nlfA, nlfB, fAeffect, fBeffect, group
     {
       warning("\nBy setting '0' effects and proportional SD you will obtain groups with standard deviation of 0.")
     }
-    else if(withinf=="fA" | withinf=="fB" | withinf=="none")
+    else if(withinf=="fA" | withinf=="fB" | withinf=="both")
     {
       warning("\nBy setting '0' effects and proportional SD you will obtain groups with standard deviation\nof 0 and individuals with 0 covariance.")
     }

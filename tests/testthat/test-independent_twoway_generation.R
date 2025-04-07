@@ -109,11 +109,12 @@ test_that("sd of simulated values match sd matrix", {
 test_that("simulated values are normally distributed", {
   nlevfA <- 2
   nlevfB <- 2
+  label_list <- list(groups=LETTERS[1:nlevfA], treatment=letters[1:nlevfB])
   group_size <- 100
   iterations <- 1
   matlist <- calculate_mean_matrix(refmean = 1, nlfA = nlevfA, nlfB = nlevfB,
                                    fAeffect = 0.01, fBeffect = 0.01, plot = FALSE, sdratio = 0.1, sdproportional = FALSE,
-                                   label_list = list(groups=LETTERS[1:nlevfA], treatment=letters[1:nlevfB]))
+                                   label_list = label_list)
   set.seed(160724)
   simdat <- twoway_simulation_independent(group_size = group_size, matrices_obj = matlist, nsims = iterations)
   distest <- tapply(simdat$y, simdat$cond, shapiro.test)

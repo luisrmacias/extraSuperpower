@@ -1,3 +1,87 @@
+test_that("data entry type for labels", {
+  faeff <- 1
+  fA <- 2
+  fbeff <- 3
+  fB <- 2
+  labels <- letters[1:4]
+  expect_error(calculate_mean_matrix(refmean = 10, nlfA = fA, nlfB = fB,
+                                     fAeffect = fAeff, fBeffect = fbeff,
+                                     label_list = labels))
+
+
+  labels <- list(fA=letters[1:2], fB=LETTERS[1])
+  expect_error(calculate_mean_matrix(refmean = 10, nlfA = fA, nlfB = fB,
+                                     fAeffect = fAeff, fBeffect = fbeff,
+                                     label_list = labels))
+
+
+})
+
+test_that("rho value is checked", {
+  faeff <- 1
+  fA <- 2
+  fbeff <- 3
+  fB <- 2
+  rho <- 2
+  fwithin <- "fB"
+  expect_error(calculate_mean_matrix(refmean = 10, nlfA = fA, nlfB = fB,
+                                     fAeffect = faeff, fBeffect = fbeff,
+                                     rho = rho, withinf = fwithin))
+})
+
+
+test_that("correlation message is given", {
+  faeff <- 1
+  fA <- 2
+  fbeff <- 3
+  fB <- 2
+  rho <- c(0.6, 0.4)
+  fwithin <- "both"
+  expect_message(calculate_mean_matrix(refmean = 10, nlfA = fA, nlfB = fB,
+                                     fAeffect = faeff, fBeffect = fbeff,
+                                     rho = rho, withinf = fwithin))
+})
+
+test_that("rho dimensions and within factor agree", {
+  faeff <- 1
+  fA <- 2
+  fbeff <- 3
+  fB <- 2
+  rho <- matrix(c(0.6, 0.4, 0.5, 0.25), 2, 2)
+  fwithin <- "fA"
+  expect_error(calculate_mean_matrix(refmean = 10, nlfA = fA, nlfB = fB,
+                                       fAeffect = faeff, fBeffect = fbeff,
+                                       rho = rho, withinf = fwithin))
+})
+
+test_that("within factor input check", {
+  faeff <- 1
+  fA <- 2
+  fbeff <- 3
+  fB <- 2
+  rho <- 0.7
+  fwithin <- "fa"
+  expect_error(calculate_mean_matrix(refmean = 10, nlfA = fA, nlfB = fB,
+                                     fAeffect = faeff, fBeffect = fbeff,
+                                     rho = rho, withinf = fwithin))
+})
+
+test_that("zero effects warnings", {
+  faeff <- 1
+  fA <- 2
+  fbeff <- 0
+  fB <- 2
+  expect_warning(calculate_mean_matrix(refmean = 10, nlfA = fA, nlfB = fB,
+                                     fAeffect = faeff, fBeffect = fbeff,
+                                     sdproportional = TRUE))
+  rho=0.5
+  fwithin <- "both"
+  expect_warning(calculate_mean_matrix(refmean = 10, nlfA = fA, nlfB = fB,
+                                       fAeffect = faeff, fBeffect = fbeff,
+                                       rho = rho, withinf = fwithin,
+                                       sdproportional = TRUE))
+})
+
 test_that("matrices dimensions", {
   mean_mat <- calculate_mean_matrix(refmean = 10, nlfA = 5, nlfB = 4,
                                     fAeffect = 2, fBeffect = 3, plot = FALSE)[[1]]
@@ -7,20 +91,6 @@ test_that("matrices dimensions", {
   expect_equal(dim(mean_mat), c(4, 5))
 })
 
-test_that("data entry type for labels", {
-  faeff <- 1
-  fA <- 2
-  fbeff <- 3
-  fB <- 2
-  labels <- letters[1:4]
-  expect_error(calculate_mean_matrix(refmean = 10, nlfA = fA, nlfB = fB,
-                        fAeffect = fAeffect, fBeffect = fbeff,
-                        label_list = labels))
-  labels <- list(letters[1:4])
-  expect_error(calculate_mean_matrix(refmean = 10, nlfA = fA, nlfB = fB,
-                                     fAeffect = fAeffect, fBeffect = fbeff,
-                                     label_list = labels))
-})
 
 test_that("standard deviation proportionality", {
   mean_mats <- calculate_mean_matrix(refmean = 10, nlfA = 5, nlfB = 4,
@@ -128,6 +198,17 @@ test_that("factor B end effect ratio", {
   f1.1 <- mean_mat[1,1]
   fbnext.1 <- mean_mat[1,2]
   expect_equal(fbnext.1/f1.1, fbeff)
+})
+
+test_that("interaction conditions input check", {
+  faeff <- 1
+  fA <- 2
+  fbeff <- 3
+  fB <- 2
+  interg <- c(2,3,4)
+  expect_error(calculate_mean_matrix(refmean = 10, nlfA = fA, nlfB = fB,
+                                     fAeffect = faeff, fBeffect = fbeff,
+                                     groupswinteraction = interg, interact = 2))
 })
 
 test_that("interaction modelled as defined with stepwise effect", {
