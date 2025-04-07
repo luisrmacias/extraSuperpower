@@ -1,4 +1,44 @@
+
 set.seed(1552104)
+
+test_that("format check works", {
+  faeff <- 1
+  fA <- 2
+  fbeff <- 3
+  fB <- 2
+  group_size <- 5
+  mean_mat <- calculate_mean_matrix(refmean = 10, nlfA = fA, nlfB = fB,
+                                     fAeffect = faeff, fBeffect = fbeff)
+  expect_no_error(twoway_simulation_independent(group_size = group_size, mean_mat, nsims = 3))
+
+  dimnames(mean_mat$matrices_obj$mean.mat) <- NULL
+  expect_error(twoway_simulation_independent(group_size = group_size, mean_mat, nsims = 3))
+})
+
+test_that("design check works", {
+  faeff <- 1
+  fA <- 2
+  fbeff <- 3
+  fB <- 2
+  mean_mat <- calculate_mean_matrix(refmean = 10, nlfA = fA, nlfB = fB,
+                                    fAeffect = faeff, fBeffect = fbeff)
+  group_size <- 5.4
+  expect_error(twoway_simulation_independent(group_size = group_size, mean_mat, nsims = 3))
+
+  group_size <- c(5, 6, 4)
+  expect_error(twoway_simulation_independent(group_size = group_size, mean_mat, nsims = 3,
+                                             balanced = FALSE))
+
+  group_size <- 10
+  expect_error(twoway_simulation_independent(group_size = group_size, mean_mat, nsims = 3,
+                                             balanced = FALSE))
+
+  group_size <- c(5, 6)
+  expect_error(twoway_simulation_independent(group_size = group_size, mean_mat, nsims = 3,
+                                             balanced = TRUE))
+
+})
+
 test_that("number of levels generated correspond to model", {
   nlevfA <- 2
   nlevfB <- 2
@@ -132,17 +172,20 @@ test_that("simulated values are normally distributed", {
   expect_true(all(p.adjust(pvals)>0.05))
 })
 
-# test_that("simulated values respect truncation limit", {
+
+# test_that("simulated values are skewd", {
 #   nlevfA <- 2
-#   nlevfB <- 2
+#   nlevfB <- 4
+#   label_list <- list(groups=LETTERS[1:nlevfA], treatment=letters[1:nlevfB])
 #   group_size <- 100
 #   iterations <- 1
-#   matlist <- calculate_mean_matrix(refmean = 1, nlfA = nlevfA, nlfB = nlevfB,
-#                                    fAeffect = 0.01, fBeffect = 0.01, plot = FALSE, sdratio = 0.3,
-#                                    label_list = list(groups=LETTERS[1:nlevfA], treatment=letters[1:nlevfB]))
+#   matlist <- calculate_mean_matrix(refmean = 10, nlfA = nlevfA, nlfB = nlevfB,
+#                                    fAeffect = 2, fBeffect = 0.5, plot = FALSE,
+#                                    label_list = label_list)
 #   set.seed(160724)
-#   simdat <- twoway_simulation_independent(group_size = group_size, matrices_obj = matlist, nsims = iterations, inferior_limit = -1)
-#
+#   simdat <- twoway_simulation_independent(group_size = group_size, matrices_obj = matlist,
+#                                           nsims = iterations, distribution = "skewed", skewness = 0.1)
+#   distest <- tapply(simdat$y, simdat$cond, mean)
 #   expect_true(all(sapply(distest, "[", "p.value")>0.05))
 #
 #   nlevfA <- 3
@@ -156,3 +199,38 @@ test_that("simulated values are normally distributed", {
 #   pvals <- unlist(sapply(distest, "[", "p.value"))
 #   expect_true(all(p.adjust(pvals)>0.05))
 # })
+
+test_that("skewed and truncated input checks work", {
+  nlevfA <- 2
+  nlevfB <- 4
+  group_size <- 100
+  iterations <- 1
+  suplim <- 12
+  matlist <- calculate_mean_matrix(refmean = 10, nlfA = nlevfA, nlfB = nlevfB,
+                                   fAeffect = 2, fBeffect = 2, plot = FALSE, sdratio = 0.3,
+                                   label_list = list(groups=LETTERS[1:nlevfA], treatment=letters[1:nlevfB]))
+
+  expect_warning(twoway_simulation_independent(group_size = group_size, matrices_obj = matlist, nsims = iterations,
+                                          distribution = "skewed", superior_limit = suplim))
+
+  expect_warning(twoway_simulation_independent(group_size = group_size, matrices_obj = matlist, nsims = iterations,
+                                               distribution = "truncated.normal", skewness = 5))
+})
+
+
+
+test_that("simulated values respect truncation limit", {
+  nlevfA <- 2
+  nlevfB <- 4
+  group_size <- 100
+  iterations <- 1
+  suplim <- 12
+  matlist <- calculate_mean_matrix(refmean = 10, nlfA = nlevfA, nlfB = nlevfB,
+                                   fAeffect = 2, fBeffect = 2, plot = FALSE, sdratio = 0.3,
+                                   label_list = list(groups=LETTERS[1:nlevfA], treatment=letters[1:nlevfB]))
+  set.seed(160724)
+  simdat <- twoway_simulation_independent(group_size = group_size, matrices_obj = matlist, nsims = iterations,
+                                          distribution = "truncated.normal", superior_limit = suplim)
+
+  expect_lt(max(simdat$y[simdat$cond=="V5"]), suplim)
+})

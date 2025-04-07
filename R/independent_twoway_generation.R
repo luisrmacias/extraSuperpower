@@ -45,11 +45,18 @@ twoway_simulation_independent <- function(group_size, matrices_obj, distribution
   }
   if(is.null(dimnames(matrices_obj$mean.mat)) | is.null(names(dimnames(matrices_obj$mean.mat))))
   {
-    stop("The cell mean model must full dimnames")
+    stop("The cell mean model must have full dimnames")
   }
   label_list <- dimnames(matrices_obj$mean.mat)
   factor_levels <- dim(matrices_obj$mean.mat)
   mean_matrix <- as.vector(t(matrices_obj$mean.mat))
+  if (!balanced & length(group_size)==1)
+  {
+    stop("Are you sure you want to set balanced to false?")
+  } else if (balanced & length(group_size)>1)
+  {
+    stop("If you wish a balanced design a single integer is required as 'group_size' argument.")
+  }
   if(balanced & length(group_size==1))
   {
     if(as.integer(group_size)!=group_size)
@@ -61,6 +68,15 @@ twoway_simulation_independent <- function(group_size, matrices_obj, distribution
   {
     stop("Number of elements of mean matrix must be a multiple of group size elements.")
   }
+  if((distribution=="normal" | distribution=="skewed") & (superior_limit<Inf | inferior_limit>-Inf))
+  {
+    warning(paste("Superior and inferior limits are ignored when distribution is", distribution))
+  }
+  if((distribution=="normal" | distribution=="truncated.normal") & (skewness!=1))
+  {
+    warning(paste("Skewness is ignored when distribution is", distribution))
+  }
+
   if(is.matrix(matrices_obj$sd.mat))
   {
     sd_matrix <- as.vector(t(matrices_obj$sd.mat))
@@ -68,13 +84,7 @@ twoway_simulation_independent <- function(group_size, matrices_obj, distribution
   {
     sd_matrix <- matrices_obj$sd.mat
   }
-  if (!balanced & length(group_size)==1)
-  {
-    stop("Are you sure you want to set balanced to false?")
-  } else if (balanced & length(group_size)>1)
-  {
-    stop("If you wish a balanced design a single integer is required as 'group_size' argument.")
-  }
+
   sampn <- max(group_size)
   fdata <- as.data.frame(mapply(rnorm, sampn, mean_matrix, sd_matrix))
   fdata$subject <- 1:sampn
