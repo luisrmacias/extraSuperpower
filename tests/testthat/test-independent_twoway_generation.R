@@ -9,10 +9,7 @@ test_that("format check works", {
   group_size <- 5
   mean_mat <- calculate_mean_matrix(refmean = 10, nlfA = fA, nlfB = fB,
                                      fAeffect = faeff, fBeffect = fbeff)
-  expect_no_error(twoway_simulation_independent(group_size = group_size, mean_mat, nsims = 3))
-
-  dimnames(mean_mat$matrices_obj$mean.mat) <- NULL
-  expect_error(twoway_simulation_independent(group_size = group_size, mean_mat, nsims = 3))
+  expect_error(twoway_simulation_corre(group_size = group_size, mean_mat, nsims = 3))
 })
 
 test_that("design check works", {
@@ -233,4 +230,19 @@ test_that("simulated values respect truncation limit", {
                                           distribution = "truncated.normal", superior_limit = suplim)
 
   expect_lt(max(simdat$y[simdat$cond=="V5"]), suplim)
+})
+
+
+test_that("unbalanced designs are simulated", {
+  nlevfA <- 2
+  nlevfB <- 4
+  iterations <- 1
+  matlist <- calculate_mean_matrix(refmean = 10, nlfA = nlevfA, nlfB = nlevfB,
+                                   fAeffect = 2, fBeffect = 2, plot = FALSE, sdratio = 0.3,
+                                   label_list = list(groups=LETTERS[1:nlevfA], treatment=letters[1:nlevfB]))
+  group_size <- matrix(seq(12, 6, -2), nlevfA, nlevfB, byrow = TRUE)
+  set.seed(160724)
+  simdat <- twoway_simulation_independent(group_size = group_size, matrices_obj = matlist, nsims = iterations,
+                                          balanced = FALSE)
+  expect_equal(table(simdat$cond), as.vector(t(group_size)), ignore_attr=TRUE)
 })

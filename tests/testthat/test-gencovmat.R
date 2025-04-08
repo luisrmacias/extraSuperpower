@@ -10,6 +10,69 @@ separate_covariance_level <- function(cmat, level)
   c(levcov[upper.tri(levcov)], levcov[lower.tri(levcov)])
 }
 
+
+test_that("sd matrix dimension check works", {
+  fwithin <- "fA"
+  meansd_mats <- calculate_mean_matrix(refmean = 10, nlfA = fA, nlfB = fB,
+                                       fAeffect = faeff, fBeffect = fbeff,
+                                       plot = FALSE)
+  facdim <- dim(meansd_mats[[1]])
+  sd <- meansd_mats[[2]]
+  sd <- sd[,-4]
+  cor_mat <- gencorrelationmat(meansd_mats[[1]],
+                               rho = rho, withinf =fwithin,
+                               nlfA = facdim[1], nlfB = facdim[2])
+  expect_error(gencovariancemat(cor_mat, sd, withinf =fwithin,
+                                nlfA = facdim[1], nlfB = facdim[2]))
+  sd <- meansd_mats[[2]]
+  sd <- sd[-3,]
+  expect_error(gencovariancemat(cor_mat, sd, withinf =fwithin,
+                                nlfA = facdim[1], nlfB = facdim[2]))
+})
+
+test_that("sd matrix name assignment works", {
+  fwithin <- "fA"
+  meansd_mats <- calculate_mean_matrix(refmean = 10, nlfA = fA, nlfB = fB,
+                                       fAeffect = faeff, fBeffect = fbeff,
+                                       plot = FALSE)
+  facdim <- dim(meansd_mats[[1]])
+
+  cor_mat <- gencorrelationmat(meansd_mats[[1]],
+                               rho = rho, withinf =fwithin,
+                               nlfA = facdim[1], nlfB = facdim[2])
+
+  sd <- meansd_mats[[2]]
+  dimnames(sd) <- list(treatment=c("Ctrl", "MedA", "MedB"),
+                       time=paste("t", 1:4, sep="_"))
+  expect_message(cov_mat <- gencovariancemat(cor_mat, sd, withinf =fwithin,
+                              nlfA = facdim[1], nlfB = facdim[2]))
+  sdnames <- dimnames(sd)
+  sdnames <- expand.grid(sdnames[[2]], sdnames[[1]])
+  sdnames <- paste(sdnames$Var2, sdnames$Var1, sep = "_")
+
+  expect_equal(dimnames(cov_mat)[[1]], sdnames)
+})
+
+test_that("sd matrix name check works", {
+  fwithin <- "fA"
+  meansd_mats <- calculate_mean_matrix(refmean = 10, nlfA = fA, nlfB = fB,
+                                       fAeffect = faeff, fBeffect = fbeff,
+                                       plot = FALSE)
+  facdim <- dim(meansd_mats[[1]])
+
+  cor_mat <- gencorrelationmat(meansd_mats[[1]],
+                               rho = rho, withinf =fwithin,
+                               nlfA = facdim[1], nlfB = facdim[2])
+
+  sd <- meansd_mats[[2]]
+  dimnames(sd) <- list(treatment=c("Ctrl", "MedA", "MedB"),
+                       time=paste("t", 1:4, sep="_"))
+  expect_error(gencovariancemat(cor_mat, sd, withinf =fwithin,
+                                nlfA = facdim[1], nlfB = facdim[2],
+                                label_list = list(intervention=c("Placebo", "Tiritin", "Toroton"),
+                                                  time = paste("day", 1:4, sep = "_"))))
+})
+
 test_that("factor A covariance", {
   fwithin <- "fA"
   ##constant standard deviation
@@ -281,8 +344,25 @@ test_that("both factor covariance with correlation gradient", {
   expect_true(all.equal(cov2cor(fastcovmat), cor_mat))
 })
 
-##test correlation and covariance concordance when standard deviation is 0
 
+
+test_that("within factor consistency check works", {
+  rho <- 0.8
+  fwithin <- "fA"
+  meansd_mats <- calculate_mean_matrix(refmean = 10, nlfA = fA, nlfB = fB,
+                                       fAeffect = faeff, fBeffect = fbeff,
+                                       plot = FALSE)
+  facdim <- dim(meansd_mats[[1]])
+  sd <- meansd_mats[[2]]
+  cor_mat <- gencorrelationmat(meansd_mats[[1]],
+                               rho = rho, withinf =fwithin,
+                               nlfA = facdim[1], nlfB = facdim[2])
+
+  expect_error(gencovariancemat(cor_mat, sd, withinf ="fB",
+                                nlfA = facdim[1], nlfB = facdim[2]))
+})
+
+##test correlation and covariance concordance when standard deviation is 0
 
 test_that("covariance matrix with 0 standard deviation", {
   fwithin <- "fB"
@@ -301,3 +381,4 @@ test_that("covariance matrix with 0 standard deviation", {
                               withinf = fwithin, nlfA = facdim[1], nlfB = facdim[2])
   expect_equal(cor_mat*tcrossprod(as.vector(t(sd))), cov_mat)
 })
+

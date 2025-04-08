@@ -42,6 +42,9 @@ gencovariancemat <- function(correlation_matrix, sd_matrix, withinf, label_list=
     } else if (is.null(label_list) & !identical(dimnames(sd_matrix), generic_labels))
       {
         label_list <- dimnames(sd_matrix)
+        cnames <- expand.grid(label_list[[2]], label_list[[1]])
+        cnames <- paste(cnames$Var2, cnames$Var1, sep = "_")
+        rownames(correlation_matrix) <- colnames(correlation_matrix) <- cnames
         message("Covariance matrix names assigned based on names from the standard deviation matrix")
       } else if (!is.null(label_list) & identical(dimnames(sd_matrix), generic_labels) & all.equal(sapply(label_list, length), c(nlfA, nlfB), check.attributes=FALSE))
       {
@@ -89,7 +92,7 @@ gencovariancemat <- function(correlation_matrix, sd_matrix, withinf, label_list=
   }
   if(!identical(dim(correlation_matrix), dim(sigmat)) & identical(colnames(correlation_matrix), colnames(sigmat)) & identical(rownames(correlation_matrix), rownames(sigmat)))
   {stop("Factors specified for correlation matrix are different from factor or factors specified for covariance matrix")}
-  if(!identical(correlation_matrix>=0, sigmat>=0) & identical(correlation_matrix<=0, sigmat<=0))
+  if(!(identical(correlation_matrix>=0, sigmat>=0) & identical(correlation_matrix<=0, sigmat<=0)) & all(sd_matrix>0))
   {stop("The within factors of the correlation and covariance matrices are inconsistent")}
   rhokind <- unique(as.vector(correlation_matrix))
   rhokind <- rhokind[-which(rhokind==0|rhokind==1)]
