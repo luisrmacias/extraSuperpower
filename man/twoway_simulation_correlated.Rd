@@ -23,11 +23,11 @@ twoway_simulation_correlated(
 
 \item{distribution}{Character - Type of distribution from which to sample, possible values are "normal", "skewed" and "truncated"}
 
-\item{shape.parameter}{Vector - Degree of skewness in the distribution. May be a single value, hava a length equal to the number of levels of any one of the factors or a length equal to the product of the length of each factor.}
+\item{shape.parameter}{Vector - Degree of skewness in the distribution. May be a single value, have a length equal to the number of levels of any one of the factors or a length equal to the product of the length of each factor.}
 
-\item{inferior_limit}{Numeric - Value for which the distribution is truncated on the left. Only valid if 'distribution="truncated"'}
+\item{inferior_limit}{Numeric - Value for which the distribution is truncated on the left. Only valid if 'distribution="truncated.normal"'}
 
-\item{superior_limit}{Numeric - Value for which the distribution is truncated on the right. Only valid if 'distribution="truncated"'}
+\item{superior_limit}{Numeric - Value for which the distribution is truncated on the right. Only valid if 'distribution="truncated.normal"'}
 
 \item{balanced}{Logical - Whether the study will be performed with the same number of subjects in all groups. Default is 'TRUE'. See 'details'.}
 
