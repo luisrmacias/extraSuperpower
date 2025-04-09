@@ -9,7 +9,8 @@ test_that("format check works", {
   group_size <- 5
   mean_mat <- calculate_mean_matrix(refmean = 10, nlfA = fA, nlfB = fB,
                                      fAeffect = faeff, fBeffect = fbeff)
-  expect_error(twoway_simulation_corre(group_size = group_size, mean_mat, nsims = 3))
+  dimnames(mean_mat$matrices_obj$mean.mat) <- NULL
+  expect_error(twoway_simulation_independent(group_size = group_size, mean_mat, nsims = 3))
 })
 
 test_that("design check works", {
@@ -169,34 +170,6 @@ test_that("simulated values are normally distributed", {
   expect_true(all(p.adjust(pvals)>0.05))
 })
 
-
-# test_that("simulated values are skewd", {
-#   nlevfA <- 2
-#   nlevfB <- 4
-#   label_list <- list(groups=LETTERS[1:nlevfA], treatment=letters[1:nlevfB])
-#   group_size <- 100
-#   iterations <- 1
-#   matlist <- calculate_mean_matrix(refmean = 10, nlfA = nlevfA, nlfB = nlevfB,
-#                                    fAeffect = 2, fBeffect = 0.5, plot = FALSE,
-#                                    label_list = label_list)
-#   set.seed(160724)
-#   simdat <- twoway_simulation_independent(group_size = group_size, matrices_obj = matlist,
-#                                           nsims = iterations, distribution = "skewed", skewness = 0.1)
-#   distest <- tapply(simdat$y, simdat$cond, mean)
-#   expect_true(all(sapply(distest, "[", "p.value")>0.05))
-#
-#   nlevfA <- 3
-#   nlevfB <- 6
-#   matlist <- calculate_mean_matrix(refmean = 1, nlfA = nlevfA, nlfB = nlevfB,
-#                                    fAeffect = 0.01, fBeffect = 0.01, plot = FALSE, sdratio = 0.1, sdproportional = FALSE,
-#                                    groupswinteraction = matrix(c(2,2,3,3,1,4,2,5,3,6), 5, 2, byrow = TRUE), interact = 50,
-#                                    label_list = list(groups=LETTERS[1:nlevfA], treatment=letters[1:nlevfB]))
-#   simdat <- twoway_simulation_independent(group_size = group_size, matrices_obj = matlist, nsims = iterations)
-#   distest <- tapply(simdat$y, simdat$cond, shapiro.test)
-#   pvals <- unlist(sapply(distest, "[", "p.value"))
-#   expect_true(all(p.adjust(pvals)>0.05))
-# })
-
 test_that("skewed and truncated input checks work", {
   nlevfA <- 2
   nlevfB <- 4
@@ -214,7 +187,36 @@ test_that("skewed and truncated input checks work", {
                                                distribution = "truncated.normal", skewness = 5))
 })
 
+test_that("simulated values are skewed", {
+  nlevfA <- 2
+  nlevfB <- 4
+  label_list <- list(groups=LETTERS[1:nlevfA], treatment=letters[1:nlevfB])
+  group_size <- 100
+  iterations <- 1
+  matlist <- calculate_mean_matrix(refmean = 10, nlfA = nlevfA, nlfB = nlevfB,
+                                   fAeffect = 2, fBeffect = 0.5, plot = FALSE,
+                                   label_list = label_list)
+  set.seed(160724)
+  simdat <- twoway_simulation_independent(group_size = group_size, matrices_obj = matlist,
+                                          nsims = iterations, distribution = "skewed", skewness = 0.01)
+  nsubabmean <- min(tapply(simdat$y, simdat$cond, function(x)sum(x>mean(x))))
+  expect_gte(nsubabmean, group_size/2)
 
+  nlevfA <- 3
+  nlevfB <- 6
+  group_size <- 200
+  matlist <- calculate_mean_matrix(refmean = 1, nlfA = nlevfA, nlfB = nlevfB,
+                                   fAeffect = 5, fBeffect = 0.2, plot = FALSE, sdratio = 0.1, sdproportional = FALSE)
+  simdat <- twoway_simulation_independent(group_size = group_size, matrices_obj = matlist,
+                                          distribution = "skewed", skewness = 0.1, nsims = iterations)
+  distpvals <- ks.test(simdat$y[simdat$cond=="V1"], "pnorm", matlist$mean.mat[1,1], matlist$sd.mat)$p.value
+  distpvals <- c(distpvals, ks.test(simdat$y[simdat$cond=="V6"], "pnorm", matlist$mean.mat[1,6], matlist$sd.mat)$p.value)
+  distpvals <- c(distpvals, ks.test(simdat$y[simdat$cond=="V7"], "pnorm", matlist$mean.mat[2,1], matlist$sd.mat)$p.value)
+  distpvals <- c(distpvals, ks.test(simdat$y[simdat$cond=="V12"], "pnorm", matlist$mean.mat[2,6], matlist$sd.mat)$p.value)
+  distpvals <- c(distpvals, ks.test(simdat$y[simdat$cond=="V13"], "pnorm", matlist$mean.mat[3,1], matlist$sd.mat)$p.value)
+  distpvals <- c(distpvals, ks.test(simdat$y[simdat$cond=="V18"], "pnorm", matlist$mean.mat[3,6], matlist$sd.mat)$p.value)
+  expect_true(all(distpvals<0.07))
+})
 
 test_that("simulated values respect truncation limit", {
   nlevfA <- 2

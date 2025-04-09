@@ -29,7 +29,8 @@ test_that("design check works", {
                                     fAeffect = faeff, fBeffect = fbeff,
                                     rho = rho, withinf = fwithin)
   group_size <- 5.4
-  expect_error(twoway_simulation_correlated(group_size = group_size, mean_mat, nsims = 3))
+  expect_error(twoway_simulation_correlated(group_size = group_size, mean_mat, nsims = 3,
+                                            balanced = FALSE))
 
   group_size <- 10
   expect_error(twoway_simulation_correlated(group_size = group_size, mean_mat, nsims = 3,
@@ -42,9 +43,9 @@ test_that("design check works", {
 })
 
 test_that("factor A as within factor", {
-  faeff <- 1
+  faeff <- 0.5
   fA <- 2
-  fbeff <- 3
+  fbeff <- 10
   fB <- 2
   rho <- 0.9
   fwithin <- "fA"
@@ -52,32 +53,48 @@ test_that("factor A as within factor", {
                                     fAeffect = faeff, fBeffect = fbeff,
                                     rho = rho, withinf = fwithin)
 
-  group_size <- 10
+  group_size <- 100
   set.seed(15440804)
-  sim <- twoway_simulation_correlated(group_size = group_size, mean_mat, nsims = 1)
-  expect_gt(cor.test(sim$simulated_data$y[sim$simulated_data$fA=="fA_A"], sim$simulated_data$y[sim$simulated_data$fA=="fA_B"])$estimate,
-            rho)
-  expect_lt(cor.test(sim$simulated_data$y[sim$simulated_data$fB=="fB_a"], sim$simulated_data$y[sim$simulated_data$fB=="fB_b"])$estimate,
+  sim <- twoway_simulation_correlated(group_size = group_size, mean_mat, nsims = 1)$simulated_data
+  fBcor1 <- cor.test(sim$y[sim$cond=="A_a"], sim$y[sim$cond=="A_b"])$estimate
+  expect_lt(abs(fBcor1),
             0.2)
+  fBcor2 <- cor.test(sim$y[sim$cond=="B_a"], sim$y[sim$cond=="B_b"])$estimate
+  expect_lt(abs(fBcor2),
+            0.2)
+  fAcor1 <- cor.test(sim$y[sim$cond=="A_a"], sim$y[sim$cond=="B_a"])$estimate
+  expect_gt(abs(fAcor1),
+            rho-0.1)
+  fAcor2 <- cor.test(sim$y[sim$cond=="A_b"], sim$y[sim$cond=="B_b"])$estimate
+  expect_gt(abs(fAcor2),
+            rho-0.1)
 })
 
 
 test_that("factor B as within factor", {
-  faeff <- 3
-  fA <- 4
-  fbeff <- 3
-  fB <- 4
+  faeff <- 10
+  fA <- 2
+  fbeff <- 0.5
+  fB <- 2
   rho <- 0.9
   fwithin <- "fB"
   mean_mat <- calculate_mean_matrix(refmean = 10, nlfA = fA, nlfB = fB,
                                     fAeffect = faeff, fBeffect = fbeff,
                                     rho = rho, withinf = fwithin)
 
-  group_size <- 10
+  group_size <- 100
   set.seed(15440804)
   sim <- twoway_simulation_correlated(group_size = group_size, mean_mat, nsims = 1)$simulated_data
-  expect_gt(cor.test(sim$simulated_data$y[sim$simulated_data$fB=="fB_a"], sim$simulated_data$y[sim$simulated_data$fB=="fB_b"])$estimate,
-            rho)
-  expect_lt(cor.test(sim$simulated_data$y[sim$simulated_data$fA=="fA_A"], sim$simulated_data$y[sim$simulated_data$fA=="fA_B"])$estimate,
+  fBcor1 <- cor.test(sim$y[sim$cond=="A_a"], sim$y[sim$cond=="A_b"])$estimate
+  expect_gt(abs(fBcor1),
+            rho-0.1)
+  fBcor2 <- cor.test(sim$y[sim$cond=="B_a"], sim$y[sim$cond=="B_b"])$estimate
+  expect_gt(abs(fBcor2),
+            rho-0.1)
+  fAcor1 <- cor.test(sim$y[sim$cond=="A_a"], sim$y[sim$cond=="B_a"])$estimate
+  expect_lt(abs(fAcor1),
             0.2)
+  fAcor2 <- cor.test(sim$y[sim$cond=="A_b"], sim$y[sim$cond=="B_b"])$estimate
+  expect_lt(abs(fAcor2),
+           0.2)
 })
