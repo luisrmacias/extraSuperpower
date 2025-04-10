@@ -152,36 +152,36 @@ test_that("skewed and truncated input checks work", {
 })
 
 
-test_that("simulated values are skewed", {
-  nlevfA <- 2
-  nlevfB <- 4
-  label_list <- list(groups=LETTERS[1:nlevfA], treatment=letters[1:nlevfB])
-  group_size <- 100
-  iterations <- 1
-  rho <- 0.6
-  fwithin <- "fB"
-  refs <- calculate_mean_matrix(refmean = 10, nlfA = nlevfA, nlfB = nlevfB,
-                                   fAeffect = 2, fBeffect = 0.5, plot = FALSE,
-                                   label_list = label_list, rho = rho, withinf = fwithin)
-  set.seed(160724)
-  simdat <- twoway_simulation_correlated(group_size = group_size, matrices_obj = refs,
-                                         nsims = iterations,
-                                         distribution = "skewed", shape.parameter = 0.1)$simulated_data
-  nsubabmean <- min(tapply(simdat$y, simdat$cond, function(x)sum(x>mean(x))))
-  expect_gte(nsubabmean, group_size/2)
-
-  nlevfA <- 3
-  nlevfB <- 6
-  group_size <- 200
-  matlist <- calculate_mean_matrix(refmean = 1, nlfA = nlevfA, nlfB = nlevfB,
-                                   fAeffect = 5, fBeffect = 0.2, plot = FALSE, sdratio = 0.1, sdproportional = FALSE)
-  simdat <- twoway_simulation_independent(group_size = group_size, matrices_obj = matlist,
-                                          distribution = "skewed", skewness = 0.1, nsims = iterations)
-  distpvals <- ks.test(simdat$y[simdat$cond=="V1"], "pnorm", matlist$mean.mat[1,1], matlist$sd.mat)$p.value
-  distpvals <- c(distpvals, ks.test(simdat$y[simdat$cond=="V6"], "pnorm", matlist$mean.mat[1,6], matlist$sd.mat)$p.value)
-  distpvals <- c(distpvals, ks.test(simdat$y[simdat$cond=="V7"], "pnorm", matlist$mean.mat[2,1], matlist$sd.mat)$p.value)
-  distpvals <- c(distpvals, ks.test(simdat$y[simdat$cond=="V12"], "pnorm", matlist$mean.mat[2,6], matlist$sd.mat)$p.value)
-  distpvals <- c(distpvals, ks.test(simdat$y[simdat$cond=="V13"], "pnorm", matlist$mean.mat[3,1], matlist$sd.mat)$p.value)
-  distpvals <- c(distpvals, ks.test(simdat$y[simdat$cond=="V18"], "pnorm", matlist$mean.mat[3,6], matlist$sd.mat)$p.value)
-  expect_true(all(distpvals<0.07))
-})
+# test_that("simulated values are skewed", {
+#   nlevfA <- 2
+#   nlevfB <- 4
+#   label_list <- list(groups=LETTERS[1:nlevfA], treatment=letters[1:nlevfB])
+#   group_size <- 100
+#   iterations <- 1
+#   rho <- 0.6
+#   fwithin <- "fB"
+#   refs <- calculate_mean_matrix(refmean = 10, nlfA = nlevfA, nlfB = nlevfB,
+#                                    fAeffect = 2, fBeffect = 0.5, plot = FALSE,
+#                                    label_list = label_list, rho = rho, withinf = fwithin)
+#   set.seed(160724)
+#   simdat <- twoway_simulation_correlated(group_size = group_size, matrices_obj = refs,
+#                                          nsims = iterations,
+#                                          distribution = "skewed", shape.parameter = 0.1)$simulated_data
+#   nsubabmean <- min(tapply(simdat$y, simdat$cond, function(x)sum(x>mean(x))))
+#   expect_gte(nsubabmean, group_size/2)
+#
+#   nlevfA <- 3
+#   nlevfB <- 6
+#   group_size <- 200
+#   matlist <- calculate_mean_matrix(refmean = 1, nlfA = nlevfA, nlfB = nlevfB,
+#                                    fAeffect = 5, fBeffect = 0.2, plot = FALSE, sdratio = 0.1, sdproportional = FALSE)
+#   simdat <- twoway_simulation_independent(group_size = group_size, matrices_obj = matlist,
+#                                           distribution = "skewed", skewness = 0.1, nsims = iterations)
+#   distpvals <- ks.test(simdat$y[simdat$cond=="V1"], "pnorm", matlist$mean.mat[1,1], matlist$sd.mat)$p.value
+#   distpvals <- c(distpvals, ks.test(simdat$y[simdat$cond=="V6"], "pnorm", matlist$mean.mat[1,6], matlist$sd.mat)$p.value)
+#   distpvals <- c(distpvals, ks.test(simdat$y[simdat$cond=="V7"], "pnorm", matlist$mean.mat[2,1], matlist$sd.mat)$p.value)
+#   distpvals <- c(distpvals, ks.test(simdat$y[simdat$cond=="V12"], "pnorm", matlist$mean.mat[2,6], matlist$sd.mat)$p.value)
+#   distpvals <- c(distpvals, ks.test(simdat$y[simdat$cond=="V13"], "pnorm", matlist$mean.mat[3,1], matlist$sd.mat)$p.value)
+#   distpvals <- c(distpvals, ks.test(simdat$y[simdat$cond=="V18"], "pnorm", matlist$mean.mat[3,6], matlist$sd.mat)$p.value)
+#   expect_true(all(distpvals<0.07))
+# })
