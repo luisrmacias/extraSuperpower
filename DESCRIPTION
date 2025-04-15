@@ -24,7 +24,7 @@ Imports:
 	ggthemes,
 	fGarch,
 	truncnorm,
-	sn,
+	CensMFM,
 	tmvtnorm,
 	nparLD,
 	ez,

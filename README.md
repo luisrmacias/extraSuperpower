@@ -8,7 +8,7 @@ These steps allow for independent and repeated measures experiments with balance
 
 For the first step we provide a function to create mean values and standard deviation matrices. For repeated measures designs correlation and covariance matrices are also generated. For the second step separate functions are used to simulate independent and repeated measures experiments. Once the two-way factorial study is simulated under different sample sizes, the power under different statistical tests for these sample sizes can be estimated.
 
-``extraSuperpower`` depends on packages ``stringr``,  ``ggplot2``, ``reshape2``, ``scales``, ``Matrix``, ``ggpubr``, ``ggthemes``, ``rlist``, ``fGarch``, ``truncnorm``, ``MASS``, ``sn``, ``tmvtnorm``, ``afex``, ``Rfit``, ``lmPerm``, ``nparLD`` and ``ez``. 
+``extraSuperpower`` depends on packages ``stringr``,  ``ggplot2``, ``reshape2``, ``scales``, ``Matrix``, ``ggpubr``, ``ggthemes``, ``rlist``, ``fGarch``, ``truncnorm``, ``MASS``, ``CensMFM``, ``tmvtnorm``, ``afex``, ``Rfit``, ``lmPerm``, ``nparLD`` and ``ez``. 
 
 To install, install dependencies and ``devtools``, if not done already.
 

@@ -39,13 +39,12 @@ test_that("design check works", {
   group_size <- c(5, 6)
   expect_error(twoway_simulation_independent(group_size = group_size, mean_mat, nsims = 3,
                                              balanced = TRUE))
-
 })
 
 test_that("factor A as within factor", {
-  faeff <- 0.5
+  faeff <- 2
   fA <- 2
-  fbeff <- 10
+  fbeff <- 2
   fB <- 2
   rho <- 0.9
   fwithin <- "fA"
@@ -148,7 +147,7 @@ test_that("skewed and truncated input checks work", {
                                                distribution = "skewed", superior_limit = suplim))
 
   expect_warning(twoway_simulation_correlated(group_size = group_size, matrices_obj = matlist, nsims = iterations,
-                                               distribution = "truncated.normal", shape.parameter = 2))
+                                               distribution = "truncated.normal", shape = 2))
 })
 
 
@@ -158,17 +157,17 @@ test_that("skewed and truncated input checks work", {
 #   label_list <- list(groups=LETTERS[1:nlevfA], treatment=letters[1:nlevfB])
 #   group_size <- 100
 #   iterations <- 1
-#   rho <- 0.6
+#   rho <- 0.8
 #   fwithin <- "fB"
 #   refs <- calculate_mean_matrix(refmean = 10, nlfA = nlevfA, nlfB = nlevfB,
-#                                    fAeffect = 2, fBeffect = 0.5, plot = FALSE,
-#                                    label_list = label_list, rho = rho, withinf = fwithin)
+#                                 fAeffect = 2, fBeffect = 0.5, plot = FALSE,
+#                                 sdproportional = FALSE, sdratio = 0.1,
+#                                 label_list = label_list, rho = rho, withinf = fwithin)
 #   set.seed(160724)
 #   simdat <- twoway_simulation_correlated(group_size = group_size, matrices_obj = refs,
 #                                          nsims = iterations,
-#                                          distribution = "skewed", shape.parameter = 0.1)$simulated_data
-#   nsubabmean <- min(tapply(simdat$y, simdat$cond, function(x)sum(x>mean(x))))
-#   expect_gte(nsubabmean, group_size/2)
+#                                          distribution = "skewed", shape = 8)$simulated_data
+#
 #
 #   nlevfA <- 3
 #   nlevfB <- 6

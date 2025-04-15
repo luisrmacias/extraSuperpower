@@ -8,7 +8,7 @@ twoway_simulation_correlated(
   group_size,
   matrices_obj,
   distribution = "normal",
-  shape.parameter = 0,
+  shape = 0,
   inferior_limit = -Inf,
   superior_limit = Inf,
   balanced = TRUE,
@@ -23,7 +23,7 @@ twoway_simulation_correlated(
 
 \item{distribution}{Character - Type of distribution from which to sample, possible values are "normal", "skewed" and "truncated"}
 
-\item{shape.parameter}{Vector - Degree of skewness in the distribution. May be a single value, have a length equal to the number of levels of any one of the factors or a length equal to the product of the length of each factor.}
+\item{shape}{Vector - Degree of skewness in the distribution. May be a single value, have a length equal to the number of levels of any one of the factors or a length equal to the product of the length of each factor.}
 
 \item{inferior_limit}{Numeric - Value for which the distribution is truncated on the left. Only valid if 'distribution="truncated.normal"'}
 
