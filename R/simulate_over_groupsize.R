@@ -66,7 +66,7 @@ simulate_twoway_nrange <- function(matrices_obj, nset, balanced=TRUE, group_size
   } else if (repeated_measurements & length(matrices_obj[[1]])==5)
   {
     print("Simulating repeated observations experiment")
-    sim_overens <- lapply(testedns, twoway_simulation_correlated, matrices_obj, balanced=balanced, loss=loss, distribution=distribution, shape.parameter=skewness, inferior_limit=inferior_limit, superior_limit=superior_limit, nsims=nsims)
+    sim_overens <- lapply(testedns, twoway_simulation_correlated, matrices_obj, balanced=balanced, loss=loss, distribution=distribution, shape=skewness, inferior_limit=inferior_limit, superior_limit=superior_limit, nsims=nsims)
   }
   sim_overens
 }

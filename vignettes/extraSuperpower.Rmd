@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup, include=FALSE}
+```{r setup, include=FALSE, eval=FALSE}
 library(extraSuperpower)
 ```
 
@@ -57,11 +57,13 @@ if(length(cran.dep.to.install) > 0) {
 
 Then install the most recent version of extraSuperpower from GitHub:
 
-```{r package installation}
+```{r package installation and loading}
 if(!"extraSuperpower" %in% installed.packages()[, "Package"])
 {
-  devtools::install_github("luisrmacias/extraSuperpower")
-}  
+  devtools::install_github("luisrmacias/extraSuperpower", upgrade = "never")
+} 
+
+library(extraSuperpower)
 ```
 
 ## Usage
@@ -201,7 +203,7 @@ To end this section, we sample from a multivariate skewed normal distribution. T
 ```{r skewed repeated measures simulation}
 repmeasures_skewed_sim <- simulate_twoway_nrange(matrices_obj = interaction_twoway_timewithin, 
                                                  nset = n, repeated_measurements = TRUE,
-                                                 distribution = "skewed", skewness = 0.2)
+                                                 distribution = "skewed", skewness=2)
 ```
 
 ### Estimating power from simulated data
