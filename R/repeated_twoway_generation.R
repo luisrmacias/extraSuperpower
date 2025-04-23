@@ -72,7 +72,7 @@ twoway_simulation_correlated <- function(group_size, matrices_obj, distribution=
   {
     warning(paste("Superior and inferior limits are ignored when distribution is", distribution))
   }
-  if((distribution=="normal" | distribution=="truncated.normal") & (all(shape!=0)))
+  if((distribution=="normal" | distribution=="truncated.normal") & (all(shape%in%0)))
   {
     warning(paste("Skewness is ignored when distribution is", distribution))
   }
