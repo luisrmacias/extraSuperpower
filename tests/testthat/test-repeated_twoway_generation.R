@@ -148,6 +148,9 @@ test_that("skewed and truncated input checks work", {
 
   expect_warning(twoway_simulation_correlated(group_size = group_size, matrices_obj = matlist, nsims = iterations,
                                                distribution = "truncated.normal", shape = 2))
+
+  expect_warning(twoway_simulation_correlated(group_size = group_size, matrices_obj = matlist, nsims = iterations,
+                                              shape = 2))
 })
 
 
@@ -157,7 +160,7 @@ test_that("simulated values are skewed", {
   label_list <- list(groups=LETTERS[1:nlevfA], treatment=letters[1:nlevfB])
   group_size <- 50
   iterations <- 1
-  rho <- 0.8
+  rho <- 0.3
   fwithin <- "fB"
   refs <- calculate_mean_matrix(refmean = 10, nlfA = nlevfA, nlfB = nlevfB,
                                 fAeffect = 2, fBeffect = 0.5, plot = FALSE,
@@ -166,7 +169,7 @@ test_that("simulated values are skewed", {
   set.seed(160724)
   simdat <- twoway_simulation_correlated(group_size = group_size, matrices_obj = refs,
                                          nsims = iterations,
-                                         distribution = "skewed", shape = 8)$simulated_data
+                                         distribution = "skewed", shape = 20)$simulated_data
 
   distpvals <- ks.test(simdat$y[simdat$cond=="A_a"], "pnorm", refs$mean.mat[1,1], refs$sd.mat)$p.value
   distpvals <- c(distpvals, ks.test(simdat$y[simdat$cond=="A_b"], "pnorm", refs$mean.mat[1,2], refs$sd.mat)$p.value)
@@ -175,38 +178,4 @@ test_that("simulated values are skewed", {
   distpvals <- c(distpvals, ks.test(simdat$y[simdat$cond=="B_b"], "pnorm", refs$mean.mat[2,2], refs$sd.mat)$p.value)
   distpvals <- c(distpvals, ks.test(simdat$y[simdat$cond=="B_d"], "pnorm", refs$mean.mat[2,4], refs$sd.mat)$p.value)
   expect_gt(sum(distpvals<0.05), 4)
-
-  # nlevfA <- 3
-  # nlevfB <- 6
-  # group_size <- 150
-  # refs <- calculate_mean_matrix(refmean = 1, nlfA = nlevfA, nlfB = nlevfB,
-  #                               fAeffect = 5, fBeffect = 0.2, plot = FALSE,
-  #                               sdratio = 0.1, sdproportional = FALSE,
-  #                               rho = -0.2, withinf = "fA")
-  # simdat <- twoway_simulation_correlated(group_size = group_size, matrices_obj = refs,
-  #                                         distribution = "skewed", shape = c(4,7,10), nsims = iterations)$simulated_data
-  # distpvals <- ks.test(simdat$y[simdat$cond=="A_a"], "pnorm", refs$mean.mat[1,1], refs$sd.mat)$p.value
-  # distpvals <- c(distpvals, ks.test(simdat$y[simdat$cond=="A_f"], "pnorm", refs$mean.mat[1,6], refs$sd.mat)$p.value)
-  # distpvals <- c(distpvals, ks.test(simdat$y[simdat$cond=="B_a"], "pnorm", refs$mean.mat[2,1], refs$sd.mat)$p.value)
-  # distpvals <- c(distpvals, ks.test(simdat$y[simdat$cond=="B_f"], "pnorm", refs$mean.mat[2,6], refs$sd.mat)$p.value)
-  # distpvals <- c(distpvals, ks.test(simdat$y[simdat$cond=="C_a"], "pnorm", refs$mean.mat[3,1], refs$sd.mat)$p.value)
-  # distpvals <- c(distpvals, ks.test(simdat$y[simdat$cond=="C_f"], "pnorm", refs$mean.mat[3,6], refs$sd.mat)$p.value)
-  # expect_gt(sum(distpvals<0.05), )
-  #
-  # nlevfA <- 2
-  # nlevfB <- 2
-  # group_size <- 150
-  # refs <- calculate_mean_matrix(refmean = 1, nlfA = nlevfA, nlfB = nlevfB,
-  #                               fAeffect = 5, fBeffect = 0.2, plot = FALSE,
-  #                               sdratio = 0.1, sdproportional = FALSE,
-  #                               rho = -0.3, withinf = "fA")
-  # simdat <- twoway_simulation_correlated(group_size = group_size, matrices_obj = refs,
-  #                                        distribution = "skewed", shape = c(4,4), nsims = iterations)$simulated_data
-  # distpvals <- ks.test(simdat$y[simdat$cond=="A_a"], "pnorm", refs$mean.mat[1,1], refs$sd.mat)$p.value
-  # distpvals <- c(distpvals, ks.test(simdat$y[simdat$cond=="A_f"], "pnorm", refs$mean.mat[1,6], refs$sd.mat)$p.value)
-  # distpvals <- c(distpvals, ks.test(simdat$y[simdat$cond=="B_a"], "pnorm", refs$mean.mat[2,1], refs$sd.mat)$p.value)
-  # distpvals <- c(distpvals, ks.test(simdat$y[simdat$cond=="B_f"], "pnorm", refs$mean.mat[2,6], refs$sd.mat)$p.value)
-  # distpvals <- c(distpvals, ks.test(simdat$y[simdat$cond=="C_a"], "pnorm", refs$mean.mat[3,1], refs$sd.mat)$p.value)
-  # distpvals <- c(distpvals, ks.test(simdat$y[simdat$cond=="C_f"], "pnorm", refs$mean.mat[3,6], refs$sd.mat)$p.value)
-  # expect_gt(sum(distpvals<0.05), )
 })

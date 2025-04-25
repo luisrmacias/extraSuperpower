@@ -72,7 +72,7 @@ twoway_simulation_correlated <- function(group_size, matrices_obj, distribution=
   {
     warning(paste("Superior and inferior limits are ignored when distribution is", distribution))
   }
-  if((distribution=="normal" | distribution=="truncated.normal") & (sum(shape!=0)>1))
+  if((distribution=="normal" | distribution=="truncated.normal") & (any(shape>0)))
   {
     warning(paste("Skewness is ignored when distribution is", distribution))
   }
@@ -141,6 +141,7 @@ twoway_simulation_correlated <- function(group_size, matrices_obj, distribution=
     {
       gam <- shape
     }
+    ## include parameter shrinkage
     # cp <- list(mean=mean_matrix, var.cov=sigmatrix, gamma1=gam)
     # dp <- try(sn::cp2dp(cp, "SN"), silent = TRUE)
     # if(class(dp)=="try-error")
