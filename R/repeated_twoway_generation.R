@@ -141,13 +141,20 @@ twoway_simulation_correlated <- function(group_size, matrices_obj, distribution=
     {
       gam <- shape
     }
-    ## include parameter shrinkage
-    # cp <- list(mean=mean_matrix, var.cov=sigmatrix, gamma1=gam)
-    # dp <- try(sn::cp2dp(cp, "SN"), silent = TRUE)
-    # if(class(dp)=="try-error")
+    # include parameter shrinkage
+
+    cp <- list(mean=mean_matrix, var.cov=sigmatrix, gamma1=gam)
+    dp <- try(sn::cp2dp(cp, "SN"), silent = TRUE)
+    while(class(dp)=="try-error")
+    {
+      gam <- gam/3
+      cp <- list(mean=mean_matrix, var.cov=sigmatrix, gamma1=gam)
+      dp <- try(sn::cp2dp(cp, "SN"), silent = TRUE)
+    }
+    # if (class(dp)=="try-error")
     # {stop("Please use a smaller shape value or values. Shape is restricted by correlation.")}
-    y <- suppressMessages(replicate(nsims, reshape2::melt(as.data.frame(CensMFM::rMSN(n = sampn, mu=as.vector(mean_matrix), Sigma = sigmatrix, shape = gam)))$value))
-    # y <- suppressMessages(replicate(nsims, reshape2::melt(as.data.frame(sn::rmsn(n = sampn, dp=dp)))$value))
+    # y <- suppressMessages(replicate(nsims, reshape2::melt(as.data.frame(CensMFM::rMSN(n = sampn, mu=as.vector(mean_matrix), Sigma = sigmatrix, shape = gam)))$value))
+    y <- suppressMessages(replicate(nsims, reshape2::melt(as.data.frame(sn::rmsn(n = sampn, dp=dp)))$value))
     # op <- list(xi=refs$mean.mat, Psi=refs$sigmat, lambda=gam)
     # dp <- sn::op2dp(op, "SN")
     # y <- suppressMessages(replicate(nsims, reshape2::melt(as.data.frame(sn::rmsn(n = sampn, dp=dp)))$value))

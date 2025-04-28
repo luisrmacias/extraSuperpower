@@ -13,6 +13,7 @@ simulate_twoway_nrange(
   repeated_measurements = FALSE,
   distribution = "normal",
   skewness = 1,
+  shape = 0,
   inferior_limit = -Inf,
   superior_limit = Inf,
   nsims = 200
