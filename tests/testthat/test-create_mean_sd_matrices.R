@@ -127,6 +127,7 @@ test_that("factor A stepwise effect ratio", {
   faend.1 <- mean_mat[fA,1]
   expect_equal(faend.1/f1.1, faeff)
   fA <- 5
+  faeff <- 5
   mean_mat <- calculate_mean_matrix(refmean = 10, nlfA = fA, nlfB = 4,
                                     fAeffect = faeff, fBeffect = 3, plot = FALSE)[[1]]
   f1.1 <- mean_mat[1,1]

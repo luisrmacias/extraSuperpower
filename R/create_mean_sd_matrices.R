@@ -124,7 +124,8 @@ calculate_mean_matrix <- function(refmean, nlfA, nlfB, fAeffect, fBeffect, group
   ## Generation of mean matrix
   fAvec <- genvecs(change = fAeffect, reps = nlfA, bystart = endincrement, scaler = refmean)
   fBvec <- genvecs(change = fBeffect, reps = nlfB, bystart = endincrement, scaler = refmean)
-  effects <- rowSums(expand.grid(fAvec, fBvec-1))
+  effects <- expand.grid(fAvec, fBvec)
+  effects <- effects$Var1*effects$Var2
   effmat <- matrix(effects, nlfA, nlfB, dimnames = label_list)
   ## Modify mean matrix depending on interaction terms
   if(interact!=1)
