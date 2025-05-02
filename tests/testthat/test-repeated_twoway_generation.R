@@ -184,11 +184,12 @@ test_that("loss is sequential", {
   nlevfA <- 3
   nlevfB <- 4
   label_list <- list(groups=LETTERS[1:nlevfA], time=letters[1:nlevfB])
-  group_size <- rep(15,prod(nlevfA, nlevfB))
+  n <- 10
+  group_size <- rep(10,prod(nlevfA, nlevfB))
   group_size <- matrix(group_size, nlevfA, nlevfB, byrow = TRUE)
   group_size[1,] <- group_size[1,]-c(0,2,4,5)
   group_size[2,] <- group_size[2,]-c(0,2,3,4)
-  group_size[3,] <- group_size[3,]-c(0,0,4,4)
+  group_size[3,] <- group_size[3,]-c(0,0,4,5)
 
   iterations <- 1
   rho <- 0.3
@@ -198,8 +199,11 @@ test_that("loss is sequential", {
                                 sdproportional = FALSE, sdratio = 0.1,
                                 label_list = label_list, rho = rho, withinf = fwithin)
 
-  simdat <- twoway_simulation_correlated(group_size = group_size, matrices_obj = refs,
-                                         nsims = iterations, balanced = FALSE, loss = "sequential")$simulated_data
+  simdat <- twoway_simulation_correlated(group_size = group_size, matrices_obj = refs, balanced = FALSE, loss = "sequential", nsims = 10)$simulated_data
+
+  tosample <- twoway_simulation_correlated(group_size = 10, matrices_obj = refs,
+                                         nsims = iterations)$simulated_data
+
 
   distpvals <- ks.test(simdat$y[simdat$cond=="A_a"], "pnorm", refs$mean.mat[1,1], refs$sd.mat)$p.value
   distpvals <- c(distpvals, ks.test(simdat$y[simdat$cond=="A_b"], "pnorm", refs$mean.mat[1,2], refs$sd.mat)$p.value)

@@ -195,10 +195,20 @@ twoway_simulation_correlated <- function(group_size, matrices_obj, distribution=
       })
     } else if(loss=="sequential")
     {
+      if(withinf=="fA")
+      {
+        withcol <- 4
+        betwcol <- 5
+        group_size <- t(group_size)
+      }
       if(withinf=="fB")
       {
-      initial <- sapply(1:length(levels(tosample[,4])),
-             function(x)(sample(tosample$subject[tosample$groups==levels(tosample[,4])[x]], group_size[x,1])))
+        withcol <- 5
+        betwcol <- 4
+      }
+      initial <- sapply(1:length(levels(tosample[,betwcol])),
+             function(x)(sample(unique(tosample$subject[tosample[,betwcol]==levels(tosample[,betwcol])[x]]),
+                                group_size[x,1])))
       gather <- NULL
       for(i in 1:ncol(initial))
       {
@@ -214,16 +224,22 @@ twoway_simulation_correlated <- function(group_size, matrices_obj, distribution=
           avail <- j
           keep <- rlist::list.append(keep, j)
         }
-        names(keep) <- levels(tosample[,5])[ord]
+        names(keep) <- levels(tosample[,withcol])[ord]
         gather <- c(gather, keep)
-        names(gather) <- levels(sim$cond)
+      }
+      if(withinf=="fA")
+      {
+        namesec <- order(sapply(strsplit(levels(tosample$cond), "_"), "[", 2))
+        names(gather) <- levels(tosample$cond)[namesec]
+      } else if(withinf=="fB")
+      {
+        names(gather) <- levels(tosample$cond)
       }
       sim <- lapply(levels(sim$cond), function(x)
       {
         selection <- sim$subject[sim$cond==x] %in% gather[[grep(x, names(gather))]]
         sim[sim$cond==x & selection,]
       })
-      }
     }
     sim <- do.call(rbind, sim)
     sim$subject <- droplevels(sim$subject)
