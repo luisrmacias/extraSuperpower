@@ -188,28 +188,43 @@ twoway_simulation_correlated <- function(group_size, matrices_obj, distribution=
       keep <- sapply(1:length(levels(tosample$cond)),
                      function(x) sample(tosample$subject[tosample$cond==levels(tosample$cond)[x]], t(group_size)[x]))
       names(keep) <- levels(tosample$cond)
+      sim <- lapply(levels(sim$cond), function(x)
+      {
+        selection <- sim$subject[sim$cond==x] %in% keep[[grep(x, names(keep))]]
+        sim[sim$cond==x & selection,]
+      })
     } else if(loss=="sequential")
     {
-      ord <- order(t(group_size), decreasing = TRUE)
-      keep <- unique(tosample$subject)
-      avail <- keep
-      j <- sample(avail, t(group_size)[ord[2]])
-      keep <- list(keep, j)
-      avail <- j
-
-      for(i in ord[-(1:2)])
+      if(withinf=="fB")
       {
-        j <- sample(avail, t(group_size)[i])
+      initial <- sapply(1:length(levels(tosample[,4])),
+             function(x)(sample(tosample$subject[tosample$groups==levels(tosample[,4])[x]], group_size[x,1])))
+      gather <- NULL
+      for(i in 1:ncol(initial))
+      {
+        ord <- order(group_size[i,], decreasing = TRUE)
+        avail <- initial[,i]
+        j <- sample(avail, group_size[i,2])
+        keep <- list(avail, j)
         avail <- j
-        keep <- rlist::list.append(keep, j)
+
+        for(j in ord[-(1:2)])
+        {
+          j <- sample(avail, group_size[i,j])
+          avail <- j
+          keep <- rlist::list.append(keep, j)
+        }
+        names(keep) <- levels(tosample[,5])[ord]
+        gather <- c(gather, keep)
+        names(gather) <- levels(sim$cond)
       }
-      names(keep) <- levels(tosample$cond)[ord]
+      sim <- lapply(levels(sim$cond), function(x)
+      {
+        selection <- sim$subject[sim$cond==x] %in% gather[[grep(x, names(gather))]]
+        sim[sim$cond==x & selection,]
+      })
+      }
     }
-    sim <- lapply(levels(sim$cond), function(x)
-    {
-      selection <- sim$subject[sim$cond==x] %in% keep[[grep(x, names(keep))]]
-      sim[sim$cond==x & selection,]
-    })
     sim <- do.call(rbind, sim)
     sim$subject <- droplevels(sim$subject)
     sim$n <- rep(unlist(mapply(rep, t(group_size), t(group_size))), nsims)

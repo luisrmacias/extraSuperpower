@@ -179,3 +179,33 @@ test_that("simulated values are skewed", {
   distpvals <- c(distpvals, ks.test(simdat$y[simdat$cond=="B_d"], "pnorm", refs$mean.mat[2,4], refs$sd.mat)$p.value)
   expect_true(any(distpvals<0.05))
 })
+
+test_that("loss is sequential", {
+  nlevfA <- 3
+  nlevfB <- 4
+  label_list <- list(groups=LETTERS[1:nlevfA], time=letters[1:nlevfB])
+  group_size <- rep(15,prod(nlevfA, nlevfB))
+  group_size <- matrix(group_size, nlevfA, nlevfB, byrow = TRUE)
+  group_size[1,] <- group_size[1,]-c(0,2,4,5)
+  group_size[2,] <- group_size[2,]-c(0,2,3,4)
+  group_size[3,] <- group_size[3,]-c(0,0,4,4)
+
+  iterations <- 1
+  rho <- 0.3
+  fwithin <- "fB"
+  refs <- calculate_mean_matrix(refmean = 10, nlfA = nlevfA, nlfB = nlevfB,
+                                fAeffect = 2, fBeffect = 0.5, plot = FALSE,
+                                sdproportional = FALSE, sdratio = 0.1,
+                                label_list = label_list, rho = rho, withinf = fwithin)
+
+  simdat <- twoway_simulation_correlated(group_size = group_size, matrices_obj = refs,
+                                         nsims = iterations, balanced = FALSE, loss = "sequential")$simulated_data
+
+  distpvals <- ks.test(simdat$y[simdat$cond=="A_a"], "pnorm", refs$mean.mat[1,1], refs$sd.mat)$p.value
+  distpvals <- c(distpvals, ks.test(simdat$y[simdat$cond=="A_b"], "pnorm", refs$mean.mat[1,2], refs$sd.mat)$p.value)
+  distpvals <- c(distpvals, ks.test(simdat$y[simdat$cond=="A_c"], "pnorm", refs$mean.mat[1,3], refs$sd.mat)$p.value)
+  distpvals <- c(distpvals, ks.test(simdat$y[simdat$cond=="B_a"], "pnorm", refs$mean.mat[2,1], refs$sd.mat)$p.value)
+  distpvals <- c(distpvals, ks.test(simdat$y[simdat$cond=="B_b"], "pnorm", refs$mean.mat[2,2], refs$sd.mat)$p.value)
+  distpvals <- c(distpvals, ks.test(simdat$y[simdat$cond=="B_d"], "pnorm", refs$mean.mat[2,4], refs$sd.mat)$p.value)
+  expect_true(any(distpvals<0.05))
+})
