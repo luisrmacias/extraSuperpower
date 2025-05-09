@@ -60,6 +60,14 @@ twoway_simulation_correlated <- function(group_size, matrices_obj, distribution=
   factor_levels <- dim(matrices_obj$mean.mat)
   nlevels <- prod(factor_levels)
   mean_matrix <- as.vector(t(matrices_obj$mean.mat))
+  if (!balanced & length(group_size)==1)
+  {
+    stop("Are you sure you want to set balanced to false?")
+  }
+  if (balanced & length(group_size)>1)
+  {
+    stop("If you wish a balanced design a single integer is required as 'group_size' argument.")
+  }
   if(balanced & length(group_size==1))
   {
     if(as.integer(group_size)!=group_size)
@@ -79,13 +87,6 @@ twoway_simulation_correlated <- function(group_size, matrices_obj, distribution=
 
   sigmatrix <- matrices_obj$sigmat
   withinf <- matrices_obj$within.factor
-  if (!balanced & length(group_size)==1)
-  {
-    stop("Are you sure you want to set balanced to false?")
-  } else if (balanced & length(group_size)>1)
-  {
-    stop("If you wish a balanced design a single integer is required as 'group_size' argument.")
-  }
   sampn <- max(group_size)
   #generating factor data frame
   if(withinf=="both")
@@ -124,7 +125,7 @@ twoway_simulation_correlated <- function(group_size, matrices_obj, distribution=
   else if (distribution=="skewed")
   {
     if(!is.numeric(shape))
-    {stop("The shape must be a numeric")}
+    {stop("The shape must be numeric")}
     shapelen <- length(shape)
     if(shapelen>1 & (shapelen!=factor_levels[1] & shapelen!=factor_levels[2] & shapelen!=nlevels))
     {stop("Length of shape should be either 1, the number of levels of 1 of the factors of the product of number of levels of both factors")}
@@ -206,32 +207,50 @@ twoway_simulation_correlated <- function(group_size, matrices_obj, distribution=
         withcol <- 5
         betwcol <- 4
       }
-      initial <- sapply(1:length(levels(tosample[,betwcol])),
-             function(x)(sample(unique(tosample$subject[tosample[,betwcol]==levels(tosample[,betwcol])[x]]),
-                                group_size[x,1])))
-      gather <- NULL
-      for(i in 1:ncol(initial))
+      if(withinf=="fA" | withinf=="fB")
       {
-        ord <- order(group_size[i,], decreasing = TRUE)
-        avail <- initial[,i]
-        j <- sample(avail, group_size[i,2])
-        keep <- list(avail, j)
-        avail <- j
-
-        for(j in ord[-(1:2)])
+        initial <- sapply(1:length(levels(tosample[,betwcol])),
+               function(x)(sample(unique(tosample$subject[tosample[,betwcol]==levels(tosample[,betwcol])[x]]),
+                                group_size[x,1])))
+        gather <- NULL
+        for(i in 1:ncol(initial))
         {
-          j <- sample(avail, group_size[i,j])
+          ord <- order(group_size[i,], decreasing = TRUE)
+          avail <- initial[,i]
+          j <- sample(avail, group_size[i,2])
+          keep <- list(avail, j)
           avail <- j
-          keep <- rlist::list.append(keep, j)
+
+          for(j in ord[-(1:2)])
+          {
+            j <- sample(avail, group_size[i,j])
+            avail <- j
+            keep <- rlist::list.append(keep, j)
+          }
+          names(keep) <- levels(tosample[,withcol])[ord]
+          gather <- c(gather, keep)
         }
-        names(keep) <- levels(tosample[,withcol])[ord]
-        gather <- c(gather, keep)
-      }
+      } else if (withinf=="both")
+        {
+        topn <- max(group_size)
+        nvec <- topn - as.vector(t(group_size))
+        initial <- sample(1:topn, topn-unique(nvec)[1])
+        dup <- initial
+        for(i in seq(length(unique(nvec))))
+        {
+          tmp <- sample(dup, max(group_size)-unique(nvec)[i])
+          keep <- c(dup, tmp)
+          dup <- tmp
+        }
+        keep <- c(initial, keep)
+        keep <- order(table(keep), decreasing = TRUE)
+        gather <- sapply(t(group_size), function(x) keep[1:x])
+        }
       if(withinf=="fA")
       {
         namesec <- order(sapply(strsplit(levels(tosample$cond), "_"), "[", 2))
         names(gather) <- levels(tosample$cond)[namesec]
-      } else if(withinf=="fB")
+      } else if(withinf=="fB" | withinf=="both")
       {
         names(gather) <- levels(tosample$cond)
       }

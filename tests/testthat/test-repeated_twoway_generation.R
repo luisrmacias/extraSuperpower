@@ -37,7 +37,7 @@ test_that("design check works", {
                                              balanced = FALSE))
 
   group_size <- c(5, 6)
-  expect_error(twoway_simulation_independent(group_size = group_size, mean_mat, nsims = 3,
+  expect_error(twoway_simulation_correlated(group_size = group_size, mean_mat, nsims = 3,
                                              balanced = TRUE))
 })
 
@@ -133,7 +133,7 @@ test_that("simulated values are normally distributed", {
 test_that("skewed and truncated input checks work", {
   nlevfA <- 2
   nlevfB <- 4
-  group_size <- 100
+  group_size <- 30
   iterations <- 1
   suplim <- 12
   rho <- 0.8
@@ -151,7 +151,24 @@ test_that("skewed and truncated input checks work", {
 
   expect_warning(twoway_simulation_correlated(group_size = group_size, matrices_obj = matlist, nsims = iterations,
                                               shape = 2))
-})
+
+  expect_error(twoway_simulation_correlated(group_size = group_size, matrices_obj = matlist, nsims = iterations,
+                                              distribution = "skewed", shape = "fB"))
+
+  expect_error(twoway_simulation_correlated(group_size = group_size, matrices_obj = matlist, nsims = iterations,
+                                            distribution = "skewed", shape = seq(2, 6, 2)))
+  fwithin="fB"
+  group_size <- rep(seq(25, 10, -5), 2)
+  group_size <- matrix(group_size, nlevfA, nlevfB, byrow = TRUE)
+  matlist <- calculate_mean_matrix(refmean = 10, nlfA = nlevfA, nlfB = nlevfB,
+                                   fAeffect = 2, fBeffect = 2, plot = FALSE, sdratio = 0.3,
+                                   label_list = list(groups=LETTERS[1:nlevfA], treatment=letters[1:nlevfB]),
+                                   rho = rho, withinf = fwithin)
+
+  expect_no_warning(twoway_simulation_correlated(group_size = group_size, matrices_obj = matlist,
+                                                 nsims = iterations, balanced = FALSE, loss="sequential",
+                                                 distribution = "truncated.normal", inferior_limit = 3))
+  })
 
 
 test_that("simulated values are skewed", {
@@ -229,6 +246,25 @@ test_that("loss is sequential", {
 
   simdat <- twoway_simulation_correlated(group_size = group_size, matrices_obj = refs,
                                          balanced = FALSE, loss = "sequential", nsims = iterations)$simulated_data
+  seq_check <- all(apply(table(simdat$time, simdat$subject), 2,
+                         function(x) all(x[1]>=x[2] & x[x]>=x[3] & x[3]>=x[4])))
+  res <- table(simdat$groups, simdat$time)
+  expect_true(all(seq_check & all(res==group_size)))
+
+  fwithin <- "both"
+  group_size <- rep(10,prod(nlevfA, nlevfB))
+  group_size <- matrix(group_size, nlevfA, nlevfB, byrow = TRUE)
+  group_size[1,] <- group_size[1,]-c(0,0,1,1)
+  group_size[2,] <- group_size[2,]-c(1,1,1,1)
+  group_size[3,] <- group_size[3,]-c(1,1,2,2)
+
+  refs <- calculate_mean_matrix(refmean = 10, nlfA = nlevfA, nlfB = nlevfB,
+                                fAeffect = 2, fBeffect = 0.5, plot = FALSE,
+                                sdproportional = TRUE, sdratio = 0.1,
+                                label_list = label_list, rho = rho, withinf = fwithin)
+  simdat <- twoway_simulation_correlated(group_size = group_size, matrices_obj = refs,
+                               nsims = iterations, balanced = FALSE, loss="sequential",
+                               distribution = "truncated.normal", inferior_limit = 3)$simulated_data
   seq_check <- all(apply(table(simdat$time, simdat$subject), 2,
                          function(x) all(x[1]>=x[2] & x[x]>=x[3] & x[3]>=x[4])))
   res <- table(simdat$groups, simdat$time)
