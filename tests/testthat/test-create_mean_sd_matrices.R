@@ -255,3 +255,4 @@ test_that("interaction modelled as defined with end effect", {
   ratio <- int_mean_mat[rowindices,colindices]/noint_mean_mat[rowindices, colindices]
   expect_true(all(ratio==intereff))
 })
+
