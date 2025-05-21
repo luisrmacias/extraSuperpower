@@ -39,12 +39,13 @@
 twoway_simulation_independent <- function(group_size, matrices_obj, distribution="normal", skewness=1, inferior_limit=-Inf, superior_limit=Inf, balanced=TRUE, nsims=200)
 {
 
-  if(!all(sapply(matrices_obj, is.matrix)) & !is.numeric(matrices_obj[[2]]))
+  if(any(grepl("gg", unlist(sapply(matrices_obj, class)))))
   {
     matrices_obj <- matrices_obj$matrices_obj
-    if(length(matrices_obj)>2)
-    {stop("'matrices_obj' should only include two matrices. Are you sure you want to simulate independent measures?")}
   }
+
+  if(length(matrices_obj)>2)
+  {stop("'matrices_obj' should only include two matrices. Are you sure you want to simulate independent measures?")}
 
   if(is.null(dimnames(matrices_obj$mean.mat)) | is.null(names(dimnames(matrices_obj$mean.mat))))
   {

@@ -34,7 +34,17 @@ test_that("design check works", {
   group_size <- c(5, 6)
   expect_error(twoway_simulation_independent(group_size = group_size, mean_mat, nsims = 3,
                                              balanced = TRUE))
+})
 
+test_that("input format check works", {
+  faeff <- 1
+  fA <- 2
+  fbeff <- 3
+  fB <- 2
+  mean_mat <- calculate_mean_matrix(refmean = 10, nlfA = fA, nlfB = fB,
+                                    fAeffect = faeff, fBeffect = fbeff,
+                                    rho = 0.6, withinf = "both")
+  expect_error(twoway_simulation_independent(10, mean_mat))
 })
 
 test_that("number of levels generated correspond to model", {
