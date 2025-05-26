@@ -64,13 +64,15 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
       if(test=="ANOVA")
       {
         pvec <- sapply(simulation, function(i)
-          suppressMessages(suppressWarnings(afex::aov_ez(id="subject", dv="y", between="indep_var1", within="indep_var2", data=i)$anova_table))$`Pr(>F)`)
+          suppressMessages(suppressWarnings(afex::aov_ez(id="subject", dv="y", within="indep_var1", between ="indep_var2", data=i)$anova_table))$`Pr(>F)`)
         pvecnames <- rownames(suppressMessages(afex::aov_ez(id = "subject", dv = "y", within = "indep_var1", between = "indep_var2",  data = simulation[[1]])$anova_table))
       } else if(test=="permutation")
       {
-        checkFunction()
-        pvec <- sapply(simulation, function(i) ez::ezPerm(wid=subject, dv = y, within = indep_var1, between = indep_var2, data = i)$p)
-        pvecnames <- ez::ezPerm(wid=subject, dv = y, within = indep_var1,  between = indep_var2, data = simulation[[1]])$Effect
+        ##checkFunction()
+        fmla <- as.formula("y ~ indep_var1*indep_var2+ Error(subject/indep_var1)")
+        pvec <- sapply(simulation,
+                       function(i) permuco::aovperm(fmla, data = i)$table$`resampled P(>F)`)
+        pvecnames <- rownames(permuco::aovperm(fmla, data = simulation[[1]])$table)
       } else if(test=="rank")
       {
         pvec <- NULL
@@ -93,10 +95,12 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
 
       } else if(test=="permutation")
       {
-        checkFunction()
+        ##checkFunction()
+        fmla <- as.formula("y ~ indep_var1*indep_var2+ Error(subject/indep_var2)")
         pvec <- sapply(simulation,
-                       function(i) ez::ezPerm(wid=subject, dv = y, between = indep_var1, within = indep_var2, data=i)$p)
-        pvecnames <- ez::ezPerm(wid=subject, dv = y, between = indep_var1, within = indep_var2, data = simulation[[1]])$Effect
+                       function(i) permuco::aovperm(fmla, data = i)$table$`resampled P(>F)`)
+        pvecnames <- rownames(permuco::aovperm(fmla, data = simulation[[1]])$table)
+
       } else if(test=="rank")
       {
         pvec <- NULL
@@ -118,10 +122,11 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
         pvecnames <- rownames(suppressMessages(afex::aov_ez(id = "subject", dv = "y", within = c("indep_var1", "indep_var2"),  data = simulation[[1]])$anova_table))
       }else if(test=="permutation")
       {
-        checkFunction()
-        pvec <- sapply(simulation,
-                       function(i) ez::ezPerm(wid=subject, dv = y, within = .(indep_var1, indep_var2),  data = i)$p)
-        pvecnames <- ez::ezPerm(wid=subject, dv = y, within = .(indep_var1, indep_var2), data = simulation[[1]])$Effect
+        ##checkFunction()
+        fmla <- as.formula("y ~ indep_var1*indep_var2+ Error(subject/indep_var1 + indep_var2)")
+        pvec <- sapply(simulation, function(i) permuco::aovperm(fmla, data = i)$table$`resampled P(>F)`)
+        pvecnames <- rownames(permuco::aovperm(fmla, data = simulation[[1]])$table)
+
       } else if(test=="rank")
       {
         pvec <- NULL
@@ -162,15 +167,10 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
                      function(i) Rfit::raov(frml, i)$table[,5])
     } else if(test=="permutation")
     {
-      lmp <- lmPerm::lmp
       frml <- as.formula(paste("y ~ ", indep_vars[1], "*", indep_vars[2]))
-      pvec <- sapply(simulation,
-                     function(i) {
-                       coefs <- summary(lmPerm::aovp(frml, data = i))
-                       coefs[[1]][1:3,5]
-                     })
-      coefs <- summary(lmPerm::aovp(frml, data=simulation[[1]]))
-      pvecnames <- stringr::str_trim(rownames(coefs[[1]])[1:3])
+      pvec <- sapply(simulation, function(i)
+                       permuco::aovperm(frml, data = i)$table$`resampled P(>F)`)
+      pvecnames <- rownames(permuco::aovperm(frml, simulation[[1]])$table)
     }
   }
   pprops <- rowSums(pvec<alpha)/ncol(pvec)
