@@ -157,6 +157,8 @@ test_that("skewed and truncated input checks work", {
 
   expect_error(twoway_simulation_correlated(group_size = group_size, matrices_obj = matlist, nsims = iterations,
                                             distribution = "skewed", shape = seq(2, 6, 2)))
+
+
   fwithin="fB"
   group_size <- rep(seq(25, 10, -5), 2)
   group_size <- matrix(group_size, nlevfA, nlevfB, byrow = TRUE)
@@ -168,6 +170,10 @@ test_that("skewed and truncated input checks work", {
   expect_no_warning(twoway_simulation_correlated(group_size = group_size, matrices_obj = matlist,
                                                  nsims = iterations, balanced = FALSE, loss="sequential",
                                                  distribution = "truncated.normal", inferior_limit = 3))
+
+  expect_warning(twoway_simulation_correlated(group_size = group_size, matrices_obj = matlist,
+                                                 nsims = iterations, balanced = FALSE, loss="sequential",
+                                                 distribution = "truncated.normal", superior_limit = suplim))
   })
 
 
@@ -195,6 +201,28 @@ test_that("simulated values are skewed", {
   distpvals <- c(distpvals, ks.test(simdat$y[simdat$cond=="B_b"], "pnorm", refs$mean.mat[2,2], refs$sd.mat)$p.value)
   distpvals <- c(distpvals, ks.test(simdat$y[simdat$cond=="B_d"], "pnorm", refs$mean.mat[2,4], refs$sd.mat)$p.value)
   expect_true(any(distpvals<0.05))
+
+  simdat <- twoway_simulation_correlated(group_size = group_size, matrices_obj = refs,
+                                         nsims = iterations,
+                                         distribution = "skewed", shape = rep(4, nlevfA))$simulated_data
+  distpvals <- ks.test(simdat$y[simdat$cond=="A_a"], "pnorm", refs$mean.mat[1,1], refs$sd.mat)$p.value
+  distpvals <- c(distpvals, ks.test(simdat$y[simdat$cond=="A_b"], "pnorm", refs$mean.mat[1,2], refs$sd.mat)$p.value)
+  distpvals <- c(distpvals, ks.test(simdat$y[simdat$cond=="A_c"], "pnorm", refs$mean.mat[1,3], refs$sd.mat)$p.value)
+  distpvals <- c(distpvals, ks.test(simdat$y[simdat$cond=="B_a"], "pnorm", refs$mean.mat[2,1], refs$sd.mat)$p.value)
+  distpvals <- c(distpvals, ks.test(simdat$y[simdat$cond=="B_b"], "pnorm", refs$mean.mat[2,2], refs$sd.mat)$p.value)
+  distpvals <- c(distpvals, ks.test(simdat$y[simdat$cond=="B_d"], "pnorm", refs$mean.mat[2,4], refs$sd.mat)$p.value)
+  expect_true(any(distpvals>0.05))
+
+  simdat <- twoway_simulation_correlated(group_size = group_size, matrices_obj = refs,
+                                         nsims = iterations,
+                                         distribution = "skewed", shape = rep(3, prod(nlevfA, nlevfB)))$simulated_data
+  distpvals <- ks.test(simdat$y[simdat$cond=="A_a"], "pnorm", refs$mean.mat[1,1], refs$sd.mat)$p.value
+  distpvals <- c(distpvals, ks.test(simdat$y[simdat$cond=="A_b"], "pnorm", refs$mean.mat[1,2], refs$sd.mat)$p.value)
+  distpvals <- c(distpvals, ks.test(simdat$y[simdat$cond=="A_c"], "pnorm", refs$mean.mat[1,3], refs$sd.mat)$p.value)
+  distpvals <- c(distpvals, ks.test(simdat$y[simdat$cond=="B_a"], "pnorm", refs$mean.mat[2,1], refs$sd.mat)$p.value)
+  distpvals <- c(distpvals, ks.test(simdat$y[simdat$cond=="B_b"], "pnorm", refs$mean.mat[2,2], refs$sd.mat)$p.value)
+  distpvals <- c(distpvals, ks.test(simdat$y[simdat$cond=="B_d"], "pnorm", refs$mean.mat[2,4], refs$sd.mat)$p.value)
+  expect_true(any(distpvals>0.05))
 })
 
 test_that("loss is random", {
@@ -251,6 +279,25 @@ test_that("loss is sequential", {
   res <- table(simdat$groups, simdat$time)
   expect_true(all(seq_check & all(res==group_size)))
 
+  fwithin <- "fA"
+  group_size <- rep(10,prod(nlevfA, nlevfB))
+  group_size <- matrix(group_size, nlevfA, nlevfB, byrow = TRUE)
+  group_size[,2] <- group_size[,2]-c(1,2,3)
+  group_size[,3] <- group_size[,3]-c(2,2,4)
+  group_size[,4] <- group_size[,4]-c(2,2,4)
+  refs <- calculate_mean_matrix(refmean = 10, nlfA = nlevfA, nlfB = nlevfB,
+                                fAeffect = 2, fBeffect = 0.5, plot = FALSE,
+                                sdproportional = TRUE, sdratio = 0.1,
+                                label_list = label_list, rho = rho, withinf = fwithin)
+
+  simdat <- twoway_simulation_correlated(group_size = group_size, matrices_obj = refs,
+                                         balanced = FALSE, loss = "sequential", nsims = iterations)$simulated_data
+  seq_check <- all(apply(table(simdat$groups, simdat$subject), 2,
+                         function(x) all(x[1]>=x[2] & x[2]>=x[3])))
+  res <- table(simdat$groups, simdat$time)
+  expect_true(all(seq_check & all(res==group_size)))
+
+
   fwithin <- "both"
   group_size <- rep(10,prod(nlevfA, nlevfB))
   group_size <- matrix(group_size, nlevfA, nlevfB, byrow = TRUE)
@@ -269,4 +316,27 @@ test_that("loss is sequential", {
                          function(x) all(x[1]>=x[2] & x[x]>=x[3] & x[3]>=x[4])))
   res <- table(simdat$groups, simdat$time)
   expect_true(all(seq_check & all(res==group_size)))
+})
+
+test_that("loss input check works", {
+  nlevfA <- 3
+  nlevfB <- 4
+  label_list <- list(groups=LETTERS[1:nlevfA], time=letters[1:nlevfB])
+  n <- 10
+  group_size <- rep(10,prod(nlevfA, nlevfB))
+  group_size <- matrix(group_size, nlevfA, nlevfB, byrow = TRUE)
+  group_size[1,] <- group_size[1,]-c(0,2,4,5)
+  group_size[2,] <- group_size[2,]-c(0,2,3,4)
+  group_size[3,] <- group_size[3,]-c(0,0,4,5)
+
+  iterations <- 1
+  rho <- 0.3
+  fwithin <- "fB"
+  refs <- calculate_mean_matrix(refmean = 10, nlfA = nlevfA, nlfB = nlevfB,
+                                fAeffect = 2, fBeffect = 0.5, plot = FALSE,
+                                sdproportional = TRUE, sdratio = 0.1,
+                                label_list = label_list, rho = rho, withinf = fwithin)
+
+  expect_error(twoway_simulation_correlated(group_size = group_size, matrices_obj = refs,
+                                         balanced = FALSE, nsims = iterations))
 })

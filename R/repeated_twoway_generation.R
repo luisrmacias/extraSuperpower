@@ -166,7 +166,7 @@ twoway_simulation_correlated <- function(group_size, matrices_obj, distribution=
     {
       warning("The lower or upper bound for the truncated distribution is too extreme for efficient sampling.")
     }
-    y <- replicate(nsims, reshape2::melt(tmvtnorm::rtmvnorm2(sampn, mean=mean_matrix, sigma = sigmatrix, lower = rep(inferior_limit, nlevels), upper = rep(superior_limit, nlevels),  algorithm ="gibbs"))$value)
+    y <- suppressWarnings(replicate(nsims, reshape2::melt(tmvtnorm::rtmvnorm2(sampn, mean=mean_matrix, sigma = sigmatrix, lower = rep(inferior_limit, nlevels), upper = rep(superior_limit, nlevels),  algorithm ="gibbs"))$value))
   }
 
   sim <- lapply(seq(nsims),
@@ -209,14 +209,14 @@ twoway_simulation_correlated <- function(group_size, matrices_obj, distribution=
       }
       if(withinf=="fA" | withinf=="fB")
       {
-        initial <- sapply(1:length(levels(tosample[,betwcol])),
+        initial <- lapply(1:length(levels(tosample[,betwcol])),
                function(x)(sample(unique(tosample$subject[tosample[,betwcol]==levels(tosample[,betwcol])[x]]),
                                 group_size[x,1])))
         gather <- NULL
-        for(i in 1:ncol(initial))
+        for(i in 1:length(initial))
         {
           ord <- order(group_size[i,], decreasing = TRUE)
-          avail <- initial[,i]
+          avail <- initial[[i]]
           j <- sample(avail, group_size[i,2])
           keep <- list(avail, j)
           avail <- j
