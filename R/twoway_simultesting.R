@@ -48,9 +48,16 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
   if(is.list(data) & is.null(dim(data)))
   {
     checkFunction <- function() {
-      user_input <- readline("Permutation testing for repeated measurement designs can take several hours. Are you sure you want to run this? (y/n)  ")
+      # check if called in testthat or interactive
+      tb <- .traceback(x = 0)
+      if(!any(unlist(lapply(tb, function(x) any(grepl("test_env", x))))) && interactive())
+      {
+        cat("Permutation testing for repeated measurement designs can take several minutes\n
+        depending on sample size and number of groups.")
+        user_input <- readline("Do you whish to proceed? (y/n)  ")
       if(user_input != 'y') stop('Exiting')
       print('Permutation testing starts')
+      }
     }
 
     withinf <- data$withinf
@@ -68,7 +75,7 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
         pvecnames <- rownames(suppressMessages(afex::aov_ez(id = "subject", dv = "y", within = "indep_var1", between = "indep_var2",  data = simulation[[1]])$anova_table))
       } else if(test=="permutation")
       {
-        ##checkFunction()
+        checkFunction()
         fmla <- as.formula("y ~ indep_var1*indep_var2+ Error(subject/indep_var1)")
         pvec <- sapply(simulation,
                        function(i) permuco::aovperm(fmla, data = i)$table$`resampled P(>F)`)
@@ -95,7 +102,7 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
 
       } else if(test=="permutation")
       {
-        ##checkFunction()
+        checkFunction()
         fmla <- as.formula("y ~ indep_var1*indep_var2+ Error(subject/indep_var2)")
         pvec <- sapply(simulation,
                        function(i) permuco::aovperm(fmla, data = i)$table$`resampled P(>F)`)
@@ -118,11 +125,11 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
       if(test=="ANOVA")
       {
         pvec <- sapply(simulation, function(i)
-          suppressMessages(suppressWarnings(afex::aov_ez(id="subject", dv="y", between="indep_var1", within="indep_var2", data=i)$anova_table))$`Pr(>F)`)
+          suppressMessages(suppressWarnings(afex::aov_ez(id="subject", dv="y", within=c("indep_var1", "indep_var2"), data=i)$anova_table))$`Pr(>F)`)
         pvecnames <- rownames(suppressMessages(afex::aov_ez(id = "subject", dv = "y", within = c("indep_var1", "indep_var2"),  data = simulation[[1]])$anova_table))
       }else if(test=="permutation")
       {
-        ##checkFunction()
+        checkFunction()
         fmla <- as.formula("y ~ indep_var1*indep_var2+ Error(subject/indep_var1 + indep_var2)")
         pvec <- sapply(simulation, function(i) permuco::aovperm(fmla, data = i)$table$`resampled P(>F)`)
         pvecnames <- rownames(permuco::aovperm(fmla, data = simulation[[1]])$table)
@@ -146,10 +153,10 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
   {
     indep_vars <- names(data)[4:5]
     simulation <- split(data, data$iteration)
-    if(length(unique(simulation[[1]]))==1)
+    if(length(unique(simulation[[1]]$n))==1)
     {
       cat(paste("Testing power on an independent observations design experiment.\nSample size per group =", unique(simulation[[1]]$n), "\n"))
-    } else if (length(unique(simulation[[1]]))>1)
+    } else if (length(unique(simulation[[1]]$n))>1)
     {
       cat(paste("Testing power on an independent observations design experiment.\nMean sample size per group =", round(mean(simulation[[1]]$n),1), "\n"))
     }
@@ -165,12 +172,17 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
       frml <- as.formula(paste("y ~ ", indep_vars[1], "*", indep_vars[2]))
       pvec <- sapply(simulation,
                      function(i) Rfit::raov(frml, i)$table[,5])
+      pvecnames <- rownames(pvec)
     } else if(test=="permutation")
     {
       frml <- as.formula(paste("y ~ ", indep_vars[1], "*", indep_vars[2]))
-      pvec <- sapply(simulation, function(i)
-                       permuco::aovperm(frml, data = i)$table$`resampled P(>F)`)
+      pvec <- sapply(simulation, function(i) {
+                       res <- permuco::aovperm(frml, data = i)
+                       res <- res$table[-nrow(res$table),]
+                       res <- res$`resampled P(>F)`
+                       })
       pvecnames <- rownames(permuco::aovperm(frml, simulation[[1]])$table)
+      pvecnames <- pvecnames[-grep("Residuals", pvecnames)]
     }
   }
   pprops <- rowSums(pvec<alpha)/ncol(pvec)
@@ -186,18 +198,18 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
     n <- range(simulation[[1]]$n)
   }
 
-  if(test=="rank")
-  {
-    if(length(unique(simulation[[1]]$n))==1)
-    {
-      data.frame(n = n, power=pprops, "lower bound ci" = lb, "upper bound ci" = ub)
-    }
-    else if (length(unique(simulation[[1]]$n))>1)
-    {
-      data.frame("smallest group" = n[1], "largest group" = n[2], "mean group size" = mean(n), power=pprops, "lower bound ci" = lb, "upper bound ci" = ub)
-    }
-  } else if (test!="rank")
-  {
+  # if(test=="rank")
+  # {
+  #   if(length(unique(simulation[[1]]$n))==1)
+  #   {
+  #     data.frame(n = n, power=pprops, "lower bound ci" = lb, "upper bound ci" = ub)
+  #   }
+  #   else if (length(unique(simulation[[1]]$n))>1)
+  #   {
+  #     data.frame("smallest group" = n[1], "largest group" = n[2], "mean group size" = mean(n), power=pprops, "lower bound ci" = lb, "upper bound ci" = ub)
+  #   }
+  # } else if (test!="rank")
+  # {
     names(pprops) <- pvecnames
     if(length(unique(simulation[[1]]$n))==1)
     {
@@ -207,5 +219,5 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
     {
       data.frame("smallest group" = n[1], "largest group" = n[2], "mean group size" = mean(n), power=pprops, "lower bound ci" = lb, "upper bound ci" = ub)
     }
-  }
+  #}
 }
