@@ -10,7 +10,8 @@
 #' @param repeated_measurements Logical - Does the design have repeated measurements. Default is false.
 #' @param loss Character - Type of selection of subjects in groups that have less observations than 'max(group_size)'. Possible values are 'random' and 'sequential'. Ignored if 'repeated_measurements=FALSE' or 'balanced=TRUE'. See 'details'.
 #' @param distribution Character - Type of distribution to simulate. Possible values are 'normal', 'truncated' or 'skewed'.
-#' @param skewness Numeric - Momentum of distribution skewness
+#' @param skewness Numeric - Momentum of distribution skewness, univariate distribution simulation.
+#' @param shape Numeric - Degree of skewness in the distribution. May be a single value, have a length equal to the number of levels of any one of the factors or a length equal to the product of the length of each factor. For multivariate distribution simulations.
 #' @param inferior_limit Numeric - Value of the lower bound for the truncated distribution, defaults to '-Inf'. Ignored if 'distribution' is either 'normal' or 'skewed'.
 #' @param superior_limit Numeric - Value of the upper bound for the truncated distribution, defaults to 'Inf'. Ignored if 'distribution' is either 'normal' or 'skewed'.
 #' @param nsims Integer - Number of iterations

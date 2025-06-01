@@ -38,14 +38,12 @@ cran.dep <- c("stringr",
               "rlist",
               "fGarch",
               "truncnorm",
+              "sn",
               "MASS",
-              "CensMFM",
               "tmvtnorm",
               "afex",
               "Rfit",
-              "lmPerm",
-              "nparLD",
-              "ez")
+              "nparLD")
 
 cran.dep.to.install <- setdiff(cran.dep, 
                                installed.packages()[, "Package"])

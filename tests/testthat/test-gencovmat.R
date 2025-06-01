@@ -66,16 +66,12 @@ test_that("sd matrix name check works", {
 
   sd <- meansd_mats[[2]]
 
-
-
   dimnames(sd) <- list(treatment=c("Ctrl", "MedA", "MedB"),
                        time=paste("t", 1:4, sep="_"))
   expect_error(gencovariancemat(cor_mat, sd, withinf =fwithin,
                                 nlfA = facdim[1], nlfB = facdim[2],
                                 label_list = list(intervention=c("Placebo", "Tiritin", "Toroton"),
                                                   time = paste("day", 1:4, sep = "_"))))
-
-
 })
 
 test_that("factor A covariance", {

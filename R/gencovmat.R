@@ -96,7 +96,7 @@ gencovariancemat <- function(correlation_matrix, sd_matrix, withinf, label_list=
   {stop("The within factors of the correlation and covariance matrices are inconsistent")}
   rhokind <- unique(as.vector(correlation_matrix))
   rhokind <- rhokind[-which(rhokind==0|rhokind==1)]
-  if(length(rhokind)>1)
+  if(length(rhokind)>1 | any(rhokind<0))
   {
     sigmat <- Matrix::nearPD(sigmat)$mat
     sigmat <- as.matrix(sigmat)

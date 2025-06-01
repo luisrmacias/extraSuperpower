@@ -34,7 +34,9 @@ simulate_twoway_nrange(
 
 \item{distribution}{Character - Type of distribution to simulate. Possible values are 'normal', 'truncated' or 'skewed'.}
 
-\item{skewness}{Numeric - Momentum of distribution skewness}
+\item{skewness}{Numeric - Momentum of distribution skewness, univariate distribution simulation.}
+
+\item{shape}{Numeric - Degree of skewness in the distribution. May be a single value, have a length equal to the number of levels of any one of the factors or a length equal to the product of the length of each factor. For multivariate distribution simulations.}
 
 \item{inferior_limit}{Numeric - Value of the lower bound for the truncated distribution, defaults to '-Inf'. Ignored if 'distribution' is either 'normal' or 'skewed'.}
 

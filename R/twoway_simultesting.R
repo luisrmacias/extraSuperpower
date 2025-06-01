@@ -54,7 +54,7 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
       {
         cat("Permutation testing for repeated measurement designs can take several minutes\n
         depending on sample size and number of groups.")
-        user_input <- readline("Do you whish to proceed? (y/n)  ")
+        user_input <- readline("Do you wish to proceed? (y/n)  ")
       if(user_input != 'y') stop('Exiting')
       print('Permutation testing starts')
       }
@@ -79,7 +79,9 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
         fmla <- as.formula("y ~ indep_var1*indep_var2+ Error(subject/indep_var1)")
         pvec <- sapply(simulation,
                        function(i) permuco::aovperm(fmla, data = i)$table$`resampled P(>F)`)
+        pvec <- pvec[c(2,1,3),]
         pvecnames <- rownames(permuco::aovperm(fmla, data = simulation[[1]])$table)
+        pvecnames <- pvecnames[c(2,1,3)]
       } else if(test=="rank")
       {
         pvec <- NULL

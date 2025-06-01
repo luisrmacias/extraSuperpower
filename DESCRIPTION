@@ -1,6 +1,6 @@
 Package: extraSuperpower
 Title: Inspired by package Superpower, this package calculates power for two-way factorial designs
-Version: 0.0.2.8000
+Version: 0.1.0.001
 Authors@R: 
     person("Silke", "Szymczak", , "silke.szymczak@uni-luebeck.de", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-8897-9035"))
@@ -27,7 +27,10 @@ Imports:
 	tmvtnorm,
 	nparLD,
 	permuco,
-	Rfit
+	Rfit, 
+	methods,
+	stats,
+	utils
 Suggests: 
     knitr,
     rmarkdown,
