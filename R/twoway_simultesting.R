@@ -106,7 +106,8 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
 
       } else if(test=="permutation")
       {
-        checkFunction()
+        ##checkFunction()
+        cat(paste('Permutation testing with n=', mean(group_size), 'starts'))
         fmla <- as.formula("y ~ indep_var1*indep_var2+ Error(subject/indep_var2)")
         pvec <- sapply(simulation,
                        function(i) permuco::aovperm(fmla, data = i)$table$`resampled P(>F)`)
@@ -133,7 +134,8 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
         pvecnames <- rownames(suppressMessages(afex::aov_ez(id = "subject", dv = "y", within = c("indep_var1", "indep_var2"),  data = simulation[[1]])$anova_table))
       }else if(test=="permutation")
       {
-        checkFunction()
+        ##checkFunction()
+        cat(paste('Permutation testing with n=', mean(group_size), 'starts'))
         fmla <- as.formula("y ~ indep_var1*indep_var2+ Error(subject/indep_var1 + indep_var2)")
         pvec <- sapply(simulation, function(i) permuco::aovperm(fmla, data = i)$table$`resampled P(>F)`)
         pvecnames <- rownames(permuco::aovperm(fmla, data = simulation[[1]])$table)
