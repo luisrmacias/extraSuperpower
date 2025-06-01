@@ -155,3 +155,20 @@ test_that("correct within factor is used", {
   expect_lt(res_both[2,2], 0.15)
 
 })
+
+
+test_that("unbalanced designs", {
+  nlevfA <- 3
+  nlevfB <- 3
+  nlist <- list(groups=LETTERS[1:nlevfA], time=letters[1:nlevfB])
+  gwint <- matrix(c(2,3, 3, 3), 2, 2, byrow = TRUE)
+  iterations <- 100
+  rho <- -0.9
+  group_size <- matrix(rep(8:6, 3), 3, 3, byrow = TRUE)
+  refs <- calculate_mean_matrix(refmean = 1, nlfA = nlevfA, nlfB = nlevfB,
+                                fAeffect = 1.3, fBeffect = 1, sdratio = 0.2,
+                                groupswinteraction = gwint, interact = 1.1,
+                                label_list = nlist)
+  sindatind <- twoway_simulation_independent(group_size = group_size, matrices_obj = refs, balanced = FALSE)
+  resind <- twoway_simulation_testing(sindatind)
+})
