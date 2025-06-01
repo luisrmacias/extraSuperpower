@@ -98,6 +98,36 @@ test_that("factor B as within factor", {
            0.2)
 })
 
+
+test_that("both factors within", {
+  faeff <- 10
+  fA <- 2
+  fbeff <- 0.5
+  fB <- 2
+  rho <- 0.9
+  fwithin <- "both"
+  mean_mat <- calculate_mean_matrix(refmean = 10, nlfA = fA, nlfB = fB,
+                                    fAeffect = faeff, fBeffect = fbeff,
+                                    rho = rho, withinf = fwithin)
+
+  group_size <- 100
+  set.seed(15440804)
+  sim <- twoway_simulation_correlated(group_size = group_size, mean_mat, nsims = 1)$simulated_data
+  fBcor1 <- cor.test(sim$y[sim$cond=="A_a"], sim$y[sim$cond=="A_b"])$estimate
+  expect_gt(abs(fBcor1),
+            rho-0.1)
+  fBcor2 <- cor.test(sim$y[sim$cond=="B_a"], sim$y[sim$cond=="B_b"])$estimate
+  expect_gt(abs(fBcor2),
+            rho-0.1)
+  fAcor1 <- cor.test(sim$y[sim$cond=="A_a"], sim$y[sim$cond=="B_a"])$estimate
+  expect_gt(abs(fAcor1),
+            rho-0.1)
+  fAcor2 <- cor.test(sim$y[sim$cond=="A_b"], sim$y[sim$cond=="B_b"])$estimate
+  expect_gt(abs(fAcor2),
+            rho-0.1)
+})
+
+
 test_that("simulated values are normally distributed", {
   nlevfA <- 2
   nlevfB <- 2

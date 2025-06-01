@@ -100,26 +100,25 @@ test_that("correct within factor is used", {
 
   fwithin <- "fB"
   refs <- calculate_mean_matrix(refmean = 1, nlfA = nlevfA, nlfB = nlevfB,
-                                fAeffect = 1.1, fBeffect = 0.8, sdratio = 0.2,
-                                groupswinteraction = gwint, interact = 1.25,
+                                fAeffect = 2, fBeffect = 1, sdratio = 0.2,
+                                ##groupswinteraction = gwint, interact = 1.25,
                                 label_list = nlist,
                                 rho = rho, withinf = fwithin)
   group_size <- 5
   simdatB <- twoway_simulation_correlated(group_size = group_size, matrices_obj = refs, nsims = iterations)
 
-
   fwithin <- "fA"
   refs <- calculate_mean_matrix(refmean = 1, nlfA = nlevfA, nlfB = nlevfB,
-                                fAeffect = 1.1, fBeffect = 0.8, sdratio = 0.2,
-                                groupswinteraction = gwint, interact = 1.25,
+                                fAeffect = 2, fBeffect = 1, sdratio = 0.2,
+                                ##groupswinteraction = gwint, interact = 1.25,
                                 label_list = nlist,
                                 rho = rho, withinf = fwithin)
   simdatA <- twoway_simulation_correlated(group_size = group_size, matrices_obj = refs, nsims = iterations)
 
   fwithin <- "both"
   refs <- calculate_mean_matrix(refmean = 1, nlfA = nlevfA, nlfB = nlevfB,
-                                fAeffect = 1.1, fBeffect = 0.8, sdratio = 0.2,
-                                groupswinteraction = gwint, interact = 1.25,
+                                fAeffect = 2, fBeffect = 1, sdratio = 0.2,
+                                ##groupswinteraction = gwint, interact = 1.25,
                                 label_list = nlist,
                                 rho = rho, withinf = fwithin)
   group_size <- 15
@@ -129,13 +128,30 @@ test_that("correct within factor is used", {
   res_fA <- twoway_simulation_testing(simdatA, test = "rank")
   res_both <- twoway_simulation_testing(simdatboth, test = "rank")
   expect_gt(res_fA[1,2], 0.9)
-  expect_equal(res_fB[1,2], 1)
-  expect_lt(res_both[1,2], 1)
+  expect_lt(res_fA[2,2], 0.15)
+  expect_gt(res_fB[1,2], 0.9)
+  expect_lt(res_fB[2,2], 0.15)
+  expect_gt(res_both[1,2], 0.9)
+  expect_lt(res_both[2,2], 0.15)
 
   res_fB <- twoway_simulation_testing(simdatB, test = "ANOVA")
   res_fA <- twoway_simulation_testing(simdatA, test = "ANOVA")
   res_both <- twoway_simulation_testing(simdatboth, test = "ANOVA")
-  expect_equal(res_fA[1,2], 1)
-  expect_equal(res_fB[1,2], 1)
-  expect_lt(res_both[1,2], 1)
+  expect_gt(res_fA[1,2], 0.9)
+  expect_lt(res_fA[2,2], 0.15)
+  expect_gt(res_fB[1,2], 0.9)
+  expect_lt(res_fB[2,2], 0.15)
+  expect_gt(res_both[1,2], 0.9)
+  expect_lt(res_both[2,2], 0.15)
+
+  res_fB <- twoway_simulation_testing(simdatB, test = "permutation")
+  res_fA <- twoway_simulation_testing(simdatA, test = "permutation")
+  res_both <- twoway_simulation_testing(simdatboth, test = "permutation")
+  expect_gt(res_fA[1,2], 0.9)
+  expect_lt(res_fA[2,2], 0.15)
+  expect_gt(res_fB[1,2], 0.9)
+  expect_lt(res_fB[2,2], 0.15)
+  expect_gt(res_both[1,2], 0.9)
+  expect_lt(res_both[2,2], 0.15)
+
 })
