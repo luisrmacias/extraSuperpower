@@ -57,7 +57,7 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
     #     user_input <- readline("Do you wish to proceed? (y/n)  ")
     #   if(user_input != 'y') stop('Exiting')
     #   }
-    }
+    #}
 
     withinf <- data$withinf
     simulation <- data$simulated_data
