@@ -76,7 +76,7 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
         pvecnames <- pvecnames[c(2,1,3)]
       } else if(test=="permutation")
       {
-        cat(paste('Permutation testing with n=', mean(group_size), 'starts'))
+        ##cat(paste('Permutation testing with n=', mean(group_size), 'starts'))
         fmla <- as.formula("y ~ indep_var1*indep_var2+ Error(subject/indep_var1)")
         pvec <- sapply(simulation,
                        function(i) permuco::aovperm(fmla, data = i)$table$`resampled P(>F)`)
@@ -107,7 +107,7 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
       } else if(test=="permutation")
       {
         ##checkFunction()
-        cat(paste('Permutation testing with n=', mean(group_size), 'starts'))
+        ##cat(paste('Permutation testing with n=', mean(group_size), 'starts'))
         fmla <- as.formula("y ~ indep_var1*indep_var2+ Error(subject/indep_var2)")
         pvec <- sapply(simulation,
                        function(i) permuco::aovperm(fmla, data = i)$table$`resampled P(>F)`)
@@ -135,7 +135,7 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
       }else if(test=="permutation")
       {
         ##checkFunction()
-        cat(paste('Permutation testing with n=', mean(group_size), 'starts'))
+        ##cat(paste('Permutation testing with n=', mean(group_size), 'starts'))
         fmla <- as.formula("y ~ indep_var1*indep_var2+ Error(subject/indep_var1 + indep_var2)")
         pvec <- sapply(simulation, function(i) permuco::aovperm(fmla, data = i)$table$`resampled P(>F)`)
         pvecnames <- rownames(permuco::aovperm(fmla, data = simulation[[1]])$table)
