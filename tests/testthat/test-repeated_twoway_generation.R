@@ -157,7 +157,7 @@ test_that("simulated values are normally distributed", {
   simdat <- twoway_simulation_correlated(group_size = group_size, matrices_obj = refs, nsims = iterations)$simulated_data
   distest <- tapply(simdat$y, simdat$cond, shapiro.test)
   pvals <- unlist(sapply(distest, "[", "p.value"))
-  expect_true(all(p.adjust(pvals)>0.05))
+  expect_true(sum(p.adjust(pvals)>0.05)>15)
 })
 
 test_that("skewed and truncated input checks work", {

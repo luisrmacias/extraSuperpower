@@ -45,11 +45,11 @@
 #' @export
 simulate_twoway_nrange <- function(matrices_obj, nset, balanced=TRUE, group_size=NULL, loss=NULL, repeated_measurements=FALSE, distribution="normal", skewness=1, shape=0, inferior_limit=-Inf, superior_limit=Inf, nsims=200)
 {
-  if(length(matrices_obj[[1]])==5 & !repeated_measurements)
+  if(!repeated_measurements & (length(matrices_obj[[1]])==5 | length(matrices_obj)==5))
   {
     stop("It seems you have given a correlation value and a within factor as input to the 'calculate_mean_matrix' function.\nAre you sure you want to leave 'repeated_measurements' as 'FALSE'?")
   }
-  if(repeated_measurements & length(matrices_obj[[1]])==2)
+  if(repeated_measurements & ((length(matrices_obj[[1]])==2 & any(sapply(matrices_obj, ggplot2::is.ggplot))) | (length(matrices_obj)==2 & all(sapply(matrices_obj, is.matrix)))))
   {
     stop("It seems you have not given a correlation value and a within factor as input to the 'calculate_mean_matrix' function.\nAre you sure you want to set 'repeated_measurements' to 'TRUE'?")
   }
@@ -60,7 +60,7 @@ simulate_twoway_nrange <- function(matrices_obj, nset, balanced=TRUE, group_size
   {
     testedns <- lapply(nset, "+", group_size)
   }
-  if(length(matrices_obj[[1]])==2 & !repeated_measurements)
+  if(!repeated_measurements & (length(matrices_obj[[1]])==2 | length(matrices_obj)==2))
   {
     print("Simulating independent observations experiment")
     sim_overens <- lapply(testedns, twoway_simulation_independent, matrices_obj, balanced=balanced, distribution=distribution, skewness=skewness, inferior_limit=inferior_limit, superior_limit=superior_limit, nsims=nsims)
