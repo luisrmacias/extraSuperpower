@@ -53,13 +53,13 @@ test_that("type of design input check", {
                                     rho = 0.5, withinf = "both")
   expect_error(simindep <- simulate_twoway_nrange(nset = sampsizes, matrices_obj = mean_mat,
                                                   group_size = gsize, nsims = iterations))
-  expect_warning(simrep <- simulate_twoway_nrange(nset = sampsizes, matrices_obj = mean_mat, nsims = iterations,
+  expect_no_error(simrep <- simulate_twoway_nrange(nset = sampsizes, matrices_obj = mean_mat, nsims = iterations,
                                                   repeated_measurements = TRUE))
   mean_mat <- calculate_mean_matrix(refmean = 10, nlfA = fA, nlfB = fB,
                                     fAeffect = faeff, fBeffect = fbeff,
                                     rho = 0.5, withinf = "both", plot = FALSE)
   expect_error(simindep <- simulate_twoway_nrange(nset = sampsizes, matrices_obj = mean_mat,
                                                   group_size = gsize, nsims = iterations))
-  expect_warning(simrep <- simulate_twoway_nrange(nset = sampsizes, matrices_obj = mean_mat, nsims = iterations,
+  expect_no_error(simrep <- simulate_twoway_nrange(nset = sampsizes, matrices_obj = mean_mat, nsims = iterations,
                                                    repeated_measurements = TRUE))
 })

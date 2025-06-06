@@ -98,8 +98,8 @@ exact_twoway_anova_power <- function(a, b, effect_sizes, n, alpha = 0.05, factor
   METHOD <- "Balanced two-way analysis of variance power calculation"
   if(!plot)
   {
-    list(a = a, b = b, sig.level = alpha, powercurve = powercurve, note=NOTE,
-       method = METHOD)
+    return(list(a = a, b = b, sig.level = alpha, powercurve = powercurve, note=NOTE,
+       method = METHOD))
   } else if(plot)
     exactpower <- list(a = a, b = b, sig.level = alpha, powercurve = powercurve, note=NOTE,
                        method = METHOD)
