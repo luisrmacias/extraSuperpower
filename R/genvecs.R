@@ -3,7 +3,15 @@
 #'
 #' The vector's length is length equal to the number of levels of the experimental factor, defined in reps.
 #' he coefficients are estimated from a user defined change. Default is to generate linear vector, this can be modified with the
+#'
+#' @importFrom methods is
+#'
 #' @noRd
+
+## quiets concerns of R CMD check re: the .'s that appear in pipelines
+if(getRversion() >= "2.15.1")  utils::globalVariables(c("refmean", "n", "power", "effect", "y", "mean.group.size", "lower.bound.ci", "upper.bound.ci"))
+
+
 genvecs <- function(change, reps, bystart=FALSE, scaler=refmean)
 {
   if(reps%%1>0 | reps<=0)

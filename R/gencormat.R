@@ -15,6 +15,8 @@
 #' 'rho'. If 'rho' is a vector length 2 and 'withinf="both"', the first element of 'rho' will be the correlation within factor A, while the second element will be the correlation within factor B. If
 #' 'rho' is a 2*2 matrix, only possible if 'withinf="both"', a correlation gradient will be created across rows of 'rho' for each of the factors.
 #'
+#' @importFrom methods is
+#'
 #' @return Correlation matrix
 #'
 #' @export

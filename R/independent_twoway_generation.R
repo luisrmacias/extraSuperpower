@@ -20,6 +20,8 @@
 #' at random in those factor combinations that have less participants or study subjects. This may not sound like the most efficient way to proceed, is quite fast anyhow.
 #'The 'n' column in the output will reflect how many observations each factor combination has. This should match the input matrix.
 #'
+#' @importFrom stats rnorm
+#'
 #' @return data.frame with modeled outcome values, factor level labels, iteration number and sample size.
 #'
 #' @examples
@@ -28,11 +30,17 @@
 #' timepoints <- 5
 #' treateff <- 1.5
 #' timeeff <- 0.85
+#' factors_levels_names <- list(treatment=letters[1:treatgroups], time=1:timepoints)
+#'
 #' ## Independent design
-#' effects_treat_time <- calculate_mean_matrix(refmean = refmean, fAeffect = treateff, fBeffect = timeeff, nlfA = treatgroups, nlfB = timepoints, label_list = list(treatment=letters[1:treatgroups], time=1:timepoints))
+#' effects_treat_time <- calculate_mean_matrix(refmean = refmean,
+#'                                             fAeffect = treateff, fBeffect = timeeff,
+#'                                             nlfA = treatgroups, nlfB = timepoints,
+#'                                             label_list = factors_levels_names)
 #' ## Inspect plot to check if matrices correspond to design
 #' n <- 20
-#' independent_experiment <- twoway_simulation_independent(group_size = n, matrices_obj = effects_treat_time)
+#' independent_experiment <- twoway_simulation_independent(group_size = n,
+#'                                                         matrices_obj = effects_treat_time)
 #' head(independent_experiment, 10)
 #'
 #' @export

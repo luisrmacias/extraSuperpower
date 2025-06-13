@@ -26,7 +26,8 @@
 #' @return Dataframe with simulated outcome values, factor level labels and iteration number.
 #'
 #' @examples
-#' ## Repeated measures design, suppose subjects from 4 independent treatment groups measured at 5 different timepoints.
+#' ## Repeated measures design, suppose subjects from 4 independent treatment groups
+#' ## measured at 5 different timepoints.
 #'
 #' refmean <- 1
 #' treatgroups <- 4
@@ -35,14 +36,21 @@
 #' timeeff <- 0.85
 #' rho <- 0.8
 #' withinf <- "fB"
+#' factors_levels_names <- list(treatment=letters[1:treatgroups], time=1:timepoints)
 #'
 #' effects_treat_time <- calculate_mean_matrix(refmean = refmean,
-#' fAeffect = treateff, fBeffect = timeeff, nlfA = treatgroups,  nlfB = timepoints,
-#' rho = rho, withinf = withinf, label_list = list(treatment=letters[1:treatgroups], time=1:timepoints))
+#'                                             fAeffect = treateff, fBeffect = timeeff,
+#'                                             nlfA = treatgroups,  nlfB = timepoints,
+#'                                             rho = rho, withinf = withinf,
+#'                                             label_list = factors_levels_names)
 #'
 #' ## Inspect plot to check if matrices correspond to design
+#' effects_treat_time$meansplot
+#'
 #' n <- 20
-#' repeatedmeasures_experiment <- twoway_simulation_correlated(group_size = n, matrices_obj = effects_treat_time)
+#' repeatedmeasures_experiment <- twoway_simulation_correlated(group_size = n,
+#'                                 matrices_obj = effects_treat_time)
+#'
 #' head(repeatedmeasures_experiment, 10)
 #'
 #' @export

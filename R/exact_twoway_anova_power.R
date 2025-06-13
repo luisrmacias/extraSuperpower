@@ -24,17 +24,26 @@
 #' first column is the group sample size and the remaining three columns are the power for the main effect of the first
 #' factor, the main effect of the second factor and their interaction, respectively.
 #'
+#' @importFrom stats qf
+#' @importFrom stats pf
+#'
 #' @examples
 #' refmean <- 1
 #' treatgroups <- 4
 #' timepoints <- 5
 #' treateff <- 1.25
 #' timeeff <- 0.85
-#' cellswithinteraction <- matrix(c(rep(2,3), 3:5), 3,2) #second level of factor A interacts with 3rd, 4th and 5th level of factor B
+#' cellswithinteraction <- matrix(c(rep(2,3), 3:5), 3,2)
+#' #second level of factor A interacts with 3rd, 4th and 5th level of factor B
 #'
-#' effects_treat_time_interact <- calculate_mean_matrix(refmean = refmean, nlfA = treatgroups, nlfB = timepoints,
-#' fAeffect = treateff, fBeffect = timeeff, label_list = list(treatment=letters[1:treatgroups], time=1:timepoints),
-#' groupswinteraction = cellswithinteraction, interact=1.3)
+#'factors_levels_names <- list(treatment=letters[1:treatgroups], time=1:timepoints)
+#'
+#' effects_treat_time_interact <- calculate_mean_matrix(refmean = refmean,
+#'                                                      nlfA = treatgroups, nlfB = timepoints,
+#'                                                      fAeffect = treateff, fBeffect = timeeff,
+#'                                                      label_list = factors_levels_names,
+#'                                                      groupswinteraction = cellswithinteraction,
+#'                                                      interact=1.3)
 #'
 #' fxs <- effsize(effects_treat_time_interact)
 #' exact_twoway_anova_power(a= treatgroups, b=timepoints, effect_sizes=fxs, n=5:20)

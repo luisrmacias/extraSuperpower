@@ -6,12 +6,12 @@
 #' @param group_size integer - number of subjects in each group
 #' @param matrices_obj List length 2 - Cell means and standard deviation matrices
 #'
+#' @importFrom rlang .data
 #' @return Line plot with expected mean and standard deviation for each combination of factor levels
 #'
 #' @export
 graph_twoway_assumptions <- function(group_size=100, matrices_obj)
 {
-
   if(length(matrices_obj)==2)
   {
     test_run <- twoway_simulation_independent(group_size=group_size, matrices_obj=matrices_obj, nsims=1)

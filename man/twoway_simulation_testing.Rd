@@ -41,11 +41,13 @@ treateff <- 1.5
 timeeff <- 0.85
 rho <- 0.8
 withinf <- "fB"
+factors_levels_names <- list(treatment=letters[1:treatgroups], time=1:timepoints)
 
-effects_treat_time <- calculate_mean_matrix(refmean = refmean, fAeffect = treateff, fBeffect = timeeff,
-nlfA = treatgroups,  nlfB = timepoints,
-rho = rho, withinf = withinf,
-label_list = list(treatment=letters[1:treatgroups], time=1:timepoints))
+effects_treat_time <- calculate_mean_matrix(refmean = refmean,
+                                            fAeffect = treateff, fBeffect = timeeff,
+                                            nlfA = treatgroups,  nlfB = timepoints,
+                                            rho = rho, withinf = withinf,
+                                            label_list = factors_levels_names)
 
 n <- 7
 correlated_sim <- twoway_simulation_correlated(group_size=n, matrices_obj=effects_treat_time)

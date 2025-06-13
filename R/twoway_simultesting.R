@@ -10,6 +10,10 @@
 #' @param test - The test to be applied. Possible values are "ANOVA" (default), "rank" and "permutation".
 #' @param alpha - Type I error rate. Default is 0.05.
 #'
+#' @importFrom utils capture.output
+#' @importFrom stats as.formula
+#' @importFrom stats qnorm
+#'
 #' @return A data.frame with the power and 95% confidence interval for each of the main effects and their interaction.
 #'
 #' @examples
@@ -23,11 +27,13 @@
 #' timeeff <- 0.85
 #' rho <- 0.8
 #' withinf <- "fB"
+#' factors_levels_names <- list(treatment=letters[1:treatgroups], time=1:timepoints)
 #'
-#' effects_treat_time <- calculate_mean_matrix(refmean = refmean, fAeffect = treateff, fBeffect = timeeff,
-#' nlfA = treatgroups,  nlfB = timepoints,
-#' rho = rho, withinf = withinf,
-#' label_list = list(treatment=letters[1:treatgroups], time=1:timepoints))
+#' effects_treat_time <- calculate_mean_matrix(refmean = refmean,
+#'                                             fAeffect = treateff, fBeffect = timeeff,
+#'                                             nlfA = treatgroups,  nlfB = timepoints,
+#'                                             rho = rho, withinf = withinf,
+#'                                             label_list = factors_levels_names)
 #'
 #' n <- 7
 #' correlated_sim <- twoway_simulation_correlated(group_size=n, matrices_obj=effects_treat_time)

@@ -25,12 +25,16 @@
 #' timepoints <- 5
 #' treateff <- 1.25
 #' timeeff <- 0.85
-#' label_list <- list(treatment=letters[1:treatgroups], time=1:timepoints)
+#' factors_levels_names <- list(treatment=letters[1:treatgroups], time=1:timepoints)
 #'
-#' indep_matrix <- calculate_mean_matrix(refmean = refmean, fAeffect = treateff, fBeffect = timeeff, nlfA = treatgroups, nlfB = timepoints, label_list = label_list)
+#' indep_matrix <- calculate_mean_matrix(refmean = refmean,
+#'                                       fAeffect = treateff, fBeffect = timeeff,
+#'                                       nlfA = treatgroups, nlfB = timepoints,
+#'                                       label_list = factors_levels_names)
 #'
-#' indep_skewsim <- simulate_twoway_nrange(indep_matrix, seq(6, 12, 2), distribution = "skewed", skewness = 1.8)
-#' test_power_overkn(indep_skewsim)
+#' indep_skewsim <- simulate_twoway_nrange(indep_matrix, seq(6, 12, 2),
+#'                             distribution = "skewed", skewness = 1.8)
+#' test_power_overkn(indep_skewsim, test="rank")
 #'
 #' @export
 test_power_overkn <- function(data, test="ANOVA", plot=TRUE, target_power = NULL, title = NULL, target_line=TRUE, alpha_line=TRUE, alpha=0.05)
