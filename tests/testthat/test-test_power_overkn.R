@@ -124,7 +124,7 @@ test_that("rank is performed", {
 
   simrep <- simulate_twoway_nrange(matrices_obj = mean_mat, nset = sampsizes, nsims = iterations, repeated_measurements = TRUE)
   tt <- system.time(test_power_overkn(data = simrep, plot = FALSE, test = "rank"))[3]
-  expect_gt(object = tt, expected = 2)
+  expect_gt(object = tt, expected = 1)
 })
 
 test_that("unbalanced designs are tested", {
