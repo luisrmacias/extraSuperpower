@@ -1,6 +1,6 @@
 Package: extraSuperpower
 Title: Inspired by Package Superpower, this Package Calculates Power for Two-Way Factorial Designs
-Version: 1.4.001
+Version: 1.4.2
 Authors@R: c(person(given = "Louis",
                       family = "Macias",
                       role = c("aut", "cre", "cph"),
