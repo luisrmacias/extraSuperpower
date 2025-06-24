@@ -8,7 +8,7 @@ Authors@R: c(person(given = "Louis",
                       comment = "ORCID = <https://orcid.org/0000-0002-3080-2835>"),
                person(given = "Silke",
                       family = "Szymczak",
-                      role = c("aut", "cre"),
+                      role = "aut",
                       comment = "ORCID = <https://orcid.org/0000-0002-8897-9035>"))
 Author: Louis Macias [aut, cre, cph] (ORCID = <https://orcid.org/0000-0002-3080-2835>),
   Silke Szymczak [aut, cre] (ORCID = <https://orcid.org/0000-0002-8897-9035>)
