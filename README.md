@@ -8,17 +8,12 @@ These steps allow for independent and repeated measures experiments with balance
 
 For the first step we provide a function to create mean values and standard deviation matrices. For repeated measures designs correlation and covariance matrices are also generated. For the second step separate functions are used to simulate independent and repeated measures experiments. Once the two-way factorial study is simulated under different sample sizes, the power under different statistical tests for these sample sizes can be estimated.
 
-``extraSuperpower`` depends on packages ``stringr``,  ``ggplot2``, ``reshape2``, ``scales``, ``Matrix``, ``ggpubr``, ``ggthemes``, ``rlist``, ``fGarch``, ``truncnorm``, ``MASS``, ``CensMFM``, ``tmvtnorm``, ``afex``, ``Rfit``, ``lmPerm``, ``nparLD`` and ``ez``. 
+``extraSuperpower`` depends on packages ``stringr``,  ``ggplot2``, ``reshape2``, ``scales``, ``Matrix``, ``ggpubr``, ``ggthemes``, ``rlist``, ``fGarch``, ``truncnorm``, ``MASS``, ``sn``, ``tmvtnorm``, ``afex``, ``Rfit``, ``permuco`` and ``nparLD``. 
 
-To install, install dependencies and ``devtools``, if not done already.
+The package is available in CRAN.
+To install in R.
 
-``devtools::install_github("luisrmacias/extraSuperpower")``
-
-Further installation and user guide in the ``vignette`` (vignettes folder).
-Installation with vignettes takes a bit longer, nothing unbearable.
-
-``devtools::install_github("luisrmacias/extraSuperpower", build_vignettes = TRUE)``  
-``browseVignettes(package = "extraSuperpower")``
+``install.packages("extraSuperpower")``
 
 First steps:
 
