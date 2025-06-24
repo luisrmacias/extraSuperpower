@@ -11,7 +11,7 @@ Authors@R: c(person(given = "Louis",
                       role = "aut",
                       comment = "ORCID = <https://orcid.org/0000-0002-8897-9035>"))
 Author: Louis Macias [aut, cre, cph] (ORCID = <https://orcid.org/0000-0002-3080-2835>),
-  Silke Szymczak [aut, cre] (ORCID = <https://orcid.org/0000-0002-8897-9035>)
+  Silke Szymczak [aut] (ORCID = <https://orcid.org/0000-0002-8897-9035>)
 Maintainer: Louis Macias <louis.macias@uni-luebeck.de>
 Description: The basic use of this package is with 3 sequential functions. One to generate expected cell means and standard deviations, along with correlation and covariance matrices in the case of repeated measurements. This is followed by experiment simulation i number of times. Finally, power is calculated from the simulated data. Features that may be considered in the model are interaction and measure correlation.
 Encoding: UTF-8
