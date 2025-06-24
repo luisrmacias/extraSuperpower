@@ -36,7 +36,8 @@
 #'                                             label_list = factors_levels_names)
 #'
 #' n <- 7
-#' correlated_sim <- twoway_simulation_correlated(group_size=n, matrices_obj=effects_treat_time, nsims=20)
+#' correlated_sim <- twoway_simulation_correlated(group_size=n, matrices_obj=effects_treat_time,
+#'                   nsims=20)
 #' ##used smaller number of iterations to reduce computation time
 #'
 #' twoway_simulation_testing(correlated_sim)

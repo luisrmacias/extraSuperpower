@@ -62,8 +62,8 @@ indep_matrix <- calculate_mean_matrix(refmean = refmean,
                                       label_list = factors_levels_names)
 
 indep_skewsim <- simulate_twoway_nrange(indep_matrix, seq(6, 12, 2),
-                            distribution = "skewed", skewness = 1.8, nsims=20)
-##used smaller number of iterations to reduce computation time
+                            distribution = "skewed", skewness = 1.8, nsims=5)
+##used low number of iterations to reduce computation time
 
 test_power_overkn(indep_skewsim, test="rank")
 
