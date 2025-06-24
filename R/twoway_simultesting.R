@@ -36,8 +36,8 @@
 #'                                             label_list = factors_levels_names)
 #'
 #' n <- 7
-#' correlated_sim <- twoway_simulation_correlated(group_size=n, matrices_obj=effects_treat_time)
-#' ## defaults to 500 iterations
+#' correlated_sim <- twoway_simulation_correlated(group_size=n, matrices_obj=effects_treat_time, nsims=20)
+#' ##used smaller number of iterations to reduce computation time
 #'
 #' twoway_simulation_testing(correlated_sim)
 #' ## defaults to parametric analysis of variance
@@ -45,8 +45,8 @@
 #' twoway_simulation_testing(correlated_sim, test="rank")
 #' ## rank based analysis of variance
 #'
-#' ## twoway_simulation_testing(correlated_sim, test="permutation")
-#' ## warning, permutation testing takes 25-40 seconds per iteration
+#' ## permutation test is another option
+#'
 #'
 #' @export
 twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)

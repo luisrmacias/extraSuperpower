@@ -33,7 +33,9 @@
 #'                                       label_list = factors_levels_names)
 #'
 #' indep_skewsim <- simulate_twoway_nrange(indep_matrix, seq(6, 12, 2),
-#'                             distribution = "skewed", skewness = 1.8)
+#'                             distribution = "skewed", skewness = 1.8, nsims=20)
+#' ##used smaller number of iterations to reduce computation time
+#'
 #' test_power_overkn(indep_skewsim, test="rank")
 #'
 #' @export

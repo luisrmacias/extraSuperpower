@@ -33,7 +33,9 @@
 #' rho = rho, withinf = "fB", label_list = nameslist)
 #'
 #' nset <- seq(7, 14, 2)
-#' cornorm_sim <- simulate_twoway_nrange(cornorm_model, nset, repeated_measurements=TRUE)
+#' cornorm_sim <- simulate_twoway_nrange(cornorm_model, nset, repeated_measurements=TRUE, nsims=20)
+#'
+#' ##used smaller number of iterations to reduce computation time
 #'
 #' power_results <- test_power_overkn(cornorm_sim, test="rank", plot=TRUE)
 #'
