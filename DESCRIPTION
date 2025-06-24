@@ -43,3 +43,5 @@ Suggests:
 VignetteBuilder: knitr, rmarkdown
 Config/testthat/edition: 3
 License: MIT + file LICENSE
+URL: https://github.com/luisrmacias/extraSuperpower
+BugReports: https://github.com/luisrmacias/extraSuperpower/issues
