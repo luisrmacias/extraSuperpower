@@ -143,7 +143,7 @@ Once we have set values for each combination of levels of factors $A$ and $B$ we
 
 Lets start with the independent measurement experiment in which we expect there will be interaction that we stored in the 'interaction_twoway' object. We will sample from the normal distribution, which is the default.
 
-We will use a low number of iterations for these examples. The default value for `nsims` is 150.
+We will use a low number of iterations for these examples. The coverage of the power calculations will be wide. The default value for `nsims` is 150. With this value power estimation may take a couple of minutes in the context of the examples that follow.
 
 ```{r}
 set.seed(170824)
