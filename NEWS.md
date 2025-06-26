@@ -1,4 +1,4 @@
-# extraSuperpower (development version)
+# extraSuperpower 1.4.3
 
 # extraSuperpower 1.4.2
 
