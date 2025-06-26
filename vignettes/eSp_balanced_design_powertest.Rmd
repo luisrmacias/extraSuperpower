@@ -146,10 +146,11 @@ Lets start with the independent measurement experiment in which we expect there 
 We will use a low number of iterations for these examples. The coverage of the power calculations will be wide. The default value for `nsims` is 150. With this value power estimation may take a couple of minutes in the context of the examples that follow.
 
 ```{r}
+iterations <- 50
 set.seed(170824)
 n <- seq(6, 12, 3)
 indepmeasures_normal_sim <- simulate_twoway_nrange(matrices_obj = interaction_twoway,
-                                            nset = n, distribution = "normal", nsims = 10)
+                                            nset = n, distribution = "normal", nsims = iterations)
 length(indepmeasures_normal_sim)
 length(n)
 ```
@@ -161,7 +162,7 @@ To sample from a skewed normal distribution.
 ```{r}
 indepmeasures_skewed_sim <- simulate_twoway_nrange(matrices_obj = interaction_twoway,
                                             nset = n, distribution = "skewed", skewness = 2,
-                                            nsims = 10)
+                                            nsims = iterations)
 ```
 
 The same function is used to sample from a multivariate distribution but you must set the 'repeated_measurements' option to 'TRUE'.
@@ -169,7 +170,7 @@ The same function is used to sample from a multivariate distribution but you mus
 ```{r normally distributed repeated measures simulation}
 repmeasures_normal_sim <- simulate_twoway_nrange(matrices_obj = interaction_twoway_timewithin, 
                                                  nset = n, repeated_measurements = TRUE, 
-                                                 nsims = 10)
+                                                 nsims = iterations)
 ```
 
 To end this section, we sample from a multivariate skewed normal distribution. The skewness parameter must be length 1, $a$, $b$ or $ab$.
@@ -178,7 +179,7 @@ To end this section, we sample from a multivariate skewed normal distribution. T
 repmeasures_skewed_sim <- simulate_twoway_nrange(matrices_obj = interaction_twoway_timewithin, 
                                                  nset = n, repeated_measurements = TRUE,
                                                  distribution = "skewed", skewness=2,
-                                                 nsims = 10)
+                                                 nsims = iterations)
 ```
 
 ### Estimating power from simulated data
