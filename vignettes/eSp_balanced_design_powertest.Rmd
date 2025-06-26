@@ -143,11 +143,13 @@ Once we have set values for each combination of levels of factors $A$ and $B$ we
 
 Lets start with the independent measurement experiment in which we expect there will be interaction that we stored in the 'interaction_twoway' object. We will sample from the normal distribution, which is the default.
 
+We will use a low number of iterations for these examples. The default value for `nsims` is 150.
+
 ```{r}
 set.seed(170824)
-n <- seq(3, 12, 3)
+n <- seq(6, 12, 3)
 indepmeasures_normal_sim <- simulate_twoway_nrange(matrices_obj = interaction_twoway,
-                                            nset = n, distribution = "normal")
+                                            nset = n, distribution = "normal", nsims = 10)
 length(indepmeasures_normal_sim)
 length(n)
 ```
@@ -158,14 +160,16 @@ To sample from a skewed normal distribution.
 
 ```{r}
 indepmeasures_skewed_sim <- simulate_twoway_nrange(matrices_obj = interaction_twoway,
-                                            nset = n, distribution = "skewed", skewness = 2)
+                                            nset = n, distribution = "skewed", skewness = 2,
+                                            nsims = 10)
 ```
 
 The same function is used to sample from a multivariate distribution but you must set the 'repeated_measurements' option to 'TRUE'.
 
 ```{r normally distributed repeated measures simulation}
 repmeasures_normal_sim <- simulate_twoway_nrange(matrices_obj = interaction_twoway_timewithin, 
-                                                 nset = n, repeated_measurements = TRUE)
+                                                 nset = n, repeated_measurements = TRUE, 
+                                                 nsims = 10)
 ```
 
 To end this section, we sample from a multivariate skewed normal distribution. The skewness parameter must be length 1, $a$, $b$ or $ab$.
@@ -173,7 +177,8 @@ To end this section, we sample from a multivariate skewed normal distribution. T
 ```{r skewed repeated measures simulation}
 repmeasures_skewed_sim <- simulate_twoway_nrange(matrices_obj = interaction_twoway_timewithin, 
                                                  nset = n, repeated_measurements = TRUE,
-                                                 distribution = "skewed", skewness=2)
+                                                 distribution = "skewed", skewness=2,
+                                                 nsims = 10)
 ```
 
 ### Estimating power from simulated data

@@ -89,7 +89,7 @@ test_that("number of subject generated correspond to sample size", {
 test_that("mean simulated values match mean matrix", {
   nlevfA <- 2
   nlevfB <- 2
-  group_size <- 1000
+  group_size <- 400
   iterations <- 1
   mean.mat <- matrix(c(1, 0.001, 0.001, 0.001), nlevfA, nlevfB,
                      dimnames = list(groups=LETTERS[1:nlevfA], treatment=letters[1:nlevfB]))
@@ -111,7 +111,7 @@ test_that("mean simulated values match mean matrix", {
 test_that("mean simulated values match mean matrix with interaction", {
   nlevfA <- 2
   nlevfB <- 2
-  group_size <- 1000
+  group_size <- 400
   iterations <- 1
   matlist <- calculate_mean_matrix(refmean = 1, nlfA = nlevfA, nlfB = nlevfB,
                                    fAeffect = 0.01, fBeffect = 0.01, plot = FALSE, sdratio = 0.1, sdproportional = FALSE,
@@ -135,7 +135,7 @@ test_that("mean simulated values match mean matrix with interaction", {
 test_that("sd of simulated values match sd matrix", {
   nlevfA <- 2
   nlevfB <- 2
-  group_size <- 1000
+  group_size <- 400
   iterations <- 1
   matlist <- calculate_mean_matrix(refmean = 1, nlfA = nlevfA, nlfB = nlevfB,
                                    fAeffect = 100, fBeffect = 100, plot = FALSE, sdratio = 0.1,

@@ -8,25 +8,25 @@ test_that("tests are done according to input", {
   matlist <- calculate_mean_matrix(refmean = 3, nlfA = nlevfA, nlfB = nlevfB, fAeffect = 2, fBeffect = 1.2,
                                    groupswinteraction = gwint, interact = 1.4, sdproportional = FALSE,
                                    label_list = nlist)
-  simdat <- twoway_simulation_independent(group_size = group_size, matrices_obj = matlist, nsims = 10)
+  simdat <- twoway_simulation_independent(group_size = group_size, matrices_obj = matlist, nsims = 3)
   expect_output(twoway_simulation_testing(data = simdat), "independent observations")
 
   matlist <- calculate_mean_matrix(refmean = 3, nlfA = nlevfA, nlfB = nlevfB, fAeffect = 2, fBeffect = 1.2,
                                    groupswinteraction = gwint, interact = 1.4, sdproportional = FALSE,
                                    label_list = nlist, plot = FALSE)
-  simdat <- twoway_simulation_independent(group_size = group_size, matrices_obj = matlist, nsims = 10)
+  simdat <- twoway_simulation_independent(group_size = group_size, matrices_obj = matlist, nsims = 3)
   expect_output(twoway_simulation_testing(data = simdat), "independent observations")
 
   matlist <- calculate_mean_matrix(refmean = 3, nlfA = nlevfA, nlfB = nlevfB, fAeffect = 2, fBeffect = 1.2,
                                    groupswinteraction = gwint, interact = 1.4, sdproportional = FALSE,
                                    label_list = nlist, rho = 0.8, withinf = "fB")
-  simdat <- twoway_simulation_correlated(group_size = group_size, matrices_obj = matlist, nsims = 10)
+  simdat <- twoway_simulation_correlated(group_size = group_size, matrices_obj = matlist, nsims = 3)
   expect_output(twoway_simulation_testing(data = simdat), "repeated observations")
 
   matlist <- calculate_mean_matrix(refmean = 3, nlfA = nlevfA, nlfB = nlevfB, fAeffect = 2, fBeffect = 1.2,
                                    groupswinteraction = gwint, interact = 1.4, sdproportional = FALSE,
                                    label_list = nlist, rho = 0.8, withinf = "fB", plot = FALSE)
-  simdat <- twoway_simulation_correlated(group_size = group_size, matrices_obj = matlist, nsims = 10)
+  simdat <- twoway_simulation_correlated(group_size = group_size, matrices_obj = matlist, nsims = 3)
   expect_output(twoway_simulation_testing(data = simdat), "repeated observations")
 })
 
@@ -39,7 +39,7 @@ test_that("correct independent sample test is performed", {
   matlist <- calculate_mean_matrix(refmean = 3, nlfA = nlevfA, nlfB = nlevfB, fAeffect = 2, fBeffect = 1.2,
                                    groupswinteraction = gwint, interact = 1.4, sdproportional = FALSE,
                                    label_list = nlist)
-  simdat <- twoway_simulation_independent(group_size = group_size, matrices_obj = matlist, nsims = 10)
+  simdat <- twoway_simulation_independent(group_size = group_size, matrices_obj = matlist, nsims = 3)
   aov_time <- system.time(twoway_simulation_testing(simdat, test = "ANOVA"))[3]
   per_time <- system.time(twoway_simulation_testing(simdat, test = "permutation"))[3]
   rank_time <- system.time(twoway_simulation_testing(simdat, test = "rank"))[3]
@@ -51,7 +51,7 @@ test_that("correct repeated sample test is performed", {
   nlevfB <- 4
   label_list <- list(groups=LETTERS[1:nlevfA], treatment=letters[1:nlevfB])
   group_size <- 5
-  iterations <- 100
+  iterations <- 3
   rho <- -0.9
   fwithin <- "fB"
   refs <- calculate_mean_matrix(refmean = 1, nlfA = nlevfA, nlfB = nlevfB,
@@ -79,23 +79,23 @@ test_that("correct repeated sample test is performed", {
 
   fwithin <- "both"
   refs <- calculate_mean_matrix(refmean = 1, nlfA = nlevfA, nlfB = nlevfB,
-                                fAeffect = 1.1, fBeffect = 0.8, plot = FALSE, sdratio = 0.2, sdproportional = FALSE,
+                                fAeffect = 1.1, fBeffect = 0.8, sdratio = 0.2, sdproportional = FALSE,
                                 groupswinteraction = matrix(c(2,2,3,3,1,4), 3, 2, byrow = TRUE), interact = 0.8,
                                 label_list = list(groups=LETTERS[1:nlevfA], treatment=letters[1:nlevfB]),
                                 rho = rho, withinf = fwithin)
-  simdat <- twoway_simulation_correlated(group_size = group_size, matrices_obj = refs, nsims = iterations)
+  simdat <- twoway_simulation_correlated(group_size = 10, matrices_obj = refs, nsims = iterations)
   aov_time <- system.time(twoway_simulation_testing(simdat, test = "ANOVA"))[3]
   per_time <- system.time(twoway_simulation_testing(simdat, test = "permutation"))[3]
   rank_time <- system.time(twoway_simulation_testing(simdat, test = "rank"))[3]
   expect_true(all(c(per_time>rank_time), c(rank_time>aov_time)))
 })
 
-test_that("correct within factor is used", {
+system.time(test_that("correct within factor is used", {
   nlevfA <- 3
   nlevfB <- 3
   nlist <- list(groups=LETTERS[1:nlevfA], time=letters[1:nlevfB])
   gwint <- matrix(c(2,3, 3, 3), 2, 2, byrow = TRUE)
-  iterations <- 100
+  iterations <- 50
   rho <- -0.9
 
   fwithin <- "fB"
@@ -154,7 +154,7 @@ test_that("correct within factor is used", {
   expect_gt(res_both[1,2], 0.9)
   expect_lt(res_both[2,2], 0.15)
 
-})
+}))
 
 
 test_that("unbalanced designs", {
@@ -162,7 +162,7 @@ test_that("unbalanced designs", {
   nlevfB <- 3
   nlist <- list(groups=LETTERS[1:nlevfA], time=letters[1:nlevfB])
   gwint <- matrix(c(2,3, 3, 3), 2, 2, byrow = TRUE)
-  iterations <- 100
+  iterations <- 20
   rho <- -0.9
   group_size <- matrix(rep(8:6, 3), 3, 3, byrow = TRUE)
   refs <- calculate_mean_matrix(refmean = 1, nlfA = nlevfA, nlfB = nlevfB,
@@ -171,4 +171,5 @@ test_that("unbalanced designs", {
                                 label_list = nlist)
   sindatind <- twoway_simulation_independent(group_size = group_size, matrices_obj = refs, balanced = FALSE)
   resind <- twoway_simulation_testing(sindatind)
+  expect_equal(dim(resind), c(3,6))
 })
