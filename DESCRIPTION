@@ -1,5 +1,5 @@
 Package: extraSuperpower
-Title: Inspired by Package Superpower, this Package Calculates Power for Two-Way Factorial Designs
+Title: Power Calculation for Two-Way Factorial Designs
 Version: 1.4.3
 Authors@R: c(person(given = "Louis",
                       family = "Macias",
@@ -13,7 +13,7 @@ Authors@R: c(person(given = "Louis",
 Author: Louis Macias [aut, cre, cph] (ORCID = <https://orcid.org/0000-0002-3080-2835>),
   Silke Szymczak [aut] (ORCID = <https://orcid.org/0000-0002-8897-9035>)
 Maintainer: Louis Macias <louis.macias@uni-luebeck.de>
-Description: The basic use of this package is with 3 sequential functions. One to generate expected cell means and standard deviations, along with correlation and covariance matrices in the case of repeated measurements. This is followed by experiment simulation i number of times. Finally, power is calculated from the simulated data. Features that may be considered in the model are interaction and measure correlation.
+Description: The basic use of this package is with 3 sequential functions. One to generate expected cell means and standard deviations, along with correlation and covariance matrices in the case of repeated measurements. This is followed by experiment simulation i number of times. Finally, power is calculated from the simulated data. Features that may be considered in the model are interaction, measure correlation and non-normal distributions.
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2

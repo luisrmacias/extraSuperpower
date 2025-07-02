@@ -78,11 +78,11 @@ simulate_twoway_nrange <- function(matrices_obj, nset, balanced=TRUE, group_size
   }
   if(!repeated_measurements & (length(matrices_obj[[1]])==2 | length(matrices_obj)==2))
   {
-    print("Simulating independent observations experiment")
+    message("Simulating independent observations experiment")
     sim_overens <- lapply(testedns, twoway_simulation_independent, matrices_obj, balanced=balanced, distribution=distribution, skewness=skewness, inferior_limit=inferior_limit, superior_limit=superior_limit, nsims=nsims)
   } else if (repeated_measurements & (length(matrices_obj[[1]])==5 | length(matrices_obj)==5))
   {
-    print("Simulating repeated observations experiment")
+    message("Simulating repeated observations experiment")
     sim_overens <- lapply(testedns, twoway_simulation_correlated, matrices_obj, balanced=balanced, loss=loss, distribution=distribution, shape=shape, inferior_limit=inferior_limit, superior_limit=superior_limit, nsims=nsims)
   }
   sim_overens

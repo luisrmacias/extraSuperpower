@@ -9,25 +9,25 @@ test_that("tests are done according to input", {
                                    groupswinteraction = gwint, interact = 1.4, sdproportional = FALSE,
                                    label_list = nlist)
   simdat <- twoway_simulation_independent(group_size = group_size, matrices_obj = matlist, nsims = 3)
-  expect_output(twoway_simulation_testing(data = simdat), "independent observations")
+  expect_message(twoway_simulation_testing(data = simdat), "independent observations")
 
   matlist <- calculate_mean_matrix(refmean = 3, nlfA = nlevfA, nlfB = nlevfB, fAeffect = 2, fBeffect = 1.2,
                                    groupswinteraction = gwint, interact = 1.4, sdproportional = FALSE,
                                    label_list = nlist, plot = FALSE)
   simdat <- twoway_simulation_independent(group_size = group_size, matrices_obj = matlist, nsims = 3)
-  expect_output(twoway_simulation_testing(data = simdat), "independent observations")
+  expect_message(twoway_simulation_testing(data = simdat), "independent observations")
 
   matlist <- calculate_mean_matrix(refmean = 3, nlfA = nlevfA, nlfB = nlevfB, fAeffect = 2, fBeffect = 1.2,
                                    groupswinteraction = gwint, interact = 1.4, sdproportional = FALSE,
                                    label_list = nlist, rho = 0.8, withinf = "fB")
   simdat <- twoway_simulation_correlated(group_size = group_size, matrices_obj = matlist, nsims = 3)
-  expect_output(twoway_simulation_testing(data = simdat), "repeated observations")
+  expect_message(twoway_simulation_testing(data = simdat), "repeated observations")
 
   matlist <- calculate_mean_matrix(refmean = 3, nlfA = nlevfA, nlfB = nlevfB, fAeffect = 2, fBeffect = 1.2,
                                    groupswinteraction = gwint, interact = 1.4, sdproportional = FALSE,
                                    label_list = nlist, rho = 0.8, withinf = "fB", plot = FALSE)
   simdat <- twoway_simulation_correlated(group_size = group_size, matrices_obj = matlist, nsims = 3)
-  expect_output(twoway_simulation_testing(data = simdat), "repeated observations")
+  expect_message(twoway_simulation_testing(data = simdat), "repeated observations")
 })
 
 test_that("correct independent sample test is performed", {
@@ -90,7 +90,7 @@ test_that("correct repeated sample test is performed", {
   expect_true(all(c(per_time>rank_time), c(rank_time>aov_time)))
 })
 
-system.time(test_that("correct within factor is used", {
+test_that("correct within factor is used", {
   nlevfA <- 3
   nlevfB <- 3
   nlist <- list(groups=LETTERS[1:nlevfA], time=letters[1:nlevfB])
@@ -153,8 +153,7 @@ system.time(test_that("correct within factor is used", {
   expect_lt(res_fB[2,2], 0.15)
   expect_gt(res_both[1,2], 0.9)
   expect_lt(res_both[2,2], 0.15)
-
-}))
+})
 
 
 test_that("unbalanced designs", {

@@ -27,12 +27,7 @@ _A priori_ sample size calculation for two-way factorial designs. Inspired by pa
 
 extraSuperpower is available in CRAN.
 
-```{r package installation and loading}
-if(!"extraSuperpower" %in% installed.packages()[, "Package"])
-{
-  install.packages("extraSuperpower", upgrade = "never")
-} 
-
+```{r package loading}
 library(extraSuperpower)
 ```
 

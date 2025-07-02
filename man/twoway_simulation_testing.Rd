@@ -27,9 +27,6 @@ This functions takes the output of either the 'twoway_simulation_independent' or
 and calculates the power of the sample size used in the simulation under parametric analysis of variance, rank based analysis of variance or
 permutation testing.
 }
-\details{
-Permutation testing under a repeated measurements design may be very time consuming.
-}
 \examples{
 
 ## After creating a 'matrices_obj' with the 'calculate_mean_matrix' function.

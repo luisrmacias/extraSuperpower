@@ -4,7 +4,6 @@
 #' and calculates the power of the sample size used in the simulation under parametric analysis of variance, rank based analysis of variance or
 #' permutation testing.
 #'
-#' Permutation testing under a repeated measurements design may be very time consuming.
 #'
 #' @param data - Simulation obtained from the 'twoway_simulation_independent' or the 'twoway_simulation_correlated' functions.
 #' @param test - The test to be applied. Possible values are "ANOVA" (default), "rank" and "permutation".
@@ -68,7 +67,7 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
 
     withinf <- data$withinf
     simulation <- data$simulated_data
-    cat(paste("Testing power on a repeated observations design experiment.\n Sample size =", unique(simulation$n),"\n"))
+    message(paste("Testing power on a repeated observations design experiment.\n Sample size =", unique(simulation$n),"\n"))
     indep_vars <- names(simulation)[4:5]
     names(simulation)[4:5] <- c("indep_var1", "indep_var2")
     simulation <- split(simulation, simulation$iteration)
@@ -168,10 +167,10 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
     simulation <- split(data, data$iteration)
     if(length(unique(simulation[[1]]$n))==1)
     {
-      cat(paste("Testing power on an independent observations design experiment.\nSample size per group =", unique(simulation[[1]]$n), "\n"))
+      message(paste("Testing power on an independent observations design experiment.\nSample size per group =", unique(simulation[[1]]$n), "\n"))
     } else if (length(unique(simulation[[1]]$n))>1)
     {
-      cat(paste("Testing power on an independent observations design experiment.\nMean sample size per group =", round(mean(simulation[[1]]$n),1), "\n"))
+      message(paste("Testing power on an independent observations design experiment.\nMean sample size per group =", round(mean(simulation[[1]]$n),1), "\n"))
     }
 
     if(test=="ANOVA")
