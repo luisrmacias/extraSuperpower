@@ -75,20 +75,16 @@ test_that("graph options", {
 
 
 test_that("permutation is performed", {
-  tt <- system.time(test_power_overkn(data = simindep, plot = FALSE, test = "permutation"))[3]
-  expect_gt(object = tt, expected = 2.3)
+  expect_message(test_power_overkn(data = simindep, plot = FALSE, test = "permutation"), regexp = "permutation")
 
-  tt <- system.time(test_power_overkn(data = simrep, plot = FALSE, test = "permutation"))[3]
-  expect_gt(object = tt, expected = 3)
+  expect_message(test_power_overkn(data = simrep, plot = FALSE, test = "permutation"), regexp = "permutation")
 })
 
 
 test_that("rank is performed", {
-  tt <- system.time(test_power_overkn(data = simindep, plot = FALSE, test = "rank"))[3]
-  expect_gt(object = tt, expected = 0.35)
+  expect_message(test_power_overkn(data = simindep, plot = FALSE, test = "rank"), regexp = "rank")
 
-  tt <- system.time(test_power_overkn(data = simrep, plot = FALSE, test = "rank"))[3]
-  expect_gt(object = tt, expected = 0.3)
+  expect_message(test_power_overkn(data = simrep, plot = FALSE, test = "rank"), regexp = "rank")
 })
 
 test_that("unbalanced designs are tested", {

@@ -80,6 +80,7 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
         pvecnames <- rownames(suppressMessages(afex::aov_ez(id = "subject", dv = "y", within = "indep_var1", between = "indep_var2",  data = simulation[[1]])$anova_table))
         pvec <- pvec[c(2,1,3),]
         pvecnames <- pvecnames[c(2,1,3)]
+        message("Performing ANOVA testing on simulated data")
       } else if(test=="permutation")
       {
         ##cat(paste('Permutation testing with n=', mean(group_size), 'starts'))
@@ -89,6 +90,7 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
         pvec <- pvec[c(2,1,3),]
         pvecnames <- rownames(permuco::aovperm(fmla, data = simulation[[1]])$table)
         pvecnames <- pvecnames[c(2,1,3)]
+        message("Performing permutation testing on simulated data")
       } else if(test=="rank")
       {
         pvec <- NULL
@@ -101,6 +103,7 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
         }
         pvec <- pvec[c(2,1,3),]
         pvecnames <- c("indep_var1", "indep_var2", "indep_var1:indep_var2" )
+        message("Performing rank testing on simulated data")
       }
     } else if (withinf=="fB")
     {
@@ -109,7 +112,7 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
         pvec <- sapply(simulation, function(i)
           suppressMessages(suppressWarnings(afex::aov_ez(id="subject", dv="y", between="indep_var1", within="indep_var2", data=i)$anova_table))$`Pr(>F)`)
         pvecnames <- rownames(suppressMessages(afex::aov_ez(id = "subject", dv = "y", between = "indep_var1", within = "indep_var2",  data = simulation[[1]])$anova_table))
-
+        message("Performing ANOVA testing on simulated data")
       } else if(test=="permutation")
       {
         ##checkFunction()
@@ -118,7 +121,7 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
         pvec <- sapply(simulation,
                        function(i) permuco::aovperm(fmla, data = i)$table$`resampled P(>F)`)
         pvecnames <- rownames(permuco::aovperm(fmla, data = simulation[[1]])$table)
-
+        message("Performing permutation testing on simulated data")
       } else if(test=="rank")
       {
         pvec <- NULL
@@ -130,6 +133,7 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
           pvec <- cbind(pvec, res)
         }
         pvecnames <- c("indep_var1", "indep_var2", "indep_var1:indep_var2" )
+        message("Performing rank testing on simulated data")
       }
     } else if (withinf=="both")
     {
@@ -138,6 +142,7 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
         pvec <- sapply(simulation, function(i)
           suppressMessages(suppressWarnings(afex::aov_ez(id="subject", dv="y", within=c("indep_var1", "indep_var2"), data=i)$anova_table))$`Pr(>F)`)
         pvecnames <- rownames(suppressMessages(afex::aov_ez(id = "subject", dv = "y", within = c("indep_var1", "indep_var2"),  data = simulation[[1]])$anova_table))
+        message("Performing ANOVA testing on simulated data")
       }else if(test=="permutation")
       {
         ##checkFunction()
@@ -145,7 +150,7 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
         fmla <- as.formula("y ~ indep_var1*indep_var2+ Error(subject/indep_var1 + indep_var2)")
         pvec <- sapply(simulation, function(i) permuco::aovperm(fmla, data = i)$table$`resampled P(>F)`)
         pvecnames <- rownames(permuco::aovperm(fmla, data = simulation[[1]])$table)
-
+        message("Performing permutation testing on simulated data")
       } else if(test=="rank")
       {
         pvec <- NULL
@@ -157,6 +162,7 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
           pvec <- cbind(pvec, res)
         }
         pvecnames <- c("indep_var1", "indep_var2", "indep_var1:indep_var2" )
+        message("Performing rank testing on simulated data")
       }
     }
     pvecnames <- gsub("indep_var1", indep_vars[1], pvecnames)
@@ -179,12 +185,14 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
       pvec <- sapply(simulation,
                      function(i) suppressMessages(afex::aov_car(frml, i)$anova_table$`Pr(>F)`))
       pvecnames <- rownames(suppressMessages(afex::aov_car(frml, simulation[[1]])$anova_table))
+      message("Performing ANOVA testing on simulated data")
     } else if(test=="rank")
     {
       frml <- as.formula(paste("y ~ ", indep_vars[1], "*", indep_vars[2]))
       pvec <- sapply(simulation,
                      function(i) Rfit::raov(frml, i)$table[,5])
       pvecnames <- rownames(pvec)
+      message("Performing rank testing on simulated data")
     } else if(test=="permutation")
     {
       frml <- as.formula(paste("y ~ ", indep_vars[1], "*", indep_vars[2]))
@@ -195,6 +203,7 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
                        })
       pvecnames <- rownames(permuco::aovperm(frml, simulation[[1]])$table)
       pvecnames <- pvecnames[-grep("Residuals", pvecnames)]
+      message("Performing permutation testing on simulated data")
     }
   }
   pprops <- rowSums(pvec<alpha)/ncol(pvec)
