@@ -21,11 +21,15 @@ knitr::opts_chunk$set(
 library(extraSuperpower)
 ```
 
-_A priori_ sample size calculation for two-way factorial designs. Inspired by package Superpower by Daniel Lakens and Aaron R. Caldwell, this package simulates two-way factorial experiments to estimate the power of a given sample size to identify main and interaction effects. Both independent and repeated measurements can be simulated. Outcomes can be sampled from normal, skewed normal or truncated normal distributions.
+_A priori_ sample size calculation for two-way factorial designs. Inspired by package `Superpower` by Daniel Lakens and Aaron R. Caldwell, this package simulates two-way factorial experiments to estimate the power of a given sample size to identify main and interaction effects. Both independent and repeated measurements can be simulated. Outcomes can be sampled from normal, skewed normal or truncated normal distributions.
 
 ## Installation
 
 extraSuperpower is available in CRAN.
+
+```{r installation, eval=FALSE}
+install.packages('extraSuperpower')
+```
 
 ```{r package loading}
 library(extraSuperpower)

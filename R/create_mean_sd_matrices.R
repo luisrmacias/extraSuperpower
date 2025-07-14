@@ -1,9 +1,9 @@
 #' Create input for simulation based two-way factorial experiments
 #'
-#' The calculate_mean_matrix will generate a matrix of expected mean values for i*j group combinations of a two-way
-#' factorial design, as well as a standard deviation matrix for these i*j groups.
+#' The calculate_mean_matrix will generate a matrix of expected mean values for *ij* group combinations of a two-way
+#' factorial design, as well as a standard deviation matrix for these *ij* groups.
 #' If the design has repeated measures it will additionally provide correlation and covariance matrices calculated
-#' depending on which factors are 'within' factors in the design.
+#' depending on which factors are 'within' factors or repeated measurements in the design.
 #'
 #' The user must provide a reference mean (usually mean in control or untreated group), the expected change for each factor
 #' from one level to the next (or from the first to last level) and the number of levels in each factor.
@@ -12,8 +12,8 @@
 #' magnitude with respect to the reference mean, the expected change in the cell means will be incorporated to the
 #' aforementioned matrices.
 #'
-#' We were motivated by sample size calculation for two-way factorial designs with a,b,...,i levels of factor A and
-#' a,b,...,j levels of factor B in which the mean outcome value for replicates of cell A=a and B=a are known.
+#' We were motivated by sample size calculation for two-way factorial designs with *1,2,...,i* levels of factor *A* and
+#' *1,2,...,j* levels of factor *B* in which the mean outcome value for replicates of cell *A~1~, B~1~* are known.
 #' Furthermore, there is an expected change in level mean for each of the factors. Finally, interaction can be explicitly
 #' introduced to level combinations in which it is expected to occur.
 #'
@@ -24,7 +24,7 @@
 #' @param fBeffect Numeric - multiple by which the refmean is modified when going from one level to the next of factor B when endincrement is FALSE (default), or multiple by which the last level of factor B is modified with respect to refmean when endincrement is TRUE
 #' @param groupswinteraction vector length 2 or n*2 matrix - Combination of levels from factors A and B in which interaction is expected
 #' @param interact Numeric - value by which the mean from cell or cells indicated in groupswinteraction is multiplied after it has been calculated accordingly to fAeffect and fBeffect
-#' @param label_list List length 2 - vectors with the names of the factor levels. The objects in this list should be named as the factors. The use of this option is encouraged as these names are inherited to ANOVA_design.
+#' @param label_list List length 2 - vectors with the names of the factor levels. The objects in this list should be named as the factors. The use of this option is encouraged as these names are used for plotting and inherited to downstream functions.
 #' @param sdproportional Logical - whether the standard deviation for each combination of factor levels is a proportion of the respective factor level combination mean, defaults to TRUE
 #' @param sdratio Numeric - value by which the expected mean value of a factor level combination is multiplied to obtain the respective standard deviation, defaults to 0.2.
 #' @param endincrement Logical - determines if the multiples provided in fAeffect and fBeffect refer to change between first and last levels (default) or level to level changes.
@@ -137,20 +137,26 @@ calculate_mean_matrix <- function(refmean, nlfA, nlfB, fAeffect, fBeffect, group
       warning("\nBy setting '0' effects and proportional SD you will obtain groups with standard deviation\nof 0 and individuals with 0 covariance.")
     }
   }
+
+  # Bincrements <- fAvec[-1] - fAvec[1]
+  # effmat <- t(sapply(1:length(Bincrements), function(x) fBvec[-1] + Bincrements[x]))
+  # if(nlfB>2)
+  # {
+  #   effmat <- rbind(fBvec[-1], effmat)
+  # } else if (nlfB==2)
+  # {
+  #   effmat <- c(fBvec[-1], effmat)
+  # }
+  # effmat <- cbind(fAvec, effmat)
+  # dimnames(effmat) <- label_list
+
   ## Generation of mean matrix
   fAvec <- genvecs(change = fAeffect, reps = nlfA, bystart = endincrement, scaler = refmean)
   fBvec <- genvecs(change = fBeffect, reps = nlfB, bystart = endincrement, scaler = refmean)
-  Bincrements <- fAvec[-1] - fAvec[1]
-  effmat <- t(sapply(1:length(Bincrements), function(x) fBvec[-1] + Bincrements[x]))
-  if(nlfB>2)
-  {
-    effmat <- rbind(fBvec[-1], effmat)
-  } else if (nlfB==2)
-  {
-    effmat <- c(fBvec[-1], effmat)
-  }
-  effmat <- cbind(fAvec, effmat)
-  dimnames(effmat) <- label_list
+
+  effmat <- build_mean_mat(fAvec = fAvec, fBvec = fBvec, iA = fAeffect, a = nlfA, b = nlfB,
+                           label_list = label_list, bystart=endincrement)
+
   ## Modify mean matrix depending on interaction terms
   if(interact!=1)
   {

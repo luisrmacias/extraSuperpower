@@ -6,13 +6,13 @@ test_that("data entry type for labels", {
   labels <- letters[1:4]
   expect_error(calculate_mean_matrix(refmean = 10, nlfA = fA, nlfB = fB,
                                      fAeffect = fAeff, fBeffect = fbeff,
-                                     label_list = labels))
+                                     label_list = labels), regexp = "Label names")
 
 
   labels <- list(fA=letters[1:2], fB=LETTERS[1])
   expect_error(calculate_mean_matrix(refmean = 10, nlfA = fA, nlfB = fB,
                                      fAeffect = fAeff, fBeffect = fbeff,
-                                     label_list = labels))
+                                     label_list = labels), regexp = "Number of labels")
 
 
 })
@@ -26,7 +26,7 @@ test_that("rho value is checked", {
   fwithin <- "fB"
   expect_error(calculate_mean_matrix(refmean = 10, nlfA = fA, nlfB = fB,
                                      fAeffect = faeff, fBeffect = fbeff,
-                                     rho = rho, withinf = fwithin))
+                                     rho = rho, withinf = fwithin), regexp = "Rho")
 })
 
 

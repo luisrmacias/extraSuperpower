@@ -40,13 +40,12 @@ test_that("correct independent sample test is performed", {
                                    groupswinteraction = gwint, interact = 1.4, sdproportional = FALSE,
                                    label_list = nlist)
   simdat <- twoway_simulation_independent(group_size = group_size, matrices_obj = matlist, nsims = 3)
-  aov_time <- system.time(twoway_simulation_testing(simdat, test = "ANOVA"))[3]
-  per_time <- system.time(twoway_simulation_testing(simdat, test = "permutation"))[3]
-  rank_time <- system.time(twoway_simulation_testing(simdat, test = "rank"))[3]
-  expect_true(all(c(per_time>rank_time), c(rank_time>aov_time)))
+  expect_message(twoway_simulation_testing(simdat),regexp = "ANOVA")
+  expect_message(twoway_simulation_testing(simdat, test = "permutation"), regexp = "permutation")
+  expect_message(twoway_simulation_testing(simdat, test = "rank"), regexp = "rank")
 })
 
-test_that("correct repeated sample test is performed", {
+test_that("correct repeated measures test is performed", {
   nlevfA <- 3
   nlevfB <- 4
   label_list <- list(groups=LETTERS[1:nlevfA], treatment=letters[1:nlevfB])
@@ -60,10 +59,9 @@ test_that("correct repeated sample test is performed", {
                                 label_list = list(groups=LETTERS[1:nlevfA], treatment=letters[1:nlevfB]),
                                 rho = rho, withinf = fwithin)
   simdat <- twoway_simulation_correlated(group_size = group_size, matrices_obj = refs, nsims = iterations)
-  aov_time <- system.time(twoway_simulation_testing(simdat, test = "ANOVA"))[3]
-  per_time <- system.time(twoway_simulation_testing(simdat, test = "permutation"))[3]
-  rank_time <- system.time(twoway_simulation_testing(simdat, test = "rank"))[3]
-  expect_true(all(c(per_time>rank_time), c(rank_time>aov_time)))
+  expect_message(twoway_simulation_testing(simdat),regexp = "ANOVA")
+  expect_message(twoway_simulation_testing(simdat, test = "permutation"), regexp = "permutation")
+  expect_message(twoway_simulation_testing(simdat, test = "rank"), regexp = "rank")
 
   fwithin <- "fA"
   refs <- calculate_mean_matrix(refmean = 1, nlfA = nlevfA, nlfB = nlevfB,
@@ -72,10 +70,9 @@ test_that("correct repeated sample test is performed", {
                                 label_list = list(groups=LETTERS[1:nlevfA], treatment=letters[1:nlevfB]),
                                 rho = rho, withinf = fwithin)
   simdat <- twoway_simulation_correlated(group_size = group_size, matrices_obj = refs, nsims = iterations)
-  aov_time <- system.time(twoway_simulation_testing(simdat, test = "ANOVA"))[3]
-  per_time <- system.time(twoway_simulation_testing(simdat, test = "permutation"))[3]
-  rank_time <- system.time(twoway_simulation_testing(simdat, test = "rank"))[3]
-  expect_true(all(c(per_time>rank_time), c(rank_time>aov_time)))
+  expect_message(twoway_simulation_testing(simdat),regexp = "ANOVA")
+  expect_message(twoway_simulation_testing(simdat, test = "permutation"), regexp = "permutation")
+  expect_message(twoway_simulation_testing(simdat, test = "rank"), regexp = "rank")
 
   fwithin <- "both"
   refs <- calculate_mean_matrix(refmean = 1, nlfA = nlevfA, nlfB = nlevfB,
@@ -84,10 +81,9 @@ test_that("correct repeated sample test is performed", {
                                 label_list = list(groups=LETTERS[1:nlevfA], treatment=letters[1:nlevfB]),
                                 rho = rho, withinf = fwithin)
   simdat <- twoway_simulation_correlated(group_size = 10, matrices_obj = refs, nsims = iterations)
-  aov_time <- system.time(twoway_simulation_testing(simdat, test = "ANOVA"))[3]
-  per_time <- system.time(twoway_simulation_testing(simdat, test = "permutation"))[3]
-  rank_time <- system.time(twoway_simulation_testing(simdat, test = "rank"))[3]
-  expect_true(all(c(per_time>rank_time), c(rank_time>aov_time)))
+  expect_message(twoway_simulation_testing(simdat),regexp = "ANOVA")
+  expect_message(twoway_simulation_testing(simdat, test = "permutation"), regexp = "permutation")
+  expect_message(twoway_simulation_testing(simdat, test = "rank"), regexp = "rank")
 })
 
 test_that("correct within factor is used", {

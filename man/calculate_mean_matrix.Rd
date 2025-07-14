@@ -36,7 +36,7 @@ calculate_mean_matrix(
 
 \item{interact}{Numeric - value by which the mean from cell or cells indicated in groupswinteraction is multiplied after it has been calculated accordingly to fAeffect and fBeffect}
 
-\item{label_list}{List length 2 - vectors with the names of the factor levels. The objects in this list should be named as the factors. The use of this option is encouraged as these names are inherited to ANOVA_design.}
+\item{label_list}{List length 2 - vectors with the names of the factor levels. The objects in this list should be named as the factors. The use of this option is encouraged as these names are used for plotting and inherited to downstream functions.}
 
 \item{sdproportional}{Logical - whether the standard deviation for each combination of factor levels is a proportion of the respective factor level combination mean, defaults to TRUE}
 
@@ -58,10 +58,10 @@ The first consist of two matrices, one of expected means for each cell of the tw
 If rho is between -1 and 1 but different to 0 and whithinf is either "fA", "fB" or "both", along with the above mentioned output the output will include correlation and covariance matrices.
 }
 \description{
-The calculate_mean_matrix will generate a matrix of expected mean values for i\emph{j group combinations of a two-way
-factorial design, as well as a standard deviation matrix for these i}j groups.
+The calculate_mean_matrix will generate a matrix of expected mean values for \emph{ij} group combinations of a two-way
+factorial design, as well as a standard deviation matrix for these \emph{ij} groups.
 If the design has repeated measures it will additionally provide correlation and covariance matrices calculated
-depending on which factors are 'within' factors in the design.
+depending on which factors are 'within' factors or repeated measurements in the design.
 }
 \details{
 The user must provide a reference mean (usually mean in control or untreated group), the expected change for each factor
@@ -71,8 +71,8 @@ Also, if the user specifies factor level combinations which are expected to pres
 magnitude with respect to the reference mean, the expected change in the cell means will be incorporated to the
 aforementioned matrices.
 
-We were motivated by sample size calculation for two-way factorial designs with a,b,...,i levels of factor A and
-a,b,...,j levels of factor B in which the mean outcome value for replicates of cell A=a and B=a are known.
+We were motivated by sample size calculation for two-way factorial designs with \emph{1,2,...,i} levels of factor \emph{A} and
+\emph{1,2,...,j} levels of factor \emph{B} in which the mean outcome value for replicates of cell \emph{A~1~, B~1~} are known.
 Furthermore, there is an expected change in level mean for each of the factors. Finally, interaction can be explicitly
 introduced to level combinations in which it is expected to occur.
 
