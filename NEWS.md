@@ -1,3 +1,5 @@
+# extraSuperpower 1.5.0
+
 * Tests for type of statistical test used now rely on displayed message.
 
 # extraSuperpower (development version)
