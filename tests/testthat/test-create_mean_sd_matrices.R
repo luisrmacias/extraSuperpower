@@ -162,7 +162,7 @@ test_that("factor A end effect ratio", {
   faeff <- 2
   fA <- 2
   mean_mat <- calculate_mean_matrix(refmean = 10, nlfA = fA, nlfB = 4,
-                                    fAeffect = faeff, fBeffect = 1, endincrement = TRUE,
+                                    fAeffect = faeff, fBeffect = 1, endincrement = FALSE,
                                     plot = FALSE)[[1]]
   f1.1 <- mean_mat[1,1]
   fanext.1 <- mean_mat[2,1]
@@ -170,7 +170,7 @@ test_that("factor A end effect ratio", {
 
   fA <- 5
   mean_mat <- calculate_mean_matrix(refmean = 10, nlfA = fA, nlfB = 4,
-                                    fAeffect = faeff, fBeffect = 3, endincrement = TRUE,
+                                    fAeffect = faeff, fBeffect = 3, endincrement = FALSE,
                                     plot = FALSE)[[1]]
   f1.1 <- mean_mat[1,1]
   fanext.1 <- mean_mat[2,1]
@@ -183,7 +183,7 @@ test_that("factor B end effect ratio", {
   fbeff <- 3
   fB <- 2
   mean_mat <- calculate_mean_matrix(refmean = 10, nlfA = fA, nlfB = fB,
-                                    fAeffect = faeff, fBeffect = fbeff, endincrement = TRUE,
+                                    fAeffect = faeff, fBeffect = fbeff, endincrement = FALSE,
                                     plot = FALSE)[[1]]
   f1.1 <- mean_mat[1,1]
   fbnext.1 <- mean_mat[1,2]
@@ -194,7 +194,7 @@ test_that("factor B end effect ratio", {
   fbeff <- 3
   fB <- 4
   mean_mat <- calculate_mean_matrix(refmean = 10, nlfA = fA, nlfB = fB,
-                                    fAeffect = faeff, fBeffect = fbeff, endincrement = TRUE,
+                                    fAeffect = faeff, fBeffect = fbeff, endincrement = FALSE,
                                     plot = FALSE)[[1]]
   f1.1 <- mean_mat[1,1]
   fbnext.1 <- mean_mat[1,2]
@@ -242,13 +242,13 @@ test_that("interaction modelled as defined with end effect", {
   intereff <- 1.5
   int_mean_mat <- calculate_mean_matrix(refmean = 10, nlfA = fA, nlfB = fB,
                                         fAeffect = faeff, fBeffect = fbeff,
-                                        endincrement = TRUE,
+                                        endincrement = FALSE,
                                         groupswinteraction = ginteract, interact = intereff,
                                         plot = FALSE)[[1]]
 
   noint_mean_mat <- calculate_mean_matrix(refmean = 10, nlfA = fA, nlfB = fB,
                                           fAeffect = faeff, fBeffect = fbeff,
-                                          endincrement = TRUE,
+                                          endincrement = FALSE,
                                           plot = FALSE)[[1]]
   rowindices <- unique(ginteract[,1])
   colindices <- unique(ginteract[,2])

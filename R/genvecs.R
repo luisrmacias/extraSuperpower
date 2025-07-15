@@ -12,7 +12,7 @@
 if(getRversion() >= "2.15.1")  utils::globalVariables(c("refmean", "n", "power", "effect", "y", "mean.group.size", "lower.bound.ci", "upper.bound.ci"))
 
 
-genvecs <- function(change, reps, bystart=FALSE, scaler=refmean)
+genvecs <- function(change, reps, bystart=TRUE, scaler=refmean)
 {
   if(reps%%1>0 | reps<=0)
   {stop("Number of factor levels (nlfA and nlfB) must be positive integers")}
@@ -20,13 +20,13 @@ genvecs <- function(change, reps, bystart=FALSE, scaler=refmean)
   {stop("Effect sizes (fAeffect and fBeffect) must be numeric")}
   if(change<0)
   {stop("Effect sizes (fAeffect and fBeffect) must be positive")}
-  if(bystart)
+  if(!bystart)
   {
     reps <- reps-1
     increments <- scaler*change - scaler
     increments <- increments*(1:reps)
     increments <- c(1, 1+ (increments/scaler))
-  } else if (!bystart)
+  } else if (bystart)
   {
     increments <- seq(1, change, length.out=reps)
   }

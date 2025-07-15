@@ -10,9 +10,9 @@ test_that("matrices dimensions", {
   mean_mat <- build_mean_mat(fAvec = fAvec, fBvec = fBvec, iA = iA, a, b, label_list = fnames)
   expect_equal(dim(mean_mat), c(a, b))
 
-  fAvec <- genvecs(change = iA, reps = a, bystart = TRUE, scaler = 10)
-  fBvec <- genvecs(change = iB, reps = b, bystart = TRUE, scaler = 10)
-  mean_mat <- build_mean_mat(fAvec = fAvec, fBvec = fBvec, iA = iA, a, b, label_list = fnames, bystart = TRUE)
+  fAvec <- genvecs(change = iA, reps = a, bystart = FALSE, scaler = 10)
+  fBvec <- genvecs(change = iB, reps = b, bystart = FALSE, scaler = 10)
+  mean_mat <- build_mean_mat(fAvec = fAvec, fBvec = fBvec, iA = iA, a, b, label_list = fnames, bystart = FALSE)
   expect_equal(dim(mean_mat), c(a, b))
 
   a <- 4
@@ -23,9 +23,9 @@ test_that("matrices dimensions", {
   mean_mat <- build_mean_mat(fAvec = fAvec, fBvec = fBvec, iA = iA, a, b, label_list = fnames)
   expect_equal(dim(mean_mat), c(a, b))
 
-  fAvec <- genvecs(change = iA, reps = a, bystart = TRUE, scaler = 10)
-  fBvec <- genvecs(change = iB, reps = b, bystart = TRUE, scaler = 10)
-  mean_mat <- build_mean_mat(fAvec = fAvec, fBvec = fBvec, iA = iA, a, b, label_list = fnames, bystart = TRUE)
+  fAvec <- genvecs(change = iA, reps = a, bystart = FALSE, scaler = 10)
+  fBvec <- genvecs(change = iB, reps = b, bystart = FALSE, scaler = 10)
+  mean_mat <- build_mean_mat(fAvec = fAvec, fBvec = fBvec, iA = iA, a, b, label_list = fnames, bystart = FALSE)
   expect_equal(dim(mean_mat), c(a, b))
 })
 
@@ -126,18 +126,18 @@ test_that("factor A end effect ratio", {
   a  <- 2
   b  <- 4
   fnames <- list(fA=letters[1:a], fB=1:b)
-  fAvec <- genvecs(change = iA, reps = a, bystart = TRUE, scaler = 10)
-  fBvec <- genvecs(change = iB, reps = b, bystart = TRUE, scaler = 10)
-  mean_mat <- build_mean_mat(fAvec = fAvec, fBvec = fBvec, iA = iA, a, b, label_list = fnames, bystart = TRUE)
+  fAvec <- genvecs(change = iA, reps = a, bystart = FALSE, scaler = 10)
+  fBvec <- genvecs(change = iB, reps = b, bystart = FALSE, scaler = 10)
+  mean_mat <- build_mean_mat(fAvec = fAvec, fBvec = fBvec, iA = iA, a, b, label_list = fnames, bystart = FALSE)
   f1.1 <- mean_mat[1,1]
   fanext.1 <- mean_mat[2,1]
   expect_equal(fanext.1/f1.1, iA)
 
   a <- 5
   fnames <- list(fA=letters[1:a], fB=1:b)
-  fAvec <- genvecs(change = iA, reps = a, bystart = TRUE, scaler = 10)
-  fBvec <- genvecs(change = iB, reps = b, bystart = TRUE, scaler = 10)
-  mean_mat <- build_mean_mat(fAvec = fAvec, fBvec = fBvec, iA = iA, a, b, label_list = fnames, bystart = TRUE)
+  fAvec <- genvecs(change = iA, reps = a, bystart = FALSE, scaler = 10)
+  fBvec <- genvecs(change = iB, reps = b, bystart = FALSE, scaler = 10)
+  mean_mat <- build_mean_mat(fAvec = fAvec, fBvec = fBvec, iA = iA, a, b, label_list = fnames, bystart = FALSE)
   f1.1 <- mean_mat[1,1]
   fanext.1 <- mean_mat[2,1]
   expect_equal(fanext.1/f1.1, iA)
@@ -150,9 +150,9 @@ test_that("factor B end effect ratio", {
   a <- 4
   b <- 2
   fnames <- list(fA=letters[1:a], fB=1:b)
-  fAvec <- genvecs(change = iA, reps = a, bystart = TRUE, scaler = 10)
-  fBvec <- genvecs(change = iB, reps = b, bystart = TRUE, scaler = 10)
-  mean_mat <- build_mean_mat(fAvec = fAvec, fBvec = fBvec, iA = iA, a, b, label_list = fnames, bystart = TRUE)
+  fAvec <- genvecs(change = iA, reps = a, bystart = FALSE, scaler = 10)
+  fBvec <- genvecs(change = iB, reps = b, bystart = FALSE, scaler = 10)
+  mean_mat <- build_mean_mat(fAvec = fAvec, fBvec = fBvec, iA = iA, a, b, label_list = fnames, bystart = FALSE)
   f1.1 <- mean_mat[1,1]
   fbnext.1 <- mean_mat[1,2]
   expect_equal(fbnext.1/f1.1, iB)
@@ -162,9 +162,9 @@ test_that("factor B end effect ratio", {
   a  <- 5
   b  <- 4
   fnames <- list(fA=letters[1:a], fB=1:b)
-  fAvec <- genvecs(change = iA, reps = a, bystart = TRUE, scaler = 10)
-  fBvec <- genvecs(change = iB, reps = b, bystart = TRUE, scaler = 10)
-  mean_mat <- build_mean_mat(fAvec = fAvec, fBvec = fBvec, iA = iA, a, b, label_list = fnames, bystart = TRUE)
+  fAvec <- genvecs(change = iA, reps = a, bystart = FALSE, scaler = 10)
+  fBvec <- genvecs(change = iB, reps = b, bystart = FALSE, scaler = 10)
+  mean_mat <- build_mean_mat(fAvec = fAvec, fBvec = fBvec, iA = iA, a, b, label_list = fnames, bystart = FALSE)
   f1.1 <- mean_mat[1,1]
   fbnext.1 <- mean_mat[1,2]
   expect_equal(fbnext.1/f1.1, iB)
@@ -178,9 +178,9 @@ test_that("combined A and B end effect", {
   b <- 4
 
   fnames <- list(fA=letters[1:a], fB=1:b)
-  fAvec <- genvecs(change = iA, reps = a, bystart = TRUE, scaler = 10)
-  fBvec <- genvecs(change = iB, reps = b, bystart = TRUE, scaler = 10)
-  mean_mat <- build_mean_mat(fAvec = fAvec, fBvec = fBvec, iA = iA, a, b, label_list = fnames, bystart = TRUE)
+  fAvec <- genvecs(change = iA, reps = a, bystart = FALSE, scaler = 10)
+  fBvec <- genvecs(change = iB, reps = b, bystart = FALSE, scaler = 10)
+  mean_mat <- build_mean_mat(fAvec = fAvec, fBvec = fBvec, iA = iA, a, b, label_list = fnames, bystart = FALSE)
   betaA <- unique(diff(fAvec))
   betaB <- diff(fBvec)[1]
   cellab <-  1+(betaA*(a-1))+(betaB*(b-1))
@@ -194,9 +194,9 @@ test_that("combined A and B end effect", {
   b <- 3
 
   fnames <- list(fA=letters[1:a], fB=1:b)
-  fAvec <- genvecs(change = iA, reps = a, bystart = TRUE, scaler = 10)
-  fBvec <- genvecs(change = iB, reps = b, bystart = TRUE, scaler = 10)
-  mean_mat <- build_mean_mat(fAvec = fAvec, fBvec = fBvec, iA = iA, a, b, label_list = fnames, bystart = TRUE)
+  fAvec <- genvecs(change = iA, reps = a, bystart = FALSE, scaler = 10)
+  fBvec <- genvecs(change = iB, reps = b, bystart = FALSE, scaler = 10)
+  mean_mat <- build_mean_mat(fAvec = fAvec, fBvec = fBvec, iA = iA, a, b, label_list = fnames, bystart = FALSE)
   betaA <- unique(diff(fAvec))
   betaB <- diff(fBvec)[1]
   cellab <-  1+(betaA*(a-1))+(betaB*(b-1))
