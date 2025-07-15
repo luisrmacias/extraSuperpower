@@ -1,47 +1,50 @@
 #' Create input for simulation based two-way factorial experiments
 #'
 #' This function will generate a matrix of expected mean values for *ab* factor level combinations of a two-way
-#' factorial design by assuming linear effects. It will also provide a standard deviation matrix for these *ab*
-#' combinations of factor levels. If the design has repeated measures, it will additionally provide correlation
-#' and covariance matrices calculated depending on which factor is the 'within' factor or repeated measurements
-#' in the design.
-#'
-#' The user must provide a reference mean (usually mean in control or untreated group), the expected change for each factor
-#' from one level to the next (or from the first to last level) and the number of levels in each factor.
-#'
-#' Also, if the user specifies factor level combinations which are expected to present interaction and its
-#' magnitude with respect to the reference mean, the expected change in the cell means will be incorporated to the
-#' aforementioned matrices.
-#'
-#' We were motivated by sample size calculation for two-way factorial designs with *1,2,...,i* levels of factor *A* and
-#' *1,2,...,j* levels of factor *B* in which the mean outcome value for replicates of cell *A=1, B=1* are known.
-#' Furthermore, there is an expected change in level mean for each of the factors. Finally, interaction can be explicitly
-#' introduced to level combinations in which it is expected to occur.
+#' factorial design by assuming linear effects with possible departure from linearity by interaction. It will also
+#' provide a standard deviation matrix for these *ab* combinations of factor levels. If the design has repeated measures,
+#' it will additionally provide correlation and covariance matrices calculated depending on which factor has repeated
+#' measurements or is the 'within' factor.
 #'
 #' @param refmean Numeric - expected mean for first level of both factors A and B
 #' @param nlfA Integer - number of levels of factor A
 #' @param nlfB integer - number of levels of factor B
-#' @param fAeffect Numeric - multiple that defines how cell means are modified by factor A. With the default `endincrement` (`TRUE`), the value for the last level of factor A is obtained by multiplying `refmean` by this parameter. When `endincrement=FALSE` this multiple applies from one level to the next.
-#' @param fBeffect Numeric - multiple that defines how cell means are modified by factor B. With the default `endincrement` (`TRUE`), the value for the last level of factor B is obtained by multiplying `refmean` by this parameter. When `endincrement=FALSE` this multiple applies from one level to the next.
+#' @param fAeffect Numeric - multiple that defines how cell means are modified by factor A. With the default `endincrement` (`TRUE`), determines the last level of factor A with respect to its first level. When `endincrement=FALSE` this multiple applies from one level to the next.
+#' @param fBeffect Numeric - multiple that defines how cell means are modified by factor B. With the default `endincrement` (`TRUE`), determines the last level of factor B with respect to its first level. When `endincrement=FALSE` this multiple applies from one level to the next.
 #' @param groupswinteraction vector length 2 or n*2 matrix - Combination of levels from factors A and B in which interaction is expected
 #' @param interact Numeric - value by which the mean from cell or cells indicated in `groupswinteraction` is multiplied after it has been calculated accordingly to `fAeffect` and `fBeffect`
 #' @param label_list List length 2 - vectors with the names of the factor levels. The objects in this list should be named as the factors. The use of this option is encouraged as these names are used for plotting and inherited to downstream functions.
 #' @param sdproportional Logical - whether the standard deviation for each combination of factor levels is a proportion of the respective factor level combination mean, defaults to `TRUE`
 #' @param sdratio Numeric - value by which the expected mean value of a factor level combination is multiplied to obtain the respective standard deviation, defaults to 0.2.
 #' @param endincrement Logical - determines if the multiples provided in `fAeffect` and `fBeffect` refer to change between first and last levels (default) or level to level changes.
-#' @param rho Vector length 1 or 2, or 2 by 2 matrix - Controls how the correlation and hence de covariance matrix is built. See details.
+#' @param rho Vector length 1 or 2, or 2 by 2 matrix - Controls how the correlation and hence de covariance matrix is built. See 'details' and `?gencorrelationmat` examples.
 #' @param withinf Character - Names the factor with repeated measures. Possible values are NULL, "fA", "fB" or "both"
 #' @param plot Logical - Should a line plot with the modeled mean and standard deviations be part of the output. Default is `TRUE`
 #'
-#' @return If rho and whithinf are left at their default values of 0 and NULL, respectively, a list with two objects.
-#' @return The first consist of two matrices, one of expected means for each cell of the two-way factorial experiment, one of expected standard deviations for said cells.
-#' @return If rho is between -1 and 1 but different to 0 and whithinf is either "fA", "fB" or "both", along with the above mentioned output the output will include correlation and covariance matrices.
+#' @return If `rho` and `withinf` are left at their default values of 0 and NULL, respectively, a cell mean matrix, a cell standard deviation matrix and
+#' optionally a graph that represents both.
+#' @return If `rho` is between -1 and 1 but different to 0 and `withinf` is either "fA", "fB" or "both", correlation and covariance matrices are generated
+#' along with the aforementioned output.
 #'
 #' @details
-#' If a repeated measures experiment is intended 'withinf' must be set to "fA", "fB" or "both", depending on which is the "within" factor. If 'rho' is a vector length 1, the within subject correlation
-#' will be constant for the factor defined in 'withinf'. If 'rho' is a vector length 2 and 'withinf' is either "fA" or "fB" a correlation gradient will be created from the first to second value of
-#' 'rho'. If 'rho' is a vector length 2 and 'withinf="both"', the first element of 'rho' will be the correlation within factor A, while the second element will be the correlation within factor B. If
-#' 'rho' is a 2*2 matrix, only possible if 'withinf="both"', a correlation gradient will be created across rows of 'rho' for each of the factors.
+#' The user must provide a reference mean (usually mean in control or untreated group), the expected change for each factor
+#' from first to last level (or from one level to the next) and the number of levels in each factor.
+#'
+#' The user can also specify factor level combinations in which interaction is assumed and its magnitude with respect to the
+#' reference mean. The cell mean matrix will be modified accordingly and this can also have an effect of the standard deviation
+#' matrix.
+#'
+#' We were motivated by sample size calculation for two-way factorial designs with *1,2,...,a* levels of factor *A* and
+#' *1,2,...,b* levels of factor *B* in which the mean outcome value for replicates of cell *A=1, B=1* are known.
+#' Furthermore, there is an expected change in level mean for each of the factors. Finally, interaction can be explicitly
+#' introduced to level combinations in which it is expected to occur.
+#'
+#' If a repeated measures experiment is intended `withinf` must be set to "fA", "fB" or "both", depending on which is the 'within' factor.
+#' If `rho` is a vector length 1, the within subject correlation will be constant for the factor defined in `withinf`. If `rho` is a vector
+#' length 2 and `withinf` is either "fA" or "fB" a correlation gradient will be created from the first to second value of `rho`. If `rho` is
+#' a vector length 2 and `withinf="both"`, the first element of `rho` will be the correlation within factor A, while the second element will
+#' be the correlation within factor B. If `rho` is a 2*2 matrix, only possible if `withinf="both"`, a correlation gradient will be created
+#' across rows of `rho` for each of the factors.
 #'
 #'
 #' @examples

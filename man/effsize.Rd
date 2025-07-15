@@ -7,15 +7,15 @@
 effsize(matrices_obj)
 }
 \arguments{
-\item{matrices_obj}{List of 2 matrices, named mean.mat and sd.mat. It is the part of th output of the 'calculate_mean_matrix function'. This output can be used in full although only the matrices section is used.}
+\item{matrices_obj}{List of 2 matrices, named mean.mat and sd.mat. This is the minimal output of the \code{calculate_mean_matrix} function. The full output from \code{calculate_mean_matrix} is also valid.}
 }
 \value{
-Vector of length 3. The first two elements are the effect sizes for the main effects of the first
-and second factors, respectively. The third element is the interaction effect size.
+Vector of length 3. The first two elements are the effect sizes for the main effects factor A and factor B,
+respectively. The third element is the interaction effect size.
 }
 \description{
 Calculate effect sizes for two-way factorial designs from matrices of expected mean and standard deviation values
-for each combination of factor levels. The output given is Cohen's f. Calculations are done as exemplified in the
+at each combination of factor levels. The output given is Cohen's f. Calculations are done as exemplified in the
 G*Power 3.1 manual.
 }
 \examples{

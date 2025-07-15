@@ -1,9 +1,9 @@
 #' Test simulated two-way factorial design experiments over different sample sizes.
 #'
 #' Wrapper to test data simulated under independent or repeated measurements and under different outcome distributions
-#' with different sample sizes.
+#' with different sample sizes. Takes output from `simulate_twoway_nrange` as input, along with test and plotting options.
 #'
-#' @param data data.frame - data.frame with modeled outcome values, factor level labels, iteration number and sample size.
+#' @param data data.frame - `data.frame` with modeled outcome values, factor level labels, iteration number and sample size.
 #' @param test character - Statistical test to be applied, possible values are 'ANOVA', 'rank' and 'permutation'.
 #' @param plot logical - Should the power curve be plotted. Default is TRUE.
 #' @param target_power Desired power to be attained. Accepts values between 0 and 1, defaults to 0.8.
@@ -13,7 +13,7 @@
 #' @param alpha - numeric Type I error probability
 #'
 #' @return Data frame with power and confidence intervals for the main effects and interaction for each of the sample sizes.
-#' Also presented in graphical form if 'plot=TRUE'.
+#' Also presented in graphical form if `plot=TRUE`.
 #'
 #' @examples
 #'

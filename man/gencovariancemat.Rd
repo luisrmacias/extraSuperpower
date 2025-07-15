@@ -32,3 +32,24 @@ Covariance matrix
 \description{
 May be run independently or internally as part of 'calculate_mean_matrix'.
 }
+\examples{
+
+meanvals <- c(seq(3,9,2),seq(2,8,2),seq(1,7,2))
+mean_matrix <- matrix(meanvals, 3, 4, byrow = TRUE,
+                   dimnames = list(A=LETTERS[1:3], B=letters[1:4]))
+
+mean_matrix
+sd_matrix <- mean_matrix*0.2
+
+cor_matrix <- gencorrelationmat(mean_matrix = mean_matrix,
+                                rho = 0.7, withinf = "fB", nlfA = 3, nlfB = 4)
+
+gencovariancemat(cor_matrix, sd_matrix, withinf = "fB", nlfA = 3, nlfB = 4)
+
+##correlation gradient over levels of factor B
+cor_matrix <- gencorrelationmat(mean_matrix = mean_matrix,
+                                rho = c(0.7, 0.4), withinf = "fB", nlfA = 3, nlfB = 4)
+
+gencovariancemat(cor_matrix, sd_matrix, withinf = "fB", nlfA = 3, nlfB = 4)
+
+}

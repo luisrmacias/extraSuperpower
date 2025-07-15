@@ -8,7 +8,7 @@ twoway_simulation_testing(data, test = "ANOVA", alpha = 0.05)
 }
 \arguments{
 \item{data}{\itemize{
-\item Simulation obtained from the 'twoway_simulation_independent' or the 'twoway_simulation_correlated' functions.
+\item Simulation obtained from the \code{twoway_simulation_independent} or \code{twoway_simulation_correlated}
 }}
 
 \item{test}{\itemize{
@@ -20,10 +20,10 @@ twoway_simulation_testing(data, test = "ANOVA", alpha = 0.05)
 }}
 }
 \value{
-A data.frame with the power and 95\% confidence interval for each of the main effects and their interaction.
+A \code{data.frame} with the power and 95\% confidence interval for each of the main effects and their interaction.
 }
 \description{
-This functions takes the output of either the 'twoway_simulation_independent' or the 'twoway_simulation_correlated' functions
+This functions takes the output of either the \code{twoway_simulation_independent} or the \code{twoway_simulation_correlated} functions
 and calculates the power of the sample size used in the simulation under parametric analysis of variance, rank based analysis of variance or
 permutation testing.
 }

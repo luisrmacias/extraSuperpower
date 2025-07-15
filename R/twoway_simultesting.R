@@ -1,11 +1,11 @@
 #' Calculate power for global main effects and interaction from two-way factorial simulated data
 #'
-#' This functions takes the output of either the 'twoway_simulation_independent' or the 'twoway_simulation_correlated' functions
+#' This functions takes the output of either the `twoway_simulation_independent` or the `twoway_simulation_correlated` functions
 #' and calculates the power of the sample size used in the simulation under parametric analysis of variance, rank based analysis of variance or
 #' permutation testing.
 #'
 #'
-#' @param data - Simulation obtained from the 'twoway_simulation_independent' or the 'twoway_simulation_correlated' functions.
+#' @param data - Simulation obtained from the `twoway_simulation_independent` or `twoway_simulation_correlated`
 #' @param test - The test to be applied. Possible values are "ANOVA" (default), "rank" and "permutation".
 #' @param alpha - Type I error rate. Default is 0.05.
 #'
@@ -13,7 +13,7 @@
 #' @importFrom stats as.formula
 #' @importFrom stats qnorm
 #'
-#' @return A data.frame with the power and 95% confidence interval for each of the main effects and their interaction.
+#' @return A `data.frame` with the power and 95% confidence interval for each of the main effects and their interaction.
 #'
 #' @examples
 #'

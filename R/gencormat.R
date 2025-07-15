@@ -1,6 +1,7 @@
 #' Function that generates a correlation matrix taking as input number of factors for each level, factor or factors that present correlation and rho value or values.
+#' Additionally, a mean matrix is required to check consistency.
 #'
-#' May be run independently or internally as part of 'calculate_mean_matrix'.
+#' May be run independently or internally as part of `calculate_mean_matrix`.
 #'
 #' @param mean_matrix Matrix - cell mean value matrix
 #' @param rho Vector length 1 or 2, or 2 by 2 matrix - Controls how the correlation and hence de covariance matrix is built. See details.
@@ -10,14 +11,34 @@
 #' @param nlfB Integer - number of levels of factor B
 #'
 #' @details
-#' If a repeated measures experiment is intended 'withinf' must be set to "fA", "fB" or "both", depending on which is the "within" factor. If 'rho' is a vector length 1, the within subject correlation
-#' will be constant for the factor defined in 'withinf'. If 'rho' is a vector length 2 and 'withinf' is either "fA" or "fB" a correlation gradient will be created from the first to second value of
-#' 'rho'. If 'rho' is a vector length 2 and 'withinf="both"', the first element of 'rho' will be the correlation within factor A, while the second element will be the correlation within factor B. If
-#' 'rho' is a 2*2 matrix, only possible if 'withinf="both"', a correlation gradient will be created across rows of 'rho' for each of the factors.
+#' For a repeated measures experiment `withinf` must be set to "fA", "fB" or "both", depending on which is the 'within' factor.
+#' If `rho` is a vector length 1, the within subject correlation will be constant for the factor defined in `withinf`. If `rho` is a vector
+#' length 2 and `withinf` is either "fA" or "fB" a correlation gradient will be created from the first to second value of `rho`. If `rho` is
+#' a vector length 2 and `withinf="both"`, the first element of `rho` will be the correlation within factor A, while the second element will
+#' be the correlation within factor B. If `rho` is a 2*2 matrix, only possible if `withinf="both"`, a correlation gradient will be created
+#' across rows of `rho` for each of the factors.
 #'
 #' @importFrom methods is
 #'
 #' @return Correlation matrix
+#'
+#' @examples
+#'
+#' meanvals <- c(seq(3,9,2),seq(2,8,2),seq(1,7,2))
+#' mean_matrix <- matrix(meanvals, 3, 4, byrow = TRUE,
+#'                    dimnames = list(A=LETTERS[1:3], B=letters[1:4]))
+#'
+#' mean_matrix
+#'
+#' gencorrelationmat(mean_matrix = mean_matrix, rho = 0.7, withinf = "fB", nlfA = 3, nlfB = 4)
+#'
+#' ##correlation gradient over levels of factor B
+#' gencorrelationmat(mean_matrix = mean_matrix, rho = c(0.7, 0.4), withinf = "fB", nlfA = 3, nlfB = 4)
+#'
+#' ##gradient both factors
+#'
+#' rhovals <- matrix(c(0.7, 0.4), 2, 2, byrow = TRUE)
+#' gencorrelationmat(mean_matrix = mean_matrix, rho = rhovals, withinf = "both", nlfA = 3, nlfB = 4)
 #'
 #' @export
 gencorrelationmat <- function(mean_matrix, rho, label_list=NULL, withinf, nlfA, nlfB)
@@ -174,3 +195,4 @@ gencorrelationmat <- function(mean_matrix, rho, label_list=NULL, withinf, nlfA, 
   }
   cormat
 }
+

@@ -16,7 +16,7 @@ test_power_overkn(
 )
 }
 \arguments{
-\item{data}{data.frame - data.frame with modeled outcome values, factor level labels, iteration number and sample size.}
+\item{data}{data.frame - \code{data.frame} with modeled outcome values, factor level labels, iteration number and sample size.}
 
 \item{test}{character - Statistical test to be applied, possible values are 'ANOVA', 'rank' and 'permutation'.}
 
@@ -38,11 +38,11 @@ test_power_overkn(
 }
 \value{
 Data frame with power and confidence intervals for the main effects and interaction for each of the sample sizes.
-Also presented in graphical form if 'plot=TRUE'.
+Also presented in graphical form if \code{plot=TRUE}.
 }
 \description{
 Wrapper to test data simulated under independent or repeated measurements and under different outcome distributions
-with different sample sizes.
+with different sample sizes. Takes output from \code{simulate_twoway_nrange} as input, along with test and plotting options.
 }
 \examples{
 
