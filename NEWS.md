@@ -1,3 +1,5 @@
+# extraSuperpower 1.5.1
+
 * Patch for ggplot2 reverse dependency
 
 # extraSuperpower (development version)
