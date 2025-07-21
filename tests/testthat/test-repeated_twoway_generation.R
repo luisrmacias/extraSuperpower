@@ -12,8 +12,19 @@ test_that("format check works", {
   expect_error(twoway_simulation_correlated(group_size = group_size, mean_mat, nsims = 3))
 
   mean_mat <- calculate_mean_matrix(refmean = 10, nlfA = fA, nlfB = fB,
+                                    fAeffect = faeff, fBeffect = fbeff, plot = FALSE)
+
+  expect_error(twoway_simulation_correlated(group_size = group_size, mean_mat, nsims = 3))
+
+  mean_mat <- calculate_mean_matrix(refmean = 10, nlfA = fA, nlfB = fB,
                                     fAeffect = faeff, fBeffect = fbeff,
                                     rho = rho, withinf = fwithin)
+
+  expect_no_error(twoway_simulation_correlated(group_size = group_size, mean_mat, nsims = 3))
+
+  mean_mat <- calculate_mean_matrix(refmean = 10, nlfA = fA, nlfB = fB,
+                                    fAeffect = faeff, fBeffect = fbeff,
+                                    rho = rho, withinf = fwithin, plot = FALSE)
 
   expect_no_error(twoway_simulation_correlated(group_size = group_size, mean_mat, nsims = 3))
 })

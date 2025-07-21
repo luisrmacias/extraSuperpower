@@ -60,7 +60,7 @@ twoway_simulation_correlated <- function(group_size, matrices_obj, distribution=
   {
     stop("Your 'matrices_obj' does not specify which factor is within participants.\nIf you have a repeated measures design you need to specify the within factor and its correlation when using 'calculate_mean_matrix'.")
   }
-  if(!all(sapply(matrices_obj[-1], is.matrix)) & !is.numeric(matrices_obj[[2]][[2]]))
+  if(!all(sapply(matrices_obj[-1], is.matrix)) & !is.numeric(matrices_obj[[2]][1]))
   {
     matrices_obj <- matrices_obj$matrices_obj
   }
