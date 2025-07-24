@@ -2,8 +2,6 @@
 
 * Patch for ggplot2 reverse dependency
 
-# extraSuperpower (development version)
-
 # extraSuperpower 1.5.0
 
 * Tests for type of statistical test used now rely on displayed message.
