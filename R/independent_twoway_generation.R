@@ -124,7 +124,7 @@ twoway_simulation_independent <- function(group_size, matrices_obj, distribution
   } else if (distribution=="truncated.normal")
   {
     y <- suppressMessages(replicate(nsims, reshape2::melt(mapply(truncnorm::rtruncnorm, sampn, a=inferior_limit, b=superior_limit,
-                                                                 mean_matrix))$value))
+                                                                 mean = mean_matrix, sd=sd_matrix))$value))
   }
   sim <- lapply(seq(nsims),
                 function(x)
