@@ -1,3 +1,5 @@
+# extraSuperpower (development version)
+
 # extraSuperpower 1.5.3
 
 * Corrected independent sample truncated distribution simulation
