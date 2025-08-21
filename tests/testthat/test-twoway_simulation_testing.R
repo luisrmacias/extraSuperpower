@@ -124,7 +124,7 @@ test_that("correct within factor is used", {
   res_fA <- twoway_simulation_testing(simdatA, test = "rank")
   res_both <- twoway_simulation_testing(simdatboth, test = "rank")
   expect_gt(res_fA[1,2], 0.9)
-  expect_lt(res_fA[2,2], 0.15)
+  expect_lt(res_fA[2,2], 0.2)
   expect_gt(res_fB[1,2], 0.9)
   expect_lt(res_fB[2,2], 0.15)
   expect_gt(res_both[1,2], 0.9)

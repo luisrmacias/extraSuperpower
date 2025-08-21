@@ -26,13 +26,13 @@ calculate_mean_matrix(
 
 \item{nlfA}{Integer - number of levels of factor A}
 
-\item{nlfB}{integer - number of levels of factor B}
+\item{nlfB}{Integer - number of levels of factor B}
 
 \item{fAeffect}{Numeric - multiple that defines how cell means are modified by factor A. With the default \code{endincrement} (\code{TRUE}), determines the last level of factor A with respect to its first level. When \code{endincrement=FALSE} this multiple applies from one level to the next.}
 
 \item{fBeffect}{Numeric - multiple that defines how cell means are modified by factor B. With the default \code{endincrement} (\code{TRUE}), determines the last level of factor B with respect to its first level. When \code{endincrement=FALSE} this multiple applies from one level to the next.}
 
-\item{groupswinteraction}{vector length 2 or n*2 matrix - Combination of levels from factors A and B in which interaction is expected}
+\item{groupswinteraction}{Vector length 2 or n*2 matrix - Combination of levels from factors A and B in which interaction is expected}
 
 \item{interact}{Numeric - value by which the mean from cell or cells indicated in \code{groupswinteraction} is multiplied after it has been calculated accordingly to \code{fAeffect} and \code{fBeffect}}
 

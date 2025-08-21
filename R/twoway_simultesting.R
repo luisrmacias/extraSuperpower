@@ -12,6 +12,7 @@
 #' @importFrom utils capture.output
 #' @importFrom stats as.formula
 #' @importFrom stats qnorm
+#' @importFrom stats anova
 #'
 #' @return A `data.frame` with the power and 95% confidence interval for each of the main effects and their interaction.
 #'
@@ -84,25 +85,38 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
       } else if(test=="permutation")
       {
         ##cat(paste('Permutation testing with n=', mean(group_size), 'starts'))
-        fmla <- as.formula("y ~ indep_var1*indep_var2+ Error(subject/indep_var1)")
+        frml <- as.formula("y ~ indep_var1*indep_var2+ Error(subject/indep_var1)")
         pvec <- sapply(simulation,
-                       function(i) permuco::aovperm(fmla, data = i)$table$`resampled P(>F)`)
+                       function(i) permuco::aovperm(frml, data = i)$table$`resampled P(>F)`)
         pvec <- pvec[c(2,1,3),]
-        pvecnames <- rownames(permuco::aovperm(fmla, data = simulation[[1]])$table)
+        pvecnames <- rownames(permuco::aovperm(frml, data = simulation[[1]])$table)
         pvecnames <- pvecnames[c(2,1,3)]
         message("Performing permutation testing on simulated data")
       } else if(test=="rank")
       {
-        pvec <- NULL
-        for (i in seq(simulation))
-        {
-          capture.output(res <- nparLD::f1.ld.f1(y=simulation[[i]]$y, time = simulation[[i]]$indep_var1, group = simulation[[i]]$indep_var2, subject = simulation[[i]]$subject,
-                                                 plot.RTE = FALSE, order.warning = FALSE, description = FALSE, show.covariance = FALSE)$ANOVA.test[,3],
-                         file = nullfile())
-          pvec <- cbind(pvec, res)
-        }
-        pvec <- pvec[c(2,1,3),]
-        pvecnames <- c("indep_var1", "indep_var2", "indep_var1:indep_var2" )
+        frml <- as.formula("y ~ indep_var1*indep_var2+ Error(subject/indep_var1)")
+        pvec <- sapply(simulation, function(i)
+                      {
+                      ranked_data <- ARTool::art(frml, data=i)
+                      fit <- anova(ranked_data)
+                      res <- fit$`Pr(>F)`
+                      names(res) <- fit$Term
+                      res})
+        ranked_data <- ARTool::art(frml, data=simulation[[1]])
+        fit <- anova(ranked_data)
+        res <- fit$`Pr(>F)`
+        names(res) <- fit$Term
+        pvecnames <- names(res)
+        # pvec <- NULL
+        # for (i in seq(simulation))
+        # {
+        #   capture.output(res <- nparLD::f1.ld.f1(y=simulation[[i]]$y, time = simulation[[i]]$indep_var1, group = simulation[[i]]$indep_var2, subject = simulation[[i]]$subject,
+        #                                          plot.RTE = FALSE, order.warning = FALSE, description = FALSE, show.covariance = FALSE)$ANOVA.test[,3],
+        #                  file = nullfile())
+        #   pvec <- cbind(pvec, res)
+        # }
+        # pvec <- pvec[c(2,1,3),]
+        # pvecnames <- c("indep_var1", "indep_var2", "indep_var1:indep_var2" )
         message("Performing rank testing on simulated data")
       }
     } else if (withinf=="fB")
@@ -115,24 +129,37 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
         message("Performing ANOVA testing on simulated data")
       } else if(test=="permutation")
       {
-        ##checkFunction()
-        ##cat(paste('Permutation testing with n=', mean(group_size), 'starts'))
-        fmla <- as.formula("y ~ indep_var1*indep_var2+ Error(subject/indep_var2)")
+        frml <- as.formula("y ~ indep_var1*indep_var2+ Error(subject/indep_var2)")
         pvec <- sapply(simulation,
-                       function(i) permuco::aovperm(fmla, data = i)$table$`resampled P(>F)`)
-        pvecnames <- rownames(permuco::aovperm(fmla, data = simulation[[1]])$table)
+                       function(i) permuco::aovperm(frml, data = i)$table$`resampled P(>F)`)
+        pvecnames <- rownames(permuco::aovperm(frml, data = simulation[[1]])$table)
         message("Performing permutation testing on simulated data")
       } else if(test=="rank")
       {
-        pvec <- NULL
-        for (i in seq(simulation))
+        frml <- as.formula("y ~ indep_var1*indep_var2+ Error(subject/indep_var2)")
+        pvec <- sapply(simulation, function(i)
         {
-          capture.output(res <- nparLD::f1.ld.f1(y=simulation[[i]]$y, time = simulation[[i]]$indep_var2, group = simulation[[i]]$indep_var1, subject = simulation[[i]]$subject,
-                                                 plot.RTE = FALSE, order.warning = FALSE, description = FALSE, show.covariance = FALSE)$ANOVA.test[,3],
-                         file = nullfile())
-          pvec <- cbind(pvec, res)
-        }
-        pvecnames <- c("indep_var1", "indep_var2", "indep_var1:indep_var2" )
+          ranked_data <- ARTool::art(frml, data=i)
+          fit <- anova(ranked_data)
+          res <- fit$`Pr(>F)`
+          names(res) <- fit$Term
+          ##res <- res[c(1,3,5)]
+          res})
+        ranked_data <- ARTool::art(frml, data=simulation[[1]])
+        fit <- anova(ranked_data)
+        res <- fit$`Pr(>F)`
+        names(res) <- fit$Term
+        ##res <- res[c(1,3,5)]
+        pvecnames <- names(res)
+        # pvec <- NULL
+        # for (i in seq(simulation))
+        # {
+        #   capture.output(res <- nparLD::f1.ld.f1(y=simulation[[i]]$y, time = simulation[[i]]$indep_var2, group = simulation[[i]]$indep_var1, subject = simulation[[i]]$subject,
+        #                                          plot.RTE = FALSE, order.warning = FALSE, description = FALSE, show.covariance = FALSE)$ANOVA.test[,3],
+        #                  file = nullfile())
+        #   pvec <- cbind(pvec, res)
+        # }
+        # pvecnames <- c("indep_var1", "indep_var2", "indep_var1:indep_var2" )
         message("Performing rank testing on simulated data")
       }
     } else if (withinf=="both")
@@ -147,21 +174,35 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
       {
         ##checkFunction()
         ##cat(paste('Permutation testing with n=', mean(group_size), 'starts'))
-        fmla <- as.formula("y ~ indep_var1*indep_var2+ Error(subject/indep_var1 + indep_var2)")
-        pvec <- sapply(simulation, function(i) permuco::aovperm(fmla, data = i)$table$`resampled P(>F)`)
-        pvecnames <- rownames(permuco::aovperm(fmla, data = simulation[[1]])$table)
+        frml <- as.formula("y ~ indep_var1*indep_var2+ Error(subject/(indep_var1 + indep_var2))")
+        pvec <- sapply(simulation, function(i) permuco::aovperm(frml, data = i)$table$`resampled P(>F)`)
+        pvecnames <- rownames(permuco::aovperm(frml, data = simulation[[1]])$table)
         message("Performing permutation testing on simulated data")
       } else if(test=="rank")
       {
-        pvec <- NULL
-        for (i in seq(simulation))
+        frml <- as.formula("y ~ indep_var1*indep_var2+ Error(subject/(indep_var1 + indep_var2))")
+        pvec <- sapply(simulation, function(i)
         {
-          capture.output(res <- nparLD::ld.f2(y=simulation[[i]]$y, time1 = simulation[[i]]$indep_var1, time2 = simulation[[i]]$indep_var2, subject = simulation[[i]]$subject,
-                                                 plot.RTE = FALSE, order.warning = FALSE, description = FALSE, show.covariance = FALSE)$ANOVA.test[,3],
-                         file = nullfile())
-          pvec <- cbind(pvec, res)
-        }
-        pvecnames <- c("indep_var1", "indep_var2", "indep_var1:indep_var2" )
+          ranked_data <- ARTool::art(frml, data=i)
+          fit <- anova(ranked_data)
+          res <- fit$`Pr(>F)`
+          names(res) <- fit$Term
+          res
+        })
+        ranked_data <- ARTool::art(frml, data=simulation[[1]])
+        fit <- anova(ranked_data)
+        res <- fit$`Pr(>F)`
+        names(res) <- fit$Term
+        pvecnames <- names(res)
+        # pvec <- NULL
+        # for (i in seq(simulation))
+        # {
+        #   capture.output(res <- nparLD::ld.f2(y=simulation[[i]]$y, time1 = simulation[[i]]$indep_var1, time2 = simulation[[i]]$indep_var2, subject = simulation[[i]]$subject,
+        #                                          plot.RTE = FALSE, order.warning = FALSE, description = FALSE, show.covariance = FALSE)$ANOVA.test[,3],
+        #                  file = nullfile())
+        #   pvec <- cbind(pvec, res)
+        # }
+        # pvecnames <- c("indep_var1", "indep_var2", "indep_var1:indep_var2" )
         message("Performing rank testing on simulated data")
       }
     }
@@ -189,8 +230,14 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
     } else if(test=="rank")
     {
       frml <- as.formula(paste("y ~ ", indep_vars[1], "*", indep_vars[2]))
-      pvec <- sapply(simulation,
-                     function(i) Rfit::raov(frml, i)$table[,5])
+      pvec <- sapply(simulation, function(i)
+                      {
+                      ranked_data <- ARTool::art(frml, data=i)
+                      fit <- anova(ranked_data)
+                      res <- fit$`Pr(>F)`
+                      names(res) <- fit$Term
+                      res
+                      })
       pvecnames <- rownames(pvec)
       message("Performing rank testing on simulated data")
     } else if(test=="permutation")
@@ -219,18 +266,6 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
     n <- range(simulation[[1]]$n)
   }
 
-  # if(test=="rank")
-  # {
-  #   if(length(unique(simulation[[1]]$n))==1)
-  #   {
-  #     data.frame(n = n, power=pprops, "lower bound ci" = lb, "upper bound ci" = ub)
-  #   }
-  #   else if (length(unique(simulation[[1]]$n))>1)
-  #   {
-  #     data.frame("smallest group" = n[1], "largest group" = n[2], "mean group size" = mean(n), power=pprops, "lower bound ci" = lb, "upper bound ci" = ub)
-  #   }
-  # } else if (test!="rank")
-  # {
     names(pprops) <- pvecnames
     if(length(unique(simulation[[1]]$n))==1)
     {
@@ -240,5 +275,4 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
     {
       data.frame("smallest group" = n[1], "largest group" = n[2], "mean group size" = mean(n), power=pprops, "lower bound ci" = lb, "upper bound ci" = ub)
     }
-  #}
 }

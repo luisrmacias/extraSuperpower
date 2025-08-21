@@ -8,10 +8,10 @@
 #'
 #' @param refmean Numeric - expected mean for first level of both factors A and B
 #' @param nlfA Integer - number of levels of factor A
-#' @param nlfB integer - number of levels of factor B
+#' @param nlfB Integer - number of levels of factor B
 #' @param fAeffect Numeric - multiple that defines how cell means are modified by factor A. With the default `endincrement` (`TRUE`), determines the last level of factor A with respect to its first level. When `endincrement=FALSE` this multiple applies from one level to the next.
 #' @param fBeffect Numeric - multiple that defines how cell means are modified by factor B. With the default `endincrement` (`TRUE`), determines the last level of factor B with respect to its first level. When `endincrement=FALSE` this multiple applies from one level to the next.
-#' @param groupswinteraction vector length 2 or n*2 matrix - Combination of levels from factors A and B in which interaction is expected
+#' @param groupswinteraction Vector length 2 or n*2 matrix - Combination of levels from factors A and B in which interaction is expected
 #' @param interact Numeric - value by which the mean from cell or cells indicated in `groupswinteraction` is multiplied after it has been calculated accordingly to `fAeffect` and `fBeffect`
 #' @param label_list List length 2 - vectors with the names of the factor levels. The objects in this list should be named as the factors. The use of this option is encouraged as these names are used for plotting and inherited to downstream functions.
 #' @param sdproportional Logical - whether the standard deviation for each combination of factor levels is a proportion of the respective factor level combination mean, defaults to `TRUE`

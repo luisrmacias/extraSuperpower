@@ -32,9 +32,8 @@ Imports:
 	truncnorm,
 	sn,
 	tmvtnorm,
-	nparLD,
+	ARTool,
 	permuco,
-	Rfit, 
 	methods,
 	stats,
 	utils
