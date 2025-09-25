@@ -1,3 +1,5 @@
+# extraSuperpower (development version)
+
 # extraSuperpower 1.5.4
 
 * In order to support unbalanced repeated measures designs switched from nparLD dependency to ARTool
