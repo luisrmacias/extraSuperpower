@@ -264,7 +264,7 @@ twoway_simulation_correlated <- function(group_size, matrices_obj, distribution=
       }
       sim <- lapply(levels(sim$cond), function(x)
       {
-        selection <- sim$subject[sim$cond==x] %in% gather[[grep(x, names(gather))]]
+        selection <- sim$subject[sim$cond==x] %in% gather[[which(names(gather) %in% x)]]
         sim[sim$cond==x & selection,]
       })
     }
