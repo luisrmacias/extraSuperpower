@@ -256,8 +256,17 @@ twoway_simulation_correlated <- function(group_size, matrices_obj, distribution=
         }
       if(withinf=="fA")
       {
-        namesec <- order(sapply(strsplit(levels(tosample$cond), "_"), "[", 2))
-        names(gather) <- levels(tosample$cond)[namesec]
+        f1 <- sapply(strsplit(levels(tosample[,4]), "_"), "[", -1)
+        if(is.matrix(f1))
+        {
+          f1 <- apply(f1, 2, paste, collapse="_")
+        }
+        f2 <- sapply(strsplit(levels(tosample[,5]), "_"), "[", -1)
+        if(is.matrix(f2))
+        {
+          f2 <- apply(f2, 2, paste, collapse="_")
+        }
+        names(gather) <- paste(f1, rep(f2, each=length(f1)), sep="_")
       } else if(withinf=="fB" | withinf=="both")
       {
         names(gather) <- levels(tosample$cond)
