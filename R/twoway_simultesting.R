@@ -140,13 +140,13 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
         pvec <- sapply(simulation, function(i)
         {
           ranked_data <- ARTool::art(frml, data=i)
-          fit <- anova(ranked_data)[c(1,3,5)]
+          fit <- anova(ranked_data)[c(1,3,5),]
           res <- fit$`Pr(>F)`
           names(res) <- fit$Term
           ##res <- res
           res})
         ranked_data <- ARTool::art(frml, data=simulation[[1]])
-        fit <- anova(ranked_data)[c(1,3,5)]
+        fit <- anova(ranked_data)[c(1,3,5),]
         res <- fit$`Pr(>F)`
         names(res) <- fit$Term
         ##res <- res[c(1,3,5)]
