@@ -1,3 +1,5 @@
+# extraSuperpower (development version)
+
 # extraSuperpower 1.5.5
 
 * More flexibility in factor names with unbalanced designs

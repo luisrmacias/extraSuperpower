@@ -1,6 +1,6 @@
 Package: extraSuperpower
 Title: Power Calculation for Two-Way Factorial Designs
-Version: 1.5.5
+Version: 1.5.5.9000
 Authors@R: c(person(given = "Louis",
                       family = "Macias",
                       role = c("aut", "cre", "cph"),
