@@ -262,15 +262,19 @@ twoway_simulation_correlated <- function(group_size, matrices_obj, distribution=
       {
         names(gather) <- levels(tosample$cond)
       }
-      sim <- lapply(levels(sim$cond), function(x)
+      simsplit <- split(sim, sim$cond)
+    simsplit <- lapply(simsplit, function(x) {
+      keep <- gather[[which(names(gather) %in% x$cond)]]
+      selection <- x$subject %in% keep
+      x[selection, ]
+    })
+    simsplit <- lapply(simsplit, function(x)
       {
-        selection <- sim$subject[sim$cond==x] %in% gather[[which(names(gather) %in% x)]]
-        sim[sim$cond==x & selection,]
-      })
-    }
-    sim <- do.call(rbind, sim)
-    sim$subject <- droplevels(sim$subject)
-    sim$n <- rep(unlist(mapply(rep, t(group_size), t(group_size))), nsims)
+      cbind(x, n=length(unique(x$subject)))
+    })
+  }
+  sim <- do.call(rbind, simsplit)
+  sim$subject <- droplevels(sim$subject)
   }
   if(balanced & length(group_size)==1)
   {
