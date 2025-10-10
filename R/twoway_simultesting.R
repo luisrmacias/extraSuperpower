@@ -95,15 +95,19 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
       } else if(test=="rank")
       {
         frml <- as.formula("y ~ indep_var1*indep_var2+ Error(subject/indep_var1)")
+        ranked_data <- ARTool::art(frml, data=simulation[[1]])
+        fit <- anova(ranked_data)
+        rowsel <- !duplicated(fit$Term) & !duplicated(fit$Term, fromLast = TRUE)
+        rowsel <- rowsel | grepl(":", fit$Error)
+        fit <- fit[rowsel,]
         pvec <- sapply(simulation, function(i)
                       {
                       ranked_data <- ARTool::art(frml, data=i)
-                      fit <- anova(ranked_data)[c(2,3,5),]
+                      fit <- anova(ranked_data)[rowsel,]
                       res <- fit$`Pr(>F)`
                       names(res) <- fit$Term
                       res})
-        ranked_data <- ARTool::art(frml, data=simulation[[1]])
-        fit <- anova(ranked_data)[c(2,3,5),]
+
         res <- fit$`Pr(>F)`
         names(res) <- fit$Term
         pvecnames <- names(res)
@@ -137,16 +141,19 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
       } else if(test=="rank")
       {
         frml <- as.formula("y ~ indep_var1*indep_var2+ Error(subject/indep_var2)")
+        ranked_data <- ARTool::art(frml, data=simulation[[1]])
+        fit <- anova(ranked_data)
+        rowsel <- !duplicated(fit$Term) & !duplicated(fit$Term, fromLast = TRUE)
+        rowsel <- rowsel | grepl(":", fit$Error)
+        fit <- fit[rowsel,]
         pvec <- sapply(simulation, function(i)
         {
           ranked_data <- ARTool::art(frml, data=i)
-          fit <- anova(ranked_data)[c(1,3,5),]
+          fit <- anova(ranked_data)[rowsel,]
           res <- fit$`Pr(>F)`
           names(res) <- fit$Term
           ##res <- res
           res})
-        ranked_data <- ARTool::art(frml, data=simulation[[1]])
-        fit <- anova(ranked_data)[c(1,3,5),]
         res <- fit$`Pr(>F)`
         names(res) <- fit$Term
         ##res <- res[c(1,3,5)]
@@ -181,16 +188,19 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
       } else if(test=="rank")
       {
         frml <- as.formula("y ~ indep_var1*indep_var2+ Error(subject/(indep_var1 + indep_var2))")
+        ranked_data <- ARTool::art(frml, data=simulation[[1]])
+        fit <- anova(ranked_data)
+        rowsel <- !duplicated(fit$Term) & !duplicated(fit$Term, fromLast = TRUE)
+        rowsel <- rowsel | grepl(":", fit$Error)
+        fit <- fit[rowsel,]
         pvec <- sapply(simulation, function(i)
         {
           ranked_data <- ARTool::art(frml, data=i)
-          fit <- anova(ranked_data)
+          fit <- anova(ranked_data)[rowsel,]
           res <- fit$`Pr(>F)`
           names(res) <- fit$Term
           res
         })
-        ranked_data <- ARTool::art(frml, data=simulation[[1]])
-        fit <- anova(ranked_data)
         res <- fit$`Pr(>F)`
         names(res) <- fit$Term
         pvecnames <- names(res)
