@@ -202,6 +202,7 @@ twoway_simulation_correlated <- function(group_size, matrices_obj, distribution=
         selection <- sim$subject[sim$cond==x] %in% keep[[grep(x, names(keep))]]
         sim[sim$cond==x & selection,]
       })
+      sim <- do.call(rbind, sim)
     } else if(loss=="sequential")
     {
       if(withinf=="fA")
@@ -280,10 +281,10 @@ twoway_simulation_correlated <- function(group_size, matrices_obj, distribution=
     simsplit <- lapply(simsplit, function(x)
       {
       cbind(x, n=length(unique(x$subject)))
-    })
-  }
-  sim <- do.call(rbind, simsplit)
-  sim$subject <- droplevels(sim$subject)
+      })
+    sim <- do.call(rbind, simsplit)
+    }
+    sim$subject <- droplevels(sim$subject)
   }
   if(balanced & length(group_size)==1)
   {
