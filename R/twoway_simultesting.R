@@ -190,8 +190,7 @@ twoway_simulation_testing <- function(data, test="ANOVA", alpha=0.05)
         frml <- as.formula("y ~ indep_var1*indep_var2+ Error(subject/(indep_var1 + indep_var2))")
         ranked_data <- ARTool::art(frml, data=simulation[[1]])
         fit <- anova(ranked_data)
-        rowsel <- !duplicated(fit$Term) & !duplicated(fit$Term, fromLast = TRUE)
-        rowsel <- rowsel | grepl(":", fit$Error)
+        rowsel <- fit$Term==gsub("subject:", "", fit$Error) | fit$Error=="Within"
         fit <- fit[rowsel,]
         pvec <- sapply(simulation, function(i)
         {
