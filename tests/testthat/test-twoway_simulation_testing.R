@@ -74,34 +74,51 @@ nlevfA <- 3
 nlevfB <- 3
 nlist <- list(groups=LETTERS[1:nlevfA], time=letters[1:nlevfB])
 gwint <- matrix(c(2,3, 3, 3), 2, 2, byrow = TRUE)
-iterations <- 50
+iterations <- 200
 rho <- -0.9
 
 fwithin <- "fB"
 refs <- calculate_mean_matrix(refmean = 1, nlfA = nlevfA, nlfB = nlevfB,
                               fAeffect = 2, fBeffect = 1, sdratio = 0.2,
-                              ##groupswinteraction = gwint, interact = 1.25,
+                              groupswinteraction = gwint, interact = 1.25,
                               label_list = nlist,
                               rho = rho, withinf = fwithin)
 group_size <- 5
-simdatB <- twoway_simulation_correlated(group_size = group_size, matrices_obj = refs, nsims = iterations)
+simdatB <- twoway_simulation_correlated(group_size = group_size,
+                                        matrices_obj = refs, nsims = iterations)
+
+unbal_group_size <- matrix(c(6,6,5,6,5,4,6,4,3), 3, 3, byrow = TRUE)
+unbal_simdatB <- twoway_simulation_correlated(group_size = unbal_group_size,
+                                              matrices_obj = refs, balanced = FALSE,
+                                              loss = "sequential", nsims = iterations)
+
 
 fwithin <- "fA"
 refs <- calculate_mean_matrix(refmean = 1, nlfA = nlevfA, nlfB = nlevfB,
                               fAeffect = 2, fBeffect = 1, sdratio = 0.2,
-                              ##groupswinteraction = gwint, interact = 1.25,
+                              groupswinteraction = gwint, interact = 1.25,
                               label_list = nlist,
                               rho = rho, withinf = fwithin)
-simdatA <- twoway_simulation_correlated(group_size = group_size, matrices_obj = refs, nsims = iterations)
+simdatA <- twoway_simulation_correlated(group_size = group_size,
+                                        matrices_obj = refs, nsims = iterations)
+unbal_simdatA <- twoway_simulation_correlated(group_size = unbal_group_size,
+                                              matrices_obj = refs, balanced = FALSE,
+                                              loss = "sequential", nsims = iterations)
+
 
 fwithin <- "both"
 refs <- calculate_mean_matrix(refmean = 1, nlfA = nlevfA, nlfB = nlevfB,
                               fAeffect = 2, fBeffect = 1, sdratio = 0.2,
-                              ##groupswinteraction = gwint, interact = 1.25,
+                              groupswinteraction = gwint, interact = 1.25,
                               label_list = nlist,
                               rho = rho, withinf = fwithin)
 group_size <- 15
-simdatboth <- twoway_simulation_correlated(group_size = group_size, matrices_obj = refs, nsims = iterations)
+simdatboth <- twoway_simulation_correlated(group_size = group_size,
+                                           matrices_obj = refs, nsims = iterations)
+
+unbal_simdatboth <- twoway_simulation_correlated(group_size = unbal_group_size,
+                                              matrices_obj = refs, balanced = FALSE,
+                                              loss = "sequential", nsims = iterations)
 
 test_that("correct repeated measures test is performed", {
 
@@ -126,64 +143,63 @@ test_that("correct within factor is used", {
   res_both <- twoway_simulation_testing(simdatboth, test = "rank")
 
   expect_gt(res_fA[1,2], 0.9)
-  expect_lt(res_fA[2,2], 0.2)
+  expect_gt(res_fA[2,2], 0.9)
   expect_gt(res_fB[1,2], 0.9)
-  expect_lt(res_fB[2,2], 0.15)
+  expect_lt(res_fB[2,2], 0.5)
   expect_gt(res_both[1,2], 0.9)
-  expect_lt(res_both[2,2], 0.15)
+  expect_gt(res_both[2,2], 0.7)
 
   res_fB <- twoway_simulation_testing(simdatB, test = "ANOVA")
   res_fA <- twoway_simulation_testing(simdatA, test = "ANOVA")
   res_both <- twoway_simulation_testing(simdatboth, test = "ANOVA")
   expect_gt(res_fA[1,2], 0.9)
-  expect_lt(res_fA[2,2], 0.15)
+  expect_gt(res_fA[2,2], 0.9)
   expect_gt(res_fB[1,2], 0.9)
-  expect_lt(res_fB[2,2], 0.15)
+  expect_lt(res_fB[2,2], 0.5)
   expect_gt(res_both[1,2], 0.9)
-  expect_lt(res_both[2,2], 0.15)
+  expect_gt(res_both[2,2], 0.7)
 
   res_fB <- twoway_simulation_testing(simdatB, test = "permutation")
   res_fA <- twoway_simulation_testing(simdatA, test = "permutation")
   res_both <- twoway_simulation_testing(simdatboth, test = "permutation")
   expect_gt(res_fA[1,2], 0.9)
-  expect_lt(res_fA[2,2], 0.15)
+  expect_gt(res_fA[2,2], 0.9)
   expect_gt(res_fB[1,2], 0.9)
-  expect_lt(res_fB[2,2], 0.15)
+  expect_lt(res_fB[2,2], 0.5)
   expect_gt(res_both[1,2], 0.9)
-  expect_lt(res_both[2,2], 0.15)
+  expect_gt(res_both[2,2], 0.7)
 })
 
 
-# test_that("repeated unbalanced testing", {
-#
-#   res_fB <- twoway_simulation_testing(simdatB, test = "rank")
-#   res_fA <- twoway_simulation_testing(simdatA, test = "rank")
-#   res_both <- twoway_simulation_testing(simdatboth, test = "rank")
-#   expect_gt(res_fA[1,2], 0.9)
-#   expect_lt(res_fA[2,2], 0.2)
-#   expect_gt(res_fB[1,2], 0.9)
-#   expect_lt(res_fB[2,2], 0.15)
-#   expect_gt(res_both[1,2], 0.9)
-#   expect_lt(res_both[2,2], 0.15)
-#
-#   res_fB <- twoway_simulation_testing(simdatB, test = "ANOVA")
-#   res_fA <- twoway_simulation_testing(simdatA, test = "ANOVA")
-#   res_both <- twoway_simulation_testing(simdatboth, test = "ANOVA")
-#   expect_gt(res_fA[1,2], 0.9)
-#   expect_lt(res_fA[2,2], 0.15)
-#   expect_gt(res_fB[1,2], 0.9)
-#   expect_lt(res_fB[2,2], 0.15)
-#   expect_gt(res_both[1,2], 0.9)
-#   expect_lt(res_both[2,2], 0.15)
-#
-#   res_fB <- twoway_simulation_testing(simdatB, test = "permutation")
-#   res_fA <- twoway_simulation_testing(simdatA, test = "permutation")
-#   res_both <- twoway_simulation_testing(simdatboth, test = "permutation")
-#   expect_gt(res_fA[1,2], 0.9)
-#   expect_lt(res_fA[2,2], 0.15)
-#   expect_gt(res_fB[1,2], 0.9)
-#   expect_lt(res_fB[2,2], 0.15)
-#   expect_gt(res_both[1,2], 0.9)
-#   expect_lt(res_both[2,2], 0.15)
-#
-# })
+test_that("repeated unbalanced testing", {
+  res_fB <- twoway_simulation_testing(unbal_simdatB, test = "rank")
+  res_fA <- twoway_simulation_testing(unbal_simdatA, test = "rank")
+  res_both <- twoway_simulation_testing(unbal_simdatboth, test = "rank")
+  expect_gt(res_fA[1,2], 0.9)
+  expect_gt(res_fA[2,2], 0.9)
+  expect_gt(res_fB[1,2], 0.9)
+  expect_lt(res_fB[2,2], 0.5)
+  expect_gt(res_both[1,2], 0.9)
+  expect_lt(res_both[2,2], 0.5)
+
+  res_fB <- twoway_simulation_testing(unbal_simdatB, test = "ANOVA")
+  res_fA <- twoway_simulation_testing(unbal_simdatA, test = "ANOVA")
+  res_both <- twoway_simulation_testing(unbal_simdatboth, test = "ANOVA")
+  expect_gt(res_fA[1,2], 0.9)
+  expect_gt(res_fA[2,2], 0.8)
+  expect_gt(res_fB[1,2], 0.9)
+  expect_lt(res_fB[2,2], 0.5)
+  expect_gt(res_both[1,2], 0.5)
+  expect_lt(res_both[2,2], 0.3)
+
+  res_fB <- twoway_simulation_testing(unbal_simdatB, test = "permutation")
+  res_fA <- twoway_simulation_testing(unbal_simdatA, test = "permutation")
+  res_both <- twoway_simulation_testing(unbal_simdatboth, test = "permutation")
+  expect_gt(res_fA[1,2], 0.9)
+  expect_gt(res_fA[2,2], 0.8)
+  expect_gt(res_fB[1,2], 0.9)
+  expect_lt(res_fB[2,2], 0.5)
+  expect_gt(res_both[1,2], 0.9)
+  expect_lt(res_both[2,2], 0.5)
+
+})
