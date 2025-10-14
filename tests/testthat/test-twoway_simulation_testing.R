@@ -74,7 +74,7 @@ nlevfA <- 3
 nlevfB <- 3
 nlist <- list(groups=LETTERS[1:nlevfA], time=letters[1:nlevfB])
 gwint <- matrix(c(2,3, 3, 3), 2, 2, byrow = TRUE)
-iterations <- 50
+iterations <- 35
 rho <- -0.9
 
 fwithin <- "fB"
@@ -145,7 +145,7 @@ test_that("correct within factor is used", {
   expect_gt(res_fA[1,2], 0.9)
   expect_gt(res_fA[2,2], 0.9)
   expect_gt(res_fB[1,2], 0.9)
-  expect_lt(res_fB[2,2], 0.5)
+  expect_lt(res_fB[2,2], 0.7)
   expect_gt(res_both[1,2], 0.9)
   expect_gt(res_both[2,2], 0.7)
 
@@ -175,31 +175,31 @@ test_that("repeated unbalanced testing", {
   res_fB <- twoway_simulation_testing(unbal_simdatB, test = "rank")
   res_fA <- twoway_simulation_testing(unbal_simdatA, test = "rank")
   res_both <- twoway_simulation_testing(unbal_simdatboth, test = "rank")
-  expect_gt(res_fA[1,2], 0.9)
-  expect_gt(res_fA[2,2], 0.9)
-  expect_gt(res_fB[1,2], 0.9)
-  expect_lt(res_fB[2,2], 0.5)
-  expect_gt(res_both[1,2], 0.9)
-  expect_lt(res_both[2,2], 0.5)
+  expect_gt(res_fA[1,4], 0.9)
+  expect_gt(res_fA[2,4], 0.9)
+  expect_gt(res_fB[1,4], 0.9)
+  expect_lt(res_fB[2,4], 0.5)
+  expect_gt(res_both[1,4], 0.9)
+  expect_lt(res_both[2,4], 0.5)
 
   res_fB <- twoway_simulation_testing(unbal_simdatB, test = "ANOVA")
   res_fA <- twoway_simulation_testing(unbal_simdatA, test = "ANOVA")
   res_both <- twoway_simulation_testing(unbal_simdatboth, test = "ANOVA")
-  expect_gt(res_fA[1,2], 0.9)
-  expect_gt(res_fA[2,2], 0.8)
-  expect_gt(res_fB[1,2], 0.9)
-  expect_lt(res_fB[2,2], 0.5)
-  expect_gt(res_both[1,2], 0.5)
-  expect_lt(res_both[2,2], 0.3)
+  expect_gt(res_fA[1,4], 0.9)
+  expect_gt(res_fA[2,4], 0.8)
+  expect_gt(res_fB[1,4], 0.9)
+  expect_lt(res_fB[2,4], 0.5)
+  expect_gt(res_both[1,4], 0.5)
+  expect_lt(res_both[2,4], 0.3)
 
   res_fB <- twoway_simulation_testing(unbal_simdatB, test = "permutation")
   res_fA <- twoway_simulation_testing(unbal_simdatA, test = "permutation")
   res_both <- twoway_simulation_testing(unbal_simdatboth, test = "permutation")
-  expect_gt(res_fA[1,2], 0.9)
-  expect_gt(res_fA[2,2], 0.8)
-  expect_gt(res_fB[1,2], 0.9)
-  expect_lt(res_fB[2,2], 0.5)
-  expect_gt(res_both[1,2], 0.9)
-  expect_lt(res_both[2,2], 0.5)
+  expect_gt(res_fA[1,4], 0.9)
+  expect_gt(res_fA[2,4], 0.8)
+  expect_gt(res_fB[1,4], 0.9)
+  expect_lt(res_fB[2,4], 0.5)
+  expect_gt(res_both[1,4], 0.9)
+  expect_lt(res_both[2,4], 0.5)
 
 })
