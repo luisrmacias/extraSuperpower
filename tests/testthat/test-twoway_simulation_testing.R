@@ -74,7 +74,7 @@ nlevfA <- 3
 nlevfB <- 3
 nlist <- list(groups=LETTERS[1:nlevfA], time=letters[1:nlevfB])
 gwint <- matrix(c(2,3, 3, 3), 2, 2, byrow = TRUE)
-iterations <- 200
+iterations <- 50
 rho <- -0.9
 
 fwithin <- "fB"
