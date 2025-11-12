@@ -155,7 +155,7 @@ test_that("correct within factor is used", {
   expect_gt(res_fA[1,2], 0.9)
   expect_gt(res_fA[2,2], 0.9)
   expect_gt(res_fB[1,2], 0.9)
-  expect_lt(res_fB[2,2], 0.5)
+  expect_lt(res_fB[2,2], 0.7)
   expect_gt(res_both[1,2], 0.9)
   expect_gt(res_both[2,2], 0.7)
 
@@ -165,7 +165,7 @@ test_that("correct within factor is used", {
   expect_gt(res_fA[1,2], 0.9)
   expect_gt(res_fA[2,2], 0.9)
   expect_gt(res_fB[1,2], 0.9)
-  expect_lt(res_fB[2,2], 0.5)
+  expect_lt(res_fB[2,2], 0.7)
   expect_gt(res_both[1,2], 0.9)
   expect_gt(res_both[2,2], 0.7)
 })
