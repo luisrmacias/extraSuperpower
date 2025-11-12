@@ -1,3 +1,5 @@
+# extraSuperpower 1.6.1
+
 # extraSuperpower 1.6.0
 
 * Unbalanced designs selects p-values according to within effects. Tests heavily extended.
