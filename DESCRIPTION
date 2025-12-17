@@ -4,7 +4,7 @@ Version: 1.6.1.9000
 Authors@R: c(person(given = "Louis",
                       family = "Macias",
                       role = c("aut", "cre", "cph"),
-                      email = "louis.macias@uni-luebeck.de",
+                      email = "luisrmacias@gmail.com",
                       comment = "ORCID = <https://orcid.org/0000-0002-3080-2835>"),
                person(given = "Silke",
                       family = "Szymczak",
@@ -12,8 +12,8 @@ Authors@R: c(person(given = "Louis",
                       comment = "ORCID = <https://orcid.org/0000-0002-8897-9035>"))
 Author: Louis Macias [aut, cre, cph] (ORCID = <https://orcid.org/0000-0002-3080-2835>),
   Silke Szymczak [aut] (ORCID = <https://orcid.org/0000-0002-8897-9035>)
-Maintainer: Louis Macias <louis.macias@uni-luebeck.de>
-Description: The basic use of this package is with 3 sequential functions. One to generate expected cell means and standard deviations, along with correlation and covariance matrices in the case of repeated measurements. This is followed by experiment simulation i number of times. Finally, power is calculated from the simulated data. Features that may be considered in the model are interaction, measure correlation and non-normal distributions.
+Maintainer: Louis Macias <luisrmacias@gmail.com>
+Description: The basic use of this package is with 3 sequential functions. First to generate a cell mean matrix. In case of a repeated measurements design also generate correlation and covariance matrices. This is followed by iterative experiment simulation. Finally, power is calculated from the simulated data. Features that may be considered in the model are interaction, measure correlation, non-normal and unbalanced designs distributions.
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
